@@ -14,7 +14,7 @@ We want its usage to be very simple, its maintainability to be very easy and to 
 
 This library is based on our experience with Mockito, chai.js, sinon.js and jest.
 The library aims to provide developers a very simple way to stub, mock and assert their implementations.
-Dependency Injection and Inversion Of Control are key architectural concept the system under test need to comply with
+Dependency Injection and Inversion Of Control are key architectural concepts the system under test need to comply with
 
 ## Usage
 
