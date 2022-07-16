@@ -3,17 +3,29 @@
   "private": true,
   "version": "1.0.0",
   "description": "Salesforce App",
+  "keyword": [
+    "salesforce",
+    "apex",
+    "test",
+    "mock"
+  ],
   "scripts": {
+    "lint": "sfdx scanner:run -v -t 'force-app/classes/src/*.cls' -f table -c 'apex-mockery'",
+    "postinstall": "husky install ; ./postInstall.sh",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
-    "postinstall": "husky install",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepush": "npm run test:coverage && npm run lint",
+    "test": "sfdx force:apex:test:run -r human -d ./tests/apex -s ApexMockery -w 20",
+    "test:coverage": "npm run test -- -c"
   },
   "devDependencies": {
-    "@prettier/plugin-xml": "^2.0.1",
-    "husky": "^7.0.0",
-    "lint-staged": "^12.3.7",
-    "prettier": "^2.3.2",
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-angular": "^17.0.3",
+    "@prettier/plugin-xml": "^2.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.5.0",
+    "prettier": "^2.7.1",
     "prettier-plugin-apex": "^1.10.0"
   },
   "lint-staged": {
