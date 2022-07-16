@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  formatting-and-linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Set environment variables
+        run: |
+          echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
+          echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
+
+      - name: Install Salesforce CLI
+        run: npm install sfdx-cli -g
+
+      - name: "Install npm dependencies"
+        run: npm install
+
+      - name: "Code formatting verification with Prettier"
+        run: npm run prettier:verify
+
+      - name: Execute Static Analysis
+        run: npm run lint
+
+  ci-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variables
+        run: |
+          echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
+          echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
+          echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
+
+      - name: Install Salesforce CLI
+        run: npm install sfdx-cli -g
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: "Populate auth file with CI_URL secret"
+        shell: bash
+        run: "echo ${{ secrets.CI_URL}} > ./CI_URL.txt"
+
+      - name: "Authenticate CI Sandbox"
+        run: "sfdx force:auth:sfdxurl:store -f ./CI_URL.txt -a ci -d"
+
+      - name: "Create scratch org"
+        run: "sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1"
+
+      - name: "Push source to scratch org"
+        run: "sfdx force:source:push"
+
+      - name: "Run Apex tests"
+        run: npm run test:coverage
+
+      - name: "Upload test result"
+        uses: actions/upload-artifact@v3
+        with:
+          name: apex-code-coverage
+          path: ./tests/apex
+
+      - name: "Delete scratch org"
+        if: always()
+        run: "sfdx force:org:delete -p -u scratch-org"
