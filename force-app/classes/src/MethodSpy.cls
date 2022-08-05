@@ -46,7 +46,7 @@ public class MethodSpy {
     if (this.exceptionToThrow != null) {
       throw this.exceptionToThrow;
     }
-    if (this.parameterizedMethodCalls.size() == 0) {
+    if (this.parameterizedMethodCalls.isEmpty()) {
       return this.returnValue;
     }
 
@@ -74,10 +74,10 @@ public class MethodSpy {
   }
 
   public ParameterizedMethodSpyCall whenCalledWith(Object param) {
-    return whenCalledWith(new List<Object>{ param });
+    return whenCalledWithParams(new List<Object>{ param });
   }
 
-  public ParameterizedMethodSpyCall whenCalledWith(List<Object> params) {
+  public ParameterizedMethodSpyCall whenCalledWithParams(List<Object> params) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
       params
     );

@@ -89,12 +89,6 @@ To assert a mock has been called with the right parameters, use the `Assertion` 
 It allows to assert at the mock level or the spy level
 
 ```java
-Assertions.assertThat(numberUtilsMock)
-    .method('isOdd')
-    .hasBeenCalledWith(
-        11
-    );
-// Or
 Assertions.assertThat(isOddSpy)
     .hasBeenCalledWith(
         11
@@ -119,8 +113,7 @@ private MyServiceTest {
         sut.doSomething(11);
 
         // Assert
-        Assertions.assertThat(numberUtilsMock)
-            .method('isOdd')
+        Assertions.assertThat(isOddSpy)
             .hasBeenCalledWith(
                 11
             );

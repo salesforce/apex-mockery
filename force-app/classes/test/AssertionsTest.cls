@@ -6,4 +6,6 @@
  */
 @IsTest
 private class AssertionsTest {
+  // Implement asserter + fake asserter
+  // Unit test every method with the fake asserter (not using the lib for testing itself)
 }
