@@ -40,14 +40,6 @@ public class MethodSpy {
     return this.callCount == count;
   }
 
-  public Object call() {
-    return this.call(new List<Object>());
-  }
-
-  public Object call(Object param) {
-    return this.call(new List<Object>{ param });
-  }
-
   public Object call(List<Object> params) {
     this.callCount++;
     this.lastCallParams = params;
