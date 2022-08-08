@@ -57,7 +57,7 @@ public class Assertions {
       this.hasBeenCalledWith(new List<Object>{ params });
     }
 
-    public void hasBeenCalledWith(ParametersMatcher matcher) {
+    public void hasBeenCalledWithParams(ParametersMatcher matcher) {
       System.assertNotEquals(
         null,
         spy.getLastCallParams(),
@@ -68,7 +68,7 @@ public class Assertions {
       matcher.assertMatches(spy.getLastCallParams());
     }
 
-    public void hasBeenCalledWith(List<Object> params) {
+    public void hasBeenCalledWithParams(List<Object> params) {
       System.assertNotEquals(
         null,
         spy.getLastCallParams(),
