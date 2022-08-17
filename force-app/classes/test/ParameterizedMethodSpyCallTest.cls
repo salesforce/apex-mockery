@@ -98,7 +98,7 @@ private class ParameterizedMethodSpyCallTest {
   }
 
   @IsTest
-  static void givenTwoIdenticalCustomApexListWithEquals_matchesReturnsFalse() {
+  static void givenTwoIdenticalCustomApexListWithEquals_matchesReturnsTrue() {
     // Arrange
     final ParameterizedMethodSpyCall sut = new ParameterizedMethodSpyCall(
       new List<CustomApexWithEquals>{ new CustomApexWithEquals('test') }

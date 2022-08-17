@@ -18,10 +18,7 @@ public class ParameterizedMethodSpyCall {
   }
 
   public boolean matches(List<Object> params) {
-    if (this.params == params) {
-      return true;
-    }
-    if (this.params?.size() != params?.size()) {
+    if (this.params.size() != params.size()) {
       return false;
     }
     for (Integer i = 0; i < params.size(); i++) {
