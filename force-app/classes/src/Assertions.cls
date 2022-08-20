@@ -11,14 +11,12 @@ public class Assertions {
   }
 
   public virtual class SystemAsserter {
-    public void assertEquals(Object expected, Object actual, String message) {
-    }
-
-    public void assertNotEquals(
+    public virtual void assertEquals(
       Object expected,
       Object actual,
       String message
     ) {
+      System.assertEquals(expected, actual, message);
     }
   }
 
@@ -31,6 +29,7 @@ public class Assertions {
       this.asserter = new SystemAsserter();
     }
 
+    @TestVisible
     private MethodSpyAssert(MethodSpy spy, SystemAsserter asserter) {
       this.spy = spy;
       this.asserter = asserter;
@@ -61,19 +60,20 @@ public class Assertions {
     }
 
     public void hasBeenCalledWithParams(ParametersMatcher matcher) {
-      this.asserter.assertNotEquals(
-        null,
-        this.spy.getLastCallParams(),
+      this.asserter.assertEquals(
+        false,
+        this.spy.hasBeenCalled(),
         'Method ' +
         this.spy.methodName +
         ' was not called'
       );
+      matcher.assertMatches(this.spy.getLastCallParams());
     }
 
     public void hasBeenCalledWithParams(List<Object> params) {
-      this.asserter.assertNotEquals(
-        null,
-        this.spy.getLastCallParams(),
+      this.asserter.assertEquals(
+        false,
+        this.spy.hasBeenCalled(),
         'Method ' +
         this.spy.methodName +
         ' was not called'
