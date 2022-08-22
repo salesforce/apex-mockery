@@ -6,51 +6,116 @@
  */
 @IsTest
 private class MockTest {
+  // Integration test
   @IsTest
-  static void IntegrationTest() {
-    // given A Type
-    // when Sypying On Method
-    // Then Return The
-
-    // Use case 1
+  static void givenAType_whenSpyinOnWithReturn_callingTheMethodReturnsTheConfiguredOutput() {
     // Arrange
-    // Create a mock
-    // Parameter its return
+    final String expected = 'expected';
+    final Mock mock = Mock.forType(DummyInterface.class);
+    final MethodSpy dummyMethod = mock.spyOn('dummyMethod');
+    dummyMethod.returns(expected);
+    DummyInterface sut = (DummyInterface) mock.stub;
 
     // Act
-    // Call the method
+    final String result = sut.dummyMethod();
 
     // Assert
-    // Assert result is the same as returned
-
-    /////////////
-    // Use case 2
-    // Arrange
-    // Create a mock
-    // Do not Parameter its return
-
-    // Act
-    // Call the method
-
-    // Assert
-    // Assert result null
+    System.assertEquals(expected, result);
   }
 
   @IsTest
-  static void UnitTest() {
-    // given A method name
-    // when Sypying On Method multiple time
-    // The method Spy returned is the same
-
-    // Use case 1
+  static void givenAType_whenSpyinOnWithoutReturn_callingTheMethodReturnsNull() {
     // Arrange
-    // Create a mock
-    // SpyOn a Method
+    final Mock mock = Mock.forType(DummyInterface.class);
+    final MethodSpy dummyMethod = mock.spyOn('dummyMethod');
+    DummyInterface sut = (DummyInterface) mock.stub;
 
     // Act
-    // SpyOn the same Method
+    final Object result = sut.dummyMethod();
 
     // Assert
-    // Assert result is the same as the first spyOn
+    System.assertEquals(null, result);
+  }
+
+  // Unit test
+  @IsTest
+  static void givenAMethodName_thenSpyOnReturnsMethodSpy() {
+    // Arrange
+    final String expected = 'methodName';
+    final Mock sut = Mock.forType(DummyInterface.class);
+
+    // Act
+    final MethodSpy result = sut.spyOn(expected);
+
+    // Assert
+    System.assertEquals(expected, result.methodName);
+  }
+
+  @IsTest
+  static void givenAMethodName_whenCallingSpyOnMultipleTimes_thenReturnsSameMethodSpy() {
+    // Arrange
+    final String methodName = 'methodName';
+    final Mock sut = Mock.forType(DummyInterface.class);
+    final MethodSpy expected = sut.spyOn(methodName);
+
+    // Act
+    final MethodSpy result = sut.spyOn(methodName);
+
+    // Assert
+    System.assertEquals(expected, result);
+  }
+
+  @IsTest
+  static void givenAMethodName_whenNotSpiedOn_thenGetSpyReturnsNull() {
+    // Arrange
+    final String methodName = 'methodName';
+    final Mock sut = Mock.forType(DummyInterface.class);
+
+    // Act
+    final MethodSpy result = sut.getSpy(methodName);
+
+    // Assert
+    System.assertEquals(null, result);
+  }
+
+  @IsTest
+  static void givenAMethodName_whenSpiedOn_thenGetSpyReturnsMethodSpy() {
+    // Arrange
+    final String methodName = 'methodName';
+    final Mock sut = Mock.forType(DummyInterface.class);
+    final MethodSpy expected = sut.spyOn(methodName);
+
+    // Act
+    final MethodSpy result = sut.getSpy(methodName);
+
+    // Assert
+    System.assertEquals(expected, result);
+  }
+
+  @IsTest
+  static void givenAType_forTypeReturnsMock() {
+    // Arrange
+    final Type param = DummyInterface.class;
+
+    // Act
+    final Mock result = Mock.forType(param);
+
+    // Assert
+    System.assertNotEquals(null, result);
+  }
+
+  @IsTest
+  static void givenNull_forTypeThrows() {
+    // Arrange
+    final Type param = null;
+
+    // Act
+    try {
+      final Mock result = Mock.forType(param);
+      // Assert
+      System.assert(false);
+    } catch (Exception ex) {
+      System.assertNotEquals(null, ex);
+    }
   }
 }
