@@ -39,3 +39,6 @@ $RECYCLE.BIN/
 
 # Local environment variables
 .env
+
+# SFDX
+tests/
