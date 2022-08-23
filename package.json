@@ -10,7 +10,9 @@
     "mock"
   ],
   "scripts": {
-    "lint": "sfdx scanner:run -v -t 'force-app/classes/src/*.cls' -f table -c 'apex-mockery'",
+    "lint": "npm run lint:apex ; npm run lint:doc",
+    "lint:apex": "sfdx scanner:run -v -t 'force-app/classes/src/*.cls' -f table -c 'apex-mockery'",
+    "lint:doc": "write-good README.md --parse",
     "postinstall": "husky install ; ./postInstall.sh",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
@@ -26,11 +28,15 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.5.0",
     "prettier": "^2.7.1",
-    "prettier-plugin-apex": "^1.10.0"
+    "prettier-plugin-apex": "^1.10.0",
+    "write-good": "^1.0.8"
   },
   "lint-staged": {
     "**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
       "prettier --write"
+    ],
+    "README.md": [
+      "write-good --parse"
     ]
   }
 }
