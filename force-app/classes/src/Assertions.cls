@@ -72,7 +72,7 @@ public class Assertions {
 
     public void hasBeenCalledWithParams(List<Object> params) {
       this.asserter.assertEquals(
-        false,
+        true,
         this.spy.hasBeenCalled(),
         'Method ' +
         this.spy.methodName +
