@@ -2,8 +2,8 @@
 
 Lightweight mocking library in Apex
 
-This project provide a very simple, lightweight, easy to read mocking library for apex.
-We want its usage to be very simple, its maintainability to be very easy and to provide the best developer experience possible
+This project provide a simple, lightweight, easy to read mocking library for apex.
+We want its usage to be simple, its maintainability to be easy and to provide the best developer experience possible
 
 <a href="https://githubsfdeploy.herokuapp.com?owner=salesforce&repo=apex-mockery">
   <img alt="Deploy to Salesforce"
@@ -12,13 +12,13 @@ We want its usage to be very simple, its maintainability to be very easy and to 
 
 ## Principles
 
-This library is based on our experience with Mockito, chai.js, sinon.js and jest.
-The library aims to provide developers a very simple way to stub, mock and assert their implementations.
-Dependency Injection and Inversion Of Control are key architectural concepts the system under test need to comply with
+APIs design come from our experience with Mockito, chai.js, sinon.js and jest.
+The library aims to provide developers a simple way to stub, mock and assert their implementations.
+Dependency Injection and Inversion Of Control are key architectural concepts the system under test should implements
 
 ## Usage
 
-Let's assume we have this interface we want to mock in order to test `MyService`:
+Let's assume we have this interface we want to mock to test `MyService`:
 
 ```java
 public interface INumberUtils {
@@ -85,7 +85,7 @@ isOddSpy.returns(true);
 
 ### Assert
 
-To assert a mock has been called with the right parameters, use the `Assertion` class
+To assert the test called the mock with the right parameters, use the `Assertion` class
 It allows to assert at the mock level or the spy level
 
 ```java
