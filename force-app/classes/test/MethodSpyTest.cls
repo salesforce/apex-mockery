@@ -150,20 +150,15 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyNotConfigured_whenCallingTheSpy_itThrowsIllegalArgumentException() {
+  static void givenSpyOnMethodWithoutParameterReturningVoid_whenCallingTheSpy_itReturnsNull() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    try {
-      // Act
-      sut.call(new List<Object>{});
-      System.assert(false, 'test should have throw an exception');
-    } catch (IllegalArgumentException e) {
-      // Assert
-      System.assertEquals(
-        'methodName: No stub value found for a call with params ()',
-        e.getMessage()
-      );
-    }
+
+    // Act
+    object actual = sut.call(new List<Object>{});
+
+    // Assert
+    System.assertEquals(null, actual);
   }
 
   @IsTest

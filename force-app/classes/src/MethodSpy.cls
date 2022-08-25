@@ -45,6 +45,14 @@ public class MethodSpy {
     this.callCount++;
     this.lastCallParams = params;
 
+    if (
+      this.parameterizedMethodCalls.isEmpty() &&
+      !this.configuredGlobalReturn &&
+      this.exceptionToThrow == null
+    ) {
+      return null;
+    }
+
     for (
       ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls
     ) {
