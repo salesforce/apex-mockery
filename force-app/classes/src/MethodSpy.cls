@@ -22,6 +22,7 @@ public class MethodSpy {
   private List<Object> lastCallParams;
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
+  private Boolean configuredGlobalReturn = false;
   private Exception exceptionToThrow;
 
   public MethodSpy(String methodName) {
@@ -43,12 +44,6 @@ public class MethodSpy {
   public Object call(List<Object> params) {
     this.callCount++;
     this.lastCallParams = params;
-    if (this.exceptionToThrow != null) {
-      throw this.exceptionToThrow;
-    }
-    if (this.parameterizedMethodCalls.isEmpty()) {
-      return this.returnValue;
-    }
 
     for (
       ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls
@@ -56,6 +51,14 @@ public class MethodSpy {
       if (parameterizedCall.matches(params)) {
         return parameterizedCall.value;
       }
+    }
+
+    if (this.configuredGlobalReturn) {
+      return this.returnValue;
+    }
+
+    if (this.exceptionToThrow != null) {
+      throw this.exceptionToThrow;
     }
 
     throw new IllegalArgumentException(
@@ -66,10 +69,12 @@ public class MethodSpy {
   }
 
   public void returns(Object value) {
+    this.configuredGlobalReturn = true;
     this.returnValue = value;
   }
 
   public void throwsException(Exception exceptionToThrow) {
+    this.configuredGlobalReturn = false;
     this.exceptionToThrow = exceptionToThrow;
   }
 

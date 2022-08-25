@@ -167,6 +167,7 @@ private class AssertionsTest {
   static void givenParametersMatcher_hasBeenCalledWithParams_callsAssertEquals() {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
     final FakeAsserter fakeAsserter = new FakeAsserter();
     final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
       spy,
