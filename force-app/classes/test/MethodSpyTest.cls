@@ -6,7 +6,6 @@
  */
 @IsTest
 private class MethodSpyTest {
-  
   @IsTest
   static void givenSpyConfiguredOnceToReturnSomething_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
@@ -39,14 +38,16 @@ private class MethodSpyTest {
   static void givenSpyConfiguredToThrowException_whenCallingTheSpy_itThrowsTheException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    final Exception expectedException = new IllegalArgumentException('test exception');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
     sut.throwsException(expectedException);
 
     try {
       // Act
       sut.call(new List<Object>{});
       System.assert(false, 'test should have throw an exception');
-    } catch(Exception e) {
+    } catch (Exception e) {
       // Assert
       System.assertEquals(expectedException.getMessage(), e.getMessage());
     }
@@ -56,9 +57,15 @@ private class MethodSpyTest {
   static void givenSpyConfiguredToThrowExceptionMultipleTimes_whenCallingTheSpy_itThrowsTheLastConfiguredException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    final Exception exception1 = new IllegalArgumentException('test exception 1');
-    final Exception exception2 = new IllegalArgumentException('test exception 2');
-    final Exception exception3 = new IllegalArgumentException('test exception 3');
+    final Exception exception1 = new IllegalArgumentException(
+      'test exception 1'
+    );
+    final Exception exception2 = new IllegalArgumentException(
+      'test exception 2'
+    );
+    final Exception exception3 = new IllegalArgumentException(
+      'test exception 3'
+    );
     sut.throwsException(exception1);
     sut.throwsException(exception2);
     sut.throwsException(exception3);
@@ -67,7 +74,7 @@ private class MethodSpyTest {
       // Act
       sut.call(new List<Object>{});
       System.assert(false, 'test should have throw an exception');
-    } catch(Exception e) {
+    } catch (Exception e) {
       // Assert
       System.assertEquals(exception3.getMessage(), e.getMessage());
     }
@@ -80,7 +87,7 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected Param').thenReturn('Expected Result');
 
     // Act
-    final Object result = sut.call(new List<Object>{'Expected Param'});
+    final Object result = sut.call(new List<Object>{ 'Expected Param' });
 
     // Assert
     System.assertEquals('Expected Result', result);
@@ -94,8 +101,8 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected Param 2').thenReturn('Expected Result 2');
 
     // Act
-    Object result1 = sut.call(new List<Object>{'Expected Param 1'});
-    Object result2 = sut.call(new List<Object>{'Expected Param 2'});
+    Object result1 = sut.call(new List<Object>{ 'Expected Param 1' });
+    Object result2 = sut.call(new List<Object>{ 'Expected Param 2' });
 
     // Assert
     System.assertEquals('Expected Result 1', result1);
@@ -106,10 +113,13 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWithParams(new List<Object>{'Expected First Param', true}).thenReturn('Expected Result');
+    sut.whenCalledWithParams(new List<Object>{ 'Expected First Param', true })
+      .thenReturn('Expected Result');
 
     // Act
-    final Object result = sut.call(new List<Object>{'Expected First Param', true});
+    final Object result = sut.call(
+      new List<Object>{ 'Expected First Param', true }
+    );
 
     // Assert
     System.assertEquals('Expected Result', result);
@@ -119,12 +129,20 @@ private class MethodSpyTest {
   static void givenSpyConfiguredMultipleTimesToReturnOnMatchingParams_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWithParams(new List<Object>{'Expected First Param 1', true}).thenReturn('Expected Result 1');
-    sut.whenCalledWithParams(new List<Object>{'Expected First Param 2', false}).thenReturn('Expected Result 2');
+    sut.whenCalledWithParams(new List<Object>{ 'Expected First Param 1', true })
+      .thenReturn('Expected Result 1');
+    sut.whenCalledWithParams(
+        new List<Object>{ 'Expected First Param 2', false }
+      )
+      .thenReturn('Expected Result 2');
 
     // Act
-    Object result1 = sut.call(new List<Object>{'Expected First Param 1', true});
-    Object result2 = sut.call(new List<Object>{'Expected First Param 2', false});
+    Object result1 = sut.call(
+      new List<Object>{ 'Expected First Param 1', true }
+    );
+    Object result2 = sut.call(
+      new List<Object>{ 'Expected First Param 2', false }
+    );
 
     // Assert
     System.assertEquals('Expected Result 1', result1);
@@ -135,13 +153,16 @@ private class MethodSpyTest {
   static void givenSpyNotConfigured_whenCallingTheSpy_itThrowsIllegalArgumentException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    try{
+    try {
       // Act
       sut.call(new List<Object>{});
       System.assert(false, 'test should have throw an exception');
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       // Assert
-      System.assertEquals('methodName: No stub value found for a call with params ()', e.getMessage());
+      System.assertEquals(
+        'methodName: No stub value found for a call with params ()',
+        e.getMessage()
+      );
     }
   }
 
@@ -149,14 +170,18 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpyWithOtherParams_itThrowsIllegalArgumentException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWithParams(new List<Object>{'Expected First Param', true}).thenReturn('Expected Result');
-    try{
+    sut.whenCalledWithParams(new List<Object>{ 'Expected First Param', true })
+      .thenReturn('Expected Result');
+    try {
       // Act
-      sut.call(new List<Object>{'Another Param', false});
+      sut.call(new List<Object>{ 'Another Param', false });
       System.assert(false, 'test should have throw an exception');
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       // Assert
-      System.assertEquals('methodName: No stub value found for a call with params (Another Param, false)', e.getMessage());
+      System.assertEquals(
+        'methodName: No stub value found for a call with params (Another Param, false)',
+        e.getMessage()
+      );
     }
   }
 
@@ -164,13 +189,14 @@ private class MethodSpyTest {
   static void givenSpyConfiguredToReturnOnMatchingParamsAndThenToReturns_whenCallingTheSpyWithParams_itReturnExpectedValueAndFallbackToDefault() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWithParams(new List<Object>{'Expected First Param', true}).thenReturn('Expected Result');
+    sut.whenCalledWithParams(new List<Object>{ 'Expected First Param', true })
+      .thenReturn('Expected Result');
     sut.returns('Default Result');
-    
+
     // Act
-    Object result1 = sut.call(new List<Object>{'Expected First Param', true});
-    Object result2 = sut.call(new List<Object>{'Another Param', false});
-    
+    Object result1 = sut.call(new List<Object>{ 'Expected First Param', true });
+    Object result2 = sut.call(new List<Object>{ 'Another Param', false });
+
     // Assert
     System.assertEquals('Expected Result', result1);
     System.assertEquals('Default Result', result2);
@@ -181,12 +207,13 @@ private class MethodSpyTest {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.returns('Default Result');
-    sut.whenCalledWithParams(new List<Object>{'Expected First Param', true}).thenReturn('Expected Result');
-    
+    sut.whenCalledWithParams(new List<Object>{ 'Expected First Param', true })
+      .thenReturn('Expected Result');
+
     // Act
-    Object result1 = sut.call(new List<Object>{'Expected First Param', true});
-    Object result2 = sut.call(new List<Object>{'Another Param', false});
-    
+    Object result1 = sut.call(new List<Object>{ 'Expected First Param', true });
+    Object result2 = sut.call(new List<Object>{ 'Another Param', false });
+
     // Assert
     System.assertEquals('Expected Result', result1);
     System.assertEquals('Default Result', result2);
@@ -197,13 +224,13 @@ private class MethodSpyTest {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.returns('any result');
-    sut.call(new List<Object>{'param1'});
+    sut.call(new List<Object>{ 'param1' });
 
     // Act
     final Object result = sut.getlastCallParams();
 
     // Assert
-    System.assertEquals(new List<Object>{'param1'}, result);
+    System.assertEquals(new List<Object>{ 'param1' }, result);
   }
 
   @IsTest
@@ -315,15 +342,15 @@ private class MethodSpyTest {
     sut.whenCalledWith(2).thenReturn('result 2');
 
     // Act & Assert
-    final Object result1 = sut.call(new List<Object>{1});
+    final Object result1 = sut.call(new List<Object>{ 1 });
     System.assertEquals('result 1', result1);
 
     // Act & Assert
-    final Object result2 = sut.call(new List<Object>{2});
+    final Object result2 = sut.call(new List<Object>{ 2 });
     System.assertEquals('result 2', result2);
 
     // Act & Assert
-    final Object resultDefault = sut.call(new List<Object>{3});
+    final Object resultDefault = sut.call(new List<Object>{ 3 });
     System.assertEquals('result default', resultDefault);
   }
 
@@ -332,14 +359,16 @@ private class MethodSpyTest {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.returns('result');
-    final Exception expectedException = new IllegalArgumentException('test exception');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
     sut.throwsException(expectedException);
 
     // Act & Assert
-    try{
-      sut.call(new List<Object>{1});
+    try {
+      sut.call(new List<Object>{ 1 });
       System.assert(false, 'test should have throw an exception');
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.assertEquals(expectedException.getMessage(), e.getMessage());
     }
   }
@@ -348,12 +377,14 @@ private class MethodSpyTest {
   static void e2e_throwsException_then_returns() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    final Exception expectedException = new IllegalArgumentException('test exception');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
     sut.throwsException(expectedException);
     sut.returns('result');
 
     // Act
-    final Object result = sut.call(new List<Object>{1});
+    final Object result = sut.call(new List<Object>{ 1 });
 
     // Assert
     System.assertEquals('result', result);
@@ -368,15 +399,15 @@ private class MethodSpyTest {
     sut.returns('result default');
 
     // Act & Assert
-    final Object result1 = sut.call(new List<Object>{1});
+    final Object result1 = sut.call(new List<Object>{ 1 });
     System.assertEquals('result 1', result1);
 
     // Act & Assert
-    final Object result2 = sut.call(new List<Object>{2});
+    final Object result2 = sut.call(new List<Object>{ 2 });
     System.assertEquals('result 2', result2);
 
     // Act & Assert
-    final Object resultDefault = sut.call(new List<Object>{3});
+    final Object resultDefault = sut.call(new List<Object>{ 3 });
     System.assertEquals('result default', resultDefault);
   }
 
@@ -384,24 +415,26 @@ private class MethodSpyTest {
   static void e2e_throwsException_then_whenCalledWith() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    final Exception expectedException = new IllegalArgumentException('test exception');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
     sut.throwsException(expectedException);
     sut.whenCalledWith(1).thenReturn('result 1');
     sut.whenCalledWith(2).thenReturn('result 2');
 
     // Act & Assert
-    final Object result1 = sut.call(new List<Object>{1});
+    final Object result1 = sut.call(new List<Object>{ 1 });
     System.assertEquals('result 1', result1);
 
     // Act & Assert
-    final Object result2 = sut.call(new List<Object>{2});
+    final Object result2 = sut.call(new List<Object>{ 2 });
     System.assertEquals('result 2', result2);
 
     // Act & Assert
-    try{
-      sut.call(new List<Object>{3});
+    try {
+      sut.call(new List<Object>{ 3 });
       System.assert(false, 'test should have throw an exception');
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.assertEquals(expectedException.getMessage(), e.getMessage());
     }
   }
@@ -412,22 +445,24 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(1).thenReturn('result 1');
     sut.whenCalledWith(2).thenReturn('result 2');
-    final Exception expectedException = new IllegalArgumentException('test exception');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
     sut.throwsException(expectedException);
 
     // Act & Assert
-    final Object result1 = sut.call(new List<Object>{1});
+    final Object result1 = sut.call(new List<Object>{ 1 });
     System.assertEquals('result 1', result1);
 
     // Act & Assert
-    final Object result2 = sut.call(new List<Object>{2});
+    final Object result2 = sut.call(new List<Object>{ 2 });
     System.assertEquals('result 2', result2);
 
     // Act & Assert
-    try{
-      sut.call(new List<Object>{3});
+    try {
+      sut.call(new List<Object>{ 3 });
       System.assert(false, 'test should have throw an exception');
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.assertEquals(expectedException.getMessage(), e.getMessage());
     }
   }

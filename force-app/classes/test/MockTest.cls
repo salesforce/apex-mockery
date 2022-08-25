@@ -29,7 +29,7 @@ private class MockTest {
     final Mock mock = Mock.forType(DummyInterface.class);
     final MethodSpy dummyMethod = mock.spyOn('dummyMethod');
     dummyMethod.returns(null);
-    
+
     DummyInterface sut = (DummyInterface) mock.stub;
 
     // Act
