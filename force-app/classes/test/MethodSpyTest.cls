@@ -433,19 +433,14 @@ private class MethodSpyTest {
   }
 
   /* ************** 
- MethodSpy
+    MethodSpy
+    Not Implemented Yet 
 
-    .returns("toto");
-    .throwsException(E); // Or throw configuration error ?
-    .call(1) -> "toto"
-    .call(n) -> "toto"
-
-    
     .returns("toto");
     .whenCalledWith(1).thenThrows(E1);
     .whenCalledWith(2).thenThrows(E2);
     .call(1) -> throws E1
     .call(2) -> throws E2
     .call(3) -> "toto"
-    */
+  */
 }
