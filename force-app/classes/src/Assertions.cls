@@ -10,110 +10,85 @@ public class Assertions {
     void assertMatches(List<Object> actualParams);
   }
 
-  public class MockAssert {
-    private Mock mock;
-
-    private MockAssert(Mock mock) {
-      this.mock = mock;
-    }
-
-    public MethodSpyAssert method(final String methodName) {
-      final MethodSpy aSpy = this.mock.getSpy(methodName);
-      if (aSpy == null) {
-        System.assert(false, 'No spy declared for method ' + methodName);
-      }
-      return new MethodSpyAssert(aSpy);
+  public virtual class SystemAsserter {
+    public virtual void assertEquals(
+      Object expected,
+      Object actual,
+      String message
+    ) {
+      System.assertEquals(expected, actual, message);
     }
   }
 
   public class MethodSpyAssert {
     private MethodSpy spy;
+    private SystemAsserter asserter;
 
     private MethodSpyAssert(MethodSpy spy) {
       this.spy = spy;
+      this.asserter = new SystemAsserter();
+    }
+
+    @TestVisible
+    private MethodSpyAssert(MethodSpy spy, SystemAsserter asserter) {
+      this.spy = spy;
+      this.asserter = asserter;
     }
 
     public void hasNotBeenCalled() {
-      System.assertEquals(
+      this.asserter.assertEquals(
         false,
-        spy.hasBeenCalled(),
+        this.spy.hasBeenCalled(),
         'Method ' +
-        spy.methodName +
+        this.spy.methodName +
         ' was called'
       );
     }
 
     public void hasBeenCalled() {
-      System.assertEquals(
+      this.asserter.assertEquals(
         true,
-        spy.hasBeenCalled(),
+        this.spy.hasBeenCalled(),
         'Method ' +
-        spy.methodName +
+        this.spy.methodName +
         ' was not called'
       );
     }
 
     public void hasBeenCalledWith(Object params) {
-      this.hasBeenCalledWith(new List<Object>{ params });
+      this.hasBeenCalledWithParams(new List<Object>{ params });
     }
 
     public void hasBeenCalledWithParams(ParametersMatcher matcher) {
-      System.assertNotEquals(
-        null,
-        spy.getLastCallParams(),
+      this.asserter.assertEquals(
+        false,
+        this.spy.hasBeenCalled(),
         'Method ' +
-        spy.methodName +
+        this.spy.methodName +
         ' was not called'
       );
-      matcher.assertMatches(spy.getLastCallParams());
+      matcher.assertMatches(this.spy.getLastCallParams());
     }
 
     public void hasBeenCalledWithParams(List<Object> params) {
-      System.assertNotEquals(
-        null,
-        spy.getLastCallParams(),
+      this.asserter.assertEquals(
+        true,
+        this.spy.hasBeenCalled(),
         'Method ' +
-        spy.methodName +
+        this.spy.methodName +
         ' was not called'
       );
-      System.assertEquals(params, spy.getLastCallParams());
-    }
-  }
-
-  public class SObjectAssert {
-    private SObject value;
-
-    private SObjectAssert(SObject value) {
-      this.value = value;
-    }
-
-    public void is(SObject otherValue) {
-      if (otherValue == null) {
-        System.assertEquals(null, value);
-        return;
-      }
-      System.assertEquals(
-        otherValue.getSObjectType(),
-        value.getSObjectType(),
-        'sobjects should have the same type'
-      );
-      System.assertEquals(
-        otherValue.getPopulatedFieldsAsMap(),
-        value.getPopulatedFieldsAsMap(),
-        'sobjects should have same field values'
+      this.asserter.assertEquals(
+        params,
+        this.spy.getLastCallParams(),
+        'Method ' +
+        this.spy.methodName +
+        ' was not called'
       );
     }
-  }
-
-  public static SObjectAssert assertThat(SObject value) {
-    return new SObjectAssert(value);
   }
 
   public static MethodSpyAssert assertThat(MethodSpy spy) {
     return new MethodSpyAssert(spy);
-  }
-
-  public static MockAssert assertThat(Mock mock) {
-    return new MockAssert(mock);
   }
 }

@@ -9,6 +9,9 @@
 .localdevserver/
 deploy-options.json
 
+# SFDX apex test
+tests
+
 # LWC VSCode autocomplete
 **/lwc/jsconfig.json
 

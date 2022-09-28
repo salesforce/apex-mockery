@@ -22,6 +22,7 @@ public class MethodSpy {
   private List<Object> lastCallParams;
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
+  private Boolean configuredGlobalReturn = false;
   private Exception exceptionToThrow;
 
   public MethodSpy(String methodName) {
@@ -43,11 +44,13 @@ public class MethodSpy {
   public Object call(List<Object> params) {
     this.callCount++;
     this.lastCallParams = params;
-    if (this.exceptionToThrow != null) {
-      throw this.exceptionToThrow;
-    }
-    if (this.parameterizedMethodCalls.size() == 0) {
-      return this.returnValue;
+
+    if (
+      this.parameterizedMethodCalls.isEmpty() &&
+      !this.configuredGlobalReturn &&
+      this.exceptionToThrow == null
+    ) {
+      return null;
     }
 
     for (
@@ -58,6 +61,14 @@ public class MethodSpy {
       }
     }
 
+    if (this.configuredGlobalReturn) {
+      return this.returnValue;
+    }
+
+    if (this.exceptionToThrow != null) {
+      throw this.exceptionToThrow;
+    }
+
     throw new IllegalArgumentException(
       this.methodName +
       ': No stub value found for a call with params ' +
@@ -66,18 +77,20 @@ public class MethodSpy {
   }
 
   public void returns(Object value) {
+    this.configuredGlobalReturn = true;
     this.returnValue = value;
   }
 
   public void throwsException(Exception exceptionToThrow) {
+    this.configuredGlobalReturn = false;
     this.exceptionToThrow = exceptionToThrow;
   }
 
   public ParameterizedMethodSpyCall whenCalledWith(Object param) {
-    return whenCalledWith(new List<Object>{ param });
+    return whenCalledWithParams(new List<Object>{ param });
   }
 
-  public ParameterizedMethodSpyCall whenCalledWith(List<Object> params) {
+  public ParameterizedMethodSpyCall whenCalledWithParams(List<Object> params) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
       params
     );
