@@ -29,6 +29,10 @@ public class MethodSpy {
     this.callParams = new List<List<Object>>();
   }
 
+  public List<List<Object>> getCallParams() {
+    return this.callParams;
+  }
+
   public List<Object> getLastCallParams() {
     return this.hasBeenCalled()
       ? this.callParams[this.callParams.size() - 1]
