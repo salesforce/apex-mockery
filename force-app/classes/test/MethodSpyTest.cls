@@ -358,6 +358,23 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpy_getCallParam_returnParamList() {
+    // Arrange
+    List<Object> first = new List<Object>{ new Opportunity() };
+    List<Object> last = new List<Object>{ new Account() };
+    final MethodSpy sut = new MethodSpy('methodName');
+    System.assert(sut.getCallParams().isEmpty());
+
+    // Act && Assert
+    sut.call(first);
+    System.assert(sut.getCallParams().size() == 1);
+    System.assert(sut.getCallParams()[0] == first);
+    sut.call(last);
+    System.assert(sut.getCallParams().size() == 2);
+    System.assert(sut.getCallParams()[1] == last);
+  }
+
+  @IsTest
   static void e2e_returns_then_whenCalledWith() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
