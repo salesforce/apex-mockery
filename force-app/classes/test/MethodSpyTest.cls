@@ -329,6 +329,35 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenCalledLastWithParams_returnsTrueForLastAndFalseElse() {
+    // Arrange
+    List<Object> first = new List<Object>{ new Opportunity() };
+    List<Object> last = new List<Object>{ new Account() };
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.call(first);
+    sut.call(last);
+
+    // Act && Assert
+    System.assert(!sut.hasBeenLastCalledWith(first));
+    System.assert(sut.hasBeenLastCalledWith(last));
+  }
+
+  @IsTest
+  static void givenSpyCalledMultipleTimes_hasBeenCalledWith_returnsTrueForCalledParamsElseFalse() {
+    // Arrange
+    List<Object> first = new List<Object>{ new Opportunity() };
+    List<Object> last = new List<Object>{ new Account() };
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.call(first);
+    sut.call(last);
+
+    // Act && Assert
+    System.assert(sut.hasBeenCalledWith(first));
+    System.assert(sut.hasBeenCalledWith(last));
+    System.assert(!sut.hasBeenCalledWith(new List<Object>{ new Case() }));
+  }
+
+  @IsTest
   static void e2e_returns_then_whenCalledWith() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
