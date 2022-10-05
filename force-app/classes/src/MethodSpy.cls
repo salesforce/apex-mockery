@@ -18,8 +18,7 @@
 @IsTest
 public class MethodSpy {
   public String methodName;
-  private Integer callCount = 0;
-  private List<Object> lastCallParams;
+  private List<List<Object>> callParams;
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
   private Boolean configuredGlobalReturn = false;
@@ -27,23 +26,39 @@ public class MethodSpy {
 
   public MethodSpy(String methodName) {
     this.methodName = methodName;
+    this.callParams = new List<List<Object>>();
   }
 
   public List<Object> getLastCallParams() {
-    return this.lastCallParams;
+    return this.hasBeenCalled()
+      ? this.callParams[this.callParams.size() - 1]
+      : null;
   }
 
   public Boolean hasBeenCalled() {
-    return this.callCount > 0;
+    return !this.callParams.isEmpty();
+  }
+
+  public Boolean hasBeenCalledWith(List<Object> params) {
+    for (List<Object> callParam : this.callParams) {
+      if (callParam == params) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public Boolean hasBeenLastCalledWith(List<Object> params) {
+    return this.getLastCallParams() == params;
   }
 
   public Boolean hasBeenCalledTimes(final Integer count) {
-    return this.callCount == count;
+    return this.callParams.size() == count;
   }
 
   public Object call(List<Object> params) {
-    this.callCount++;
-    this.lastCallParams = params;
+    this.callParams.add(params);
 
     if (
       this.parameterizedMethodCalls.isEmpty() &&
