@@ -82,14 +82,8 @@ private class AssertionsTest {
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
-    System.assertEquals(
-      new List<Object>{ param },
-      fakeAsserter.assertEqualsLastExpected
-    );
-    System.assertEquals(
-      spy.getLastCallParams(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -107,14 +101,8 @@ private class AssertionsTest {
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
-    System.assertEquals(
-      new List<Object>{ null },
-      fakeAsserter.assertEqualsLastExpected
-    );
-    System.assertEquals(
-      spy.getLastCallParams(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -133,11 +121,8 @@ private class AssertionsTest {
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
-    System.assertEquals(param, fakeAsserter.assertEqualsLastExpected);
-    System.assertEquals(
-      spy.getLastCallParams(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -156,11 +141,8 @@ private class AssertionsTest {
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
-    System.assertEquals(null, fakeAsserter.assertEqualsLastExpected);
-    System.assertEquals(
-      spy.getLastCallParams(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -175,7 +157,7 @@ private class AssertionsTest {
     );
     final List<Object> spyCallParam = new List<Object>{ 'param' };
     spy.call(spyCallParam);
-    final ParametersMatcherStub param = new ParametersMatcherStub(fakeAsserter);
+    final ParametersMatcherStub param = new ParametersMatcherStub();
     param.expected = spyCallParam;
 
     // Act
@@ -183,11 +165,8 @@ private class AssertionsTest {
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
-    System.assertEquals(spyCallParam, fakeAsserter.assertEqualsLastExpected);
-    System.assertEquals(
-      spy.getLastCallParams(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -199,16 +178,16 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final Assertions.ParametersMatcher param = null;
+    final ParametersMatcher param = null;
+    spy.call(new List<Object>());
 
     // Act
     try {
-      sut.hasBeenCalledWithParams(param);
+      sut.hasBeenCalledWithParams((ParametersMatcher) param);
 
       // Assert
       System.assert(false); // Should not reach this point
     } catch (Exception ex) {
-      System.assertEquals(1, fakeAsserter.assertEqualsCallCount);
       System.assertEquals(false, fakeAsserter.assertEqualsLastExpected);
       System.assertEquals(
         spy.hasBeenCalled(),
@@ -218,16 +197,38 @@ private class AssertionsTest {
     }
   }
 
-  class ParametersMatcherStub implements Assertions.ParametersMatcher {
-    private FakeAsserter asserter;
-    public Object expected;
+  @isTest
+  static void givenNullParametersMatcher_hasBeenLastCalledWithParams_callsAssertEquals() {
+    // Arrange
+    final MethodSpy spy = new MethodSpy('method');
+    final FakeAsserter fakeAsserter = new FakeAsserter();
+    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+      spy,
+      fakeAsserter
+    );
+    final ParametersMatcher param = null;
 
-    public ParametersMatcherStub(final FakeAsserter asserter) {
-      this.asserter = asserter;
+    // Act
+    try {
+      sut.hasBeenLastCalledWithParams((ParametersMatcher) param);
+
+      // Assert
+      System.assert(false); // Should not reach this point
+    } catch (Exception ex) {
+      System.assertEquals(false, fakeAsserter.assertEqualsLastExpected);
+      System.assertEquals(
+        spy.hasBeenCalled(),
+        fakeAsserter.assertEqualsLastActual
+      );
+      System.assert(ex instanceof NullPointerException);
     }
+  }
 
-    public void assertMatches(List<Object> params) {
-      this.asserter.assertEquals(this.expected, params, 'message not spied');
+  class ParametersMatcherStub implements ParametersMatcher {
+    public List<Object> expected;
+
+    public boolean matches(List<Object> params) {
+      return this.expected == params;
     }
   }
 
