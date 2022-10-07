@@ -18,7 +18,7 @@
 @IsTest
 public class MethodSpy {
   public String methodName;
-  private List<List<Object>> callParams;
+  private List<List<Object>> callParams; //TODO create encapsulating object (calllog, with callparameter type)
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
   private Boolean configuredGlobalReturn = false;
@@ -53,8 +53,22 @@ public class MethodSpy {
     return false;
   }
 
+  public Boolean hasBeenCalledWith(ParametersMatcher matcher) {
+    for (List<Object> callParam : this.callParams) {
+      if (matcher.matches(callParam)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public Boolean hasBeenLastCalledWith(List<Object> params) {
     return this.getLastCallParams() == params;
+  }
+
+  public Boolean hasBeenLastCalledWith(ParametersMatcher matcher) {
+    return matcher.matches(this.getLastCallParams());
   }
 
   public Boolean hasBeenCalledTimes(final Integer count) {

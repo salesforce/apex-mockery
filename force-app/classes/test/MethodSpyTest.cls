@@ -329,7 +329,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenCalledLastWithParams_returnsTrueForLastAndFalseElse() {
+  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithParams_returnsTrueForLastAndFalseElse() {
     // Arrange
     List<Object> first = new List<Object>{ new Opportunity() };
     List<Object> last = new List<Object>{ new Account() };
@@ -355,6 +355,34 @@ private class MethodSpyTest {
     System.assert(sut.hasBeenCalledWith(first));
     System.assert(sut.hasBeenCalledWith(last));
     System.assert(!sut.hasBeenCalledWith(new List<Object>{ new Case() }));
+  }
+
+  @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatcher_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    final MethodSpy sut = new MethodSpy('methodName');
+    ParametersMatcherStub stub = new ParametersMatcherStub();
+    stub.expected = param;
+
+    // Act & Assert
+    System.assert(!sut.hasBeenLastCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenLastCalledWith(stub));
+  }
+
+  @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenCalledWithMatcher_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    final MethodSpy sut = new MethodSpy('methodName');
+    ParametersMatcherStub stub = new ParametersMatcherStub();
+    stub.expected = param;
+
+    // Act & Assert
+    System.assert(!sut.hasBeenCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenCalledWith(stub));
   }
 
   @IsTest
@@ -505,6 +533,14 @@ private class MethodSpyTest {
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
       System.assertEquals(expectedException.getMessage(), e.getMessage());
+    }
+  }
+
+  class ParametersMatcherStub implements ParametersMatcher {
+    public List<Object> expected;
+
+    public boolean matches(List<Object> params) {
+      return this.expected == params;
     }
   }
 
