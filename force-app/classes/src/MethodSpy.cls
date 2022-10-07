@@ -12,6 +12,7 @@
  *  - return value based on calling arguments list
  *        spy.whenCalledWith(param).thenReturn(value)
  *        spy.whenCalledWith(new List<Object>{param1, param2}).thenReturn(value)
+ *        spy.whenCalledWith(new List<Object>{param1, param2}).thenThrow(error)
  *    note: the matching algorithm is currently based on equality (equals method or reference comparison)
  *
  */
@@ -57,6 +58,9 @@ public class MethodSpy {
       ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls
     ) {
       if (parameterizedCall.matches(params)) {
+        if (parameterizedCall.shouldThrow()) {
+          throw parameterizedCall.error;
+        }
         return parameterizedCall.value;
       }
     }

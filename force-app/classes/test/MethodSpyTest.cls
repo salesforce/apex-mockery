@@ -81,6 +81,25 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyConfiguredToThenThrowException_whenCallingTheSpyWithMatchingParams_itThrowsTheException() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
+    sut.whenCalledWith('Expected Param').thenThrow(expectedException);
+
+    try {
+      // Act
+      sut.call(new List<Object>{ 'Expected Param' });
+      System.assert(false, 'test should have throw an exception');
+    } catch (Exception e) {
+      // Assert
+      System.assertEquals(expectedException.getMessage(), e.getMessage());
+    }
+  }
+
+  @IsTest
   static void givenSpyConfiguredOnceToReturnOnMatchingSingleParam_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');

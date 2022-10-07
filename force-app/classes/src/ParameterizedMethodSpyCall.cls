@@ -8,6 +8,7 @@
 public class ParameterizedMethodSpyCall {
   private List<Object> params;
   public Object value;
+  public Exception error;
 
   public ParameterizedMethodSpyCall(List<Object> params) {
     this.params = params;
@@ -15,6 +16,14 @@ public class ParameterizedMethodSpyCall {
 
   public void thenReturn(Object value) {
     this.value = value;
+  }
+
+  public void thenThrow(Exception error) {
+    this.error = error;
+  }
+
+  public boolean shouldThrow() {
+    return this.error != null;
   }
 
   public boolean matches(List<Object> params) {

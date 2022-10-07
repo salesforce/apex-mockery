@@ -208,7 +208,7 @@ private class ParameterizedMethodSpyCallTest {
   }
 
   @IsTest
-  static void givenAnObject_thenReturnSetsValueAttributWithIt() {
+  static void givenAnObject_thenReturnSetsValueAttributeWithIt() {
     // Arrange
     final String value = 'test';
     final ParameterizedMethodSpyCall sut = new ParameterizedMethodSpyCall(null);
@@ -220,7 +220,45 @@ private class ParameterizedMethodSpyCallTest {
     System.assertEquals(
       value,
       sut.value,
-      'value attribut should be set by thenReturn method call'
+      'value attribute should be set by thenReturn method call'
+    );
+  }
+
+  @IsTest
+  static void givenAnObject_thenThrowSetsErrorAttributeWithIt() {
+    // Arrange
+    final ParameterizedMethodSpyCall sut = new ParameterizedMethodSpyCall(null);
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
+
+    // Act
+    sut.thenThrow(expectedException);
+
+    // Assert
+    System.assertEquals(
+      expectedException.getMessage(),
+      sut.error.getMessage(),
+      'error attribute should be set by thenThrow method call'
+    );
+  }
+
+  @IsTest
+  static void givenAnObject_thenThrowSetShouldThrow() {
+    // Arrange
+    final ParameterizedMethodSpyCall sut = new ParameterizedMethodSpyCall(null);
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
+    sut.thenThrow(expectedException);
+
+    // Act
+    final Boolean shouldThrow = sut.shouldThrow();
+
+    // Assert
+    System.assert(
+      shouldThrow,
+      'shouldThrow should be true because an error is configured'
     );
   }
 
