@@ -132,8 +132,8 @@ public class Assertions {
         ' was not called'
       );
       this.asserter.assertEquals(
-        params,
-        this.spy.getLastCallParams(),
+        true,
+        this.spy.hasBeenLastCalledWith(params),
         'Method ' +
         this.spy.methodName +
         ' was not last called with ' +

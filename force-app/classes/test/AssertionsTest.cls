@@ -207,6 +207,7 @@ private class AssertionsTest {
       fakeAsserter
     );
     final ParametersMatcher param = null;
+    spy.call(null);
 
     // Act
     try {

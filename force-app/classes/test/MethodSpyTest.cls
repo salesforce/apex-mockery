@@ -215,47 +215,6 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledWithEmptyParamList_whenGetLastCallParams_itReturnsTheSameParamsList() {
-    // Arrange
-    final MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(new List<Object>{ 'param1' });
-
-    // Act
-    final Object result = sut.getlastCallParams();
-
-    // Assert
-    System.assertEquals(new List<Object>{ 'param1' }, result);
-  }
-
-  @IsTest
-  static void givenSpyCalledWithNoParams_whenGetLastCallParams_itReturnsNull() {
-    // Arrange
-    final MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(null);
-
-    // Act
-    final Object result = sut.getlastCallParams();
-
-    // Assert
-    System.assertEquals(null, result);
-  }
-
-  @IsTest
-  static void givenSpyNotCalled_whenGetLastCallParams_itReturnsNull() {
-    // Arrange
-    final MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-
-    // Act
-    final Object result = sut.getlastCallParams();
-
-    // Assert
-    System.assertEquals(null, result);
-  }
-
-  @IsTest
   static void givenSpyNotCalled_hasBeenCalled_itReturnsFalse() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
@@ -383,23 +342,6 @@ private class MethodSpyTest {
     System.assert(!sut.hasBeenCalledWith(stub));
     sut.call(param);
     System.assert(sut.hasBeenCalledWith(stub));
-  }
-
-  @IsTest
-  static void givenSpy_getCallParam_returnParamList() {
-    // Arrange
-    List<Object> first = new List<Object>{ new Opportunity() };
-    List<Object> last = new List<Object>{ new Account() };
-    final MethodSpy sut = new MethodSpy('methodName');
-    System.assert(sut.getCallParams().isEmpty());
-
-    // Act && Assert
-    sut.call(first);
-    System.assert(sut.getCallParams().size() == 1);
-    System.assert(sut.getCallParams()[0] == first);
-    sut.call(last);
-    System.assert(sut.getCallParams().size() == 2);
-    System.assert(sut.getCallParams()[1] == last);
   }
 
   @IsTest
