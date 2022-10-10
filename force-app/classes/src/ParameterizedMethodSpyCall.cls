@@ -7,8 +7,8 @@
 @IsTest
 public class ParameterizedMethodSpyCall {
   private List<Object> params;
-  public Object value;
-  public Exception error;
+  public Object value { get; private set; }
+  public Exception error { get; private set; }
 
   public ParameterizedMethodSpyCall(List<Object> params) {
     this.params = params;

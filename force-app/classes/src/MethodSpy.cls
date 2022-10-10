@@ -18,7 +18,7 @@
  */
 @IsTest
 public class MethodSpy {
-  public String methodName;
+  public String methodName { get; private set; }
   private CallLog callLog;
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
