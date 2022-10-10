@@ -49,7 +49,7 @@ private class MethodSpyTest {
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
       // Assert
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -95,7 +95,7 @@ private class MethodSpyTest {
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
       // Assert
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -399,7 +399,7 @@ private class MethodSpyTest {
       sut.call(new List<Object>{ 1 });
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -465,7 +465,7 @@ private class MethodSpyTest {
       sut.call(new List<Object>{ 3 });
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -493,7 +493,7 @@ private class MethodSpyTest {
       sut.call(new List<Object>{ 3 });
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
