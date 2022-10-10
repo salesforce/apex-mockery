@@ -34,18 +34,11 @@ public class MethodSpy {
   }
 
   public Boolean hasBeenCalledWith(List<Object> params) {
-    Iterator<CallParameter> it = this.callLog.iterator();
-    while (it.hasNext()) {
-      if (params == it.next().params) {
-        return true;
-      }
-    }
-
-    return false;
+    return this.hasBeenCalledWith(new EqualsMatcher(params));
   }
 
   public Boolean hasBeenCalledWith(ParametersMatcher matcher) {
-    Iterator<CallParameter> it = this.callLog.iterator();
+    Iterator<MethodCall> it = this.callLog.iterator();
     while (it.hasNext()) {
       if (matcher.matches(it.next().params)) {
         return true;
@@ -56,10 +49,7 @@ public class MethodSpy {
   }
 
   public Boolean hasBeenLastCalledWith(List<Object> params) {
-    if (this.callLog.isEmpty()) {
-      return false;
-    }
-    return this.callLog.getLast() == params;
+    return this.hasBeenLastCalledWith(new EqualsMatcher(params));
   }
 
   public Boolean hasBeenLastCalledWith(ParametersMatcher matcher) {
@@ -74,7 +64,7 @@ public class MethodSpy {
   }
 
   public Object call(List<Object> params) {
-    this.callLog.add(new CallParameter(params));
+    this.callLog.add(new MethodCall(params));
 
     if (
       this.parameterizedMethodCalls.isEmpty() &&
@@ -129,10 +119,10 @@ public class MethodSpy {
     return parameterizedMethodCall;
   }
 
-  private class CallLog implements Iterable<CallParameter> {
-    private List<CallParameter> callParams = new List<CallParameter>();
+  private class CallLog implements Iterable<MethodCall> {
+    private List<MethodCall> callParams = new List<MethodCall>();
 
-    public void add(CallParameter callParam) {
+    public void add(MethodCall callParam) {
       this.callParams.add(callParam);
     }
 
@@ -152,16 +142,28 @@ public class MethodSpy {
       return this.callParams[this.size() - 1].params;
     }
 
-    public Iterator<CallParameter> iterator() {
+    public Iterator<MethodCall> iterator() {
       return this.callParams.iterator();
     }
   }
 
-  private class CallParameter {
+  private class MethodCall {
     public List<Object> params { get; private set; }
 
-    public CallParameter(final List<Object> params) {
+    public MethodCall(final List<Object> params) {
       this.params = params;
+    }
+  }
+
+  private class EqualsMatcher implements ParametersMatcher {
+    private List<Object> paramsToMatch;
+
+    public EqualsMatcher(final List<Object> paramsToMatch) {
+      this.paramsToMatch = paramsToMatch;
+    }
+
+    public Boolean matches(List<Object> params) {
+      return this.paramsToMatch == params;
     }
   }
 }
