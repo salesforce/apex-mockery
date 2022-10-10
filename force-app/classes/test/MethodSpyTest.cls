@@ -49,7 +49,7 @@ private class MethodSpyTest {
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
       // Assert
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -77,6 +77,25 @@ private class MethodSpyTest {
     } catch (Exception e) {
       // Assert
       System.assertEquals(exception3.getMessage(), e.getMessage());
+    }
+  }
+
+  @IsTest
+  static void givenSpyConfiguredToThenThrowException_whenCallingTheSpyWithMatchingParams_itThrowsTheException() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    final Exception expectedException = new IllegalArgumentException(
+      'test exception'
+    );
+    sut.whenCalledWith('Expected Param').thenThrow(expectedException);
+
+    try {
+      // Act
+      sut.call(new List<Object>{ 'Expected Param' });
+      System.assert(false, 'test should have throw an exception');
+    } catch (Exception e) {
+      // Assert
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -380,7 +399,7 @@ private class MethodSpyTest {
       sut.call(new List<Object>{ 1 });
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -446,7 +465,7 @@ private class MethodSpyTest {
       sut.call(new List<Object>{ 3 });
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
@@ -474,7 +493,7 @@ private class MethodSpyTest {
       sut.call(new List<Object>{ 3 });
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
-      System.assertEquals(expectedException.getMessage(), e.getMessage());
+      System.assertEquals('test exception', e.getMessage());
     }
   }
 
