@@ -262,6 +262,21 @@ private class ParameterizedMethodSpyCallTest {
     );
   }
 
+  @IsTest
+  static void givenAnObject_shouldNotThrowByDefault() {
+    // Arrange
+    final ParameterizedMethodSpyCall sut = new ParameterizedMethodSpyCall(null);
+
+    // Act
+    final Boolean shouldThrow = sut.shouldThrow();
+
+    // Assert
+    System.assert(
+      !shouldThrow,
+      'shouldThrow should be false because no error has been configured'
+    );
+  }
+
   class CustomApex {
     private String attribut;
 
