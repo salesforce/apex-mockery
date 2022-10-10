@@ -234,47 +234,6 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledWithEmptyParamList_whenGetLastCallParams_itReturnsTheSameParamsList() {
-    // Arrange
-    final MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(new List<Object>{ 'param1' });
-
-    // Act
-    final Object result = sut.getlastCallParams();
-
-    // Assert
-    System.assertEquals(new List<Object>{ 'param1' }, result);
-  }
-
-  @IsTest
-  static void givenSpyCalledWithNoParams_whenGetLastCallParams_itReturnsNull() {
-    // Arrange
-    final MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(null);
-
-    // Act
-    final Object result = sut.getlastCallParams();
-
-    // Assert
-    System.assertEquals(null, result);
-  }
-
-  @IsTest
-  static void givenSpyNotCalled_whenGetLastCallParams_itReturnsNull() {
-    // Arrange
-    final MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-
-    // Act
-    final Object result = sut.getlastCallParams();
-
-    // Assert
-    System.assertEquals(null, result);
-  }
-
-  @IsTest
   static void givenSpyNotCalled_hasBeenCalled_itReturnsFalse() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
@@ -345,6 +304,63 @@ private class MethodSpyTest {
     System.assert(!sut.hasBeenCalledTimes(1));
     System.assert(sut.hasBeenCalledTimes(5));
     System.assert(!sut.hasBeenCalledTimes(6));
+  }
+
+  @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithParams_returnsTrueForLastAndFalseElse() {
+    // Arrange
+    List<Object> first = new List<Object>{ new Opportunity() };
+    List<Object> last = new List<Object>{ new Account() };
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.call(first);
+    sut.call(last);
+
+    // Act && Assert
+    System.assert(!sut.hasBeenLastCalledWith(first));
+    System.assert(sut.hasBeenLastCalledWith(last));
+  }
+
+  @IsTest
+  static void givenSpyCalledMultipleTimes_hasBeenCalledWith_returnsTrueForCalledParamsElseFalse() {
+    // Arrange
+    List<Object> first = new List<Object>{ new Opportunity() };
+    List<Object> last = new List<Object>{ new Account() };
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.call(first);
+    sut.call(last);
+
+    // Act && Assert
+    System.assert(sut.hasBeenCalledWith(first));
+    System.assert(sut.hasBeenCalledWith(last));
+    System.assert(!sut.hasBeenCalledWith(new List<Object>{ new Case() }));
+  }
+
+  @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatcher_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    final MethodSpy sut = new MethodSpy('methodName');
+    ParametersMatcherStub stub = new ParametersMatcherStub();
+    stub.expected = param;
+
+    // Act & Assert
+    System.assert(!sut.hasBeenLastCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenLastCalledWith(stub));
+  }
+
+  @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenCalledWithMatcher_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    final MethodSpy sut = new MethodSpy('methodName');
+    ParametersMatcherStub stub = new ParametersMatcherStub();
+    stub.expected = param;
+
+    // Act & Assert
+    System.assert(!sut.hasBeenCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenCalledWith(stub));
   }
 
   @IsTest
@@ -478,6 +494,14 @@ private class MethodSpyTest {
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
       System.assertEquals(expectedException.getMessage(), e.getMessage());
+    }
+  }
+
+  class ParametersMatcherStub implements ParametersMatcher {
+    public List<Object> expected;
+
+    public boolean matches(List<Object> params) {
+      return this.expected == params;
     }
   }
 

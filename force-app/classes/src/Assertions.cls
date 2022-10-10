@@ -6,10 +6,6 @@
  */
 @IsTest
 public class Assertions {
-  public interface ParametersMatcher {
-    void assertMatches(List<Object> actualParams);
-  }
-
   public virtual class SystemAsserter {
     public virtual void assertEquals(
       Object expected,
@@ -55,6 +51,18 @@ public class Assertions {
       );
     }
 
+    public void hasBeenCalledTimes(final Integer count) {
+      this.asserter.assertEquals(
+        true,
+        this.spy.hasBeenCalledTimes(count),
+        'Method ' +
+        this.spy.methodName +
+        ' was not called ' +
+        count +
+        ' times'
+      );
+    }
+
     public void hasBeenCalledWith(Object params) {
       this.hasBeenCalledWithParams(new List<Object>{ params });
     }
@@ -67,7 +75,13 @@ public class Assertions {
         this.spy.methodName +
         ' was not called'
       );
-      matcher.assertMatches(this.spy.getLastCallParams());
+      this.asserter.assertEquals(
+        true,
+        this.spy.hasBeenCalledWith(matcher),
+        'Method ' +
+        this.spy.methodName +
+        ' was not called with matcher'
+      );
     }
 
     public void hasBeenCalledWithParams(List<Object> params) {
@@ -79,11 +93,51 @@ public class Assertions {
         ' was not called'
       );
       this.asserter.assertEquals(
-        params,
-        this.spy.getLastCallParams(),
+        true,
+        this.spy.hasBeenCalledWith(params),
+        'Method ' +
+        this.spy.methodName +
+        ' was not called with ' +
+        params
+      );
+    }
+
+    public void hasBeenLastCalledWith(Object params) {
+      this.hasBeenLastCalledWithParams(new List<Object>{ params });
+    }
+
+    public void hasBeenLastCalledWithParams(ParametersMatcher matcher) {
+      this.asserter.assertEquals(
+        false,
+        this.spy.hasBeenCalled(),
+        'Method ' +
+        this.spy.methodName +
+        ' was not last called'
+      );
+      this.asserter.assertEquals(
+        true,
+        this.spy.hasBeenLastCalledWith(matcher),
+        'Method ' +
+        this.spy.methodName +
+        ' was not last called with matcher'
+      );
+    }
+
+    public void hasBeenLastCalledWithParams(List<Object> params) {
+      this.asserter.assertEquals(
+        true,
+        this.spy.hasBeenCalled(),
         'Method ' +
         this.spy.methodName +
         ' was not called'
+      );
+      this.asserter.assertEquals(
+        true,
+        this.spy.hasBeenLastCalledWith(params),
+        'Method ' +
+        this.spy.methodName +
+        ' was not last called with ' +
+        params
       );
     }
   }
