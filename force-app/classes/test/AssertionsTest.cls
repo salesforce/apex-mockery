@@ -225,6 +225,32 @@ private class AssertionsTest {
     }
   }
 
+  @isTest
+  static void givenCall_hasBeenCalledTimes_returnsCalledTimes() {
+    // Arrange
+    final MethodSpy spy = new MethodSpy('method');
+    final FakeAsserter fakeAsserter = new FakeAsserter();
+    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+      spy,
+      fakeAsserter
+    );
+    final ParametersMatcher param = null;
+    spy.call(null);
+
+    // Act & Assert
+    sut.hasBeenCalledTimes(1);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastActual);
+
+    sut.hasBeenCalledTimes(0);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+
+    sut.hasBeenCalledTimes(2);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+  }
+
   class ParametersMatcherStub implements ParametersMatcher {
     public List<Object> expected;
 
