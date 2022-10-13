@@ -111,11 +111,11 @@ public class MethodSpy {
     this.exceptionToThrow = exceptionToThrow;
   }
 
-  public ParameterizedMethodSpyCall whenCalledWith(Object param) {
+  public MethodSpyCall whenCalledWith(Object param) {
     return whenCalledWithParams(new List<Object>{ param });
   }
 
-  public ParameterizedMethodSpyCall whenCalledWithParams(List<Object> params) {
+  public MethodSpyCall whenCalledWithParams(List<Object> params) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
       params
     );
@@ -143,7 +143,7 @@ public class MethodSpy {
     }
 
     public List<Object> getLast() {
-      return this.callParams[this.size() - 1].params;
+      return this.get(this.size() - 1);
     }
 
     public Iterator<MethodCall> iterator() {
@@ -168,6 +168,47 @@ public class MethodSpy {
 
     public Boolean matches(List<Object> params) {
       return this.paramsToMatch == params;
+    }
+  }
+
+  public interface MethodSpyCall {
+    void thenReturn(Object value);
+    void thenThrow(Exception error);
+  }
+
+  private class ParameterizedMethodSpyCall implements MethodSpyCall {
+    private List<Object> params;
+    public Object value { get; private set; }
+    public Exception error { get; private set; }
+
+    public ParameterizedMethodSpyCall(List<Object> params) {
+      this.params = params;
+    }
+
+    public void thenReturn(Object value) {
+      this.value = value;
+    }
+
+    public void thenThrow(Exception error) {
+      this.error = error;
+    }
+
+    public boolean shouldThrow() {
+      return this.error != null;
+    }
+
+    public boolean matches(List<Object> params) {
+      if (this.params.size() != params.size()) {
+        return false;
+      }
+      for (Integer i = 0; i < params.size(); i++) {
+        Object expectedParam = this.params.get(i);
+        Object actualParam = params.get(i);
+        if (actualParam != expectedParam) {
+          return false;
+        }
+      }
+      return true;
     }
   }
 }
