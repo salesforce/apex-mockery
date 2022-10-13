@@ -404,6 +404,27 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyCalledWithListOf2_hasBeenCalledWithListOf1ReturnsFalse() {
+    // Arrange
+    final List<Object> objects = new List<Object>{
+      new Account(),
+      new Account()
+    };
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWithParams(objects).thenReturn(true);
+
+    // Act
+    try {
+      final Object actual = sut.call(new List<Object>{ new Account() });
+
+      // Assert
+      System.assert(false); // Should not reach this point
+    } catch (IllegalArgumentException ex) {
+      System.assertNotEquals(null, ex, 'exception should be thrown');
+    }
+  }
+
+  @IsTest
   static void givenSpyCalledWithCustomApexWithEquals_hasBeenCalledWithReturnsTrue() {
     // Arrange
     final CustomApexWithEquals param = new CustomApexWithEquals('test');
