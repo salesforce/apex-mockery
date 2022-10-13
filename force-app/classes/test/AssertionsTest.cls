@@ -198,6 +198,89 @@ private class AssertionsTest {
   }
 
   @isTest
+  static void givenNull_hasBeenLastCalledWith_callsAssertEquals() {
+    // Arrange
+    final MethodSpy spy = new MethodSpy('method');
+    final FakeAsserter fakeAsserter = new FakeAsserter();
+    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+      spy,
+      fakeAsserter
+    );
+
+    // Act
+    sut.hasBeenLastCalledWith(null);
+
+    // Assert
+    System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+  }
+
+  @isTest
+  static void givenObjectList_hasBeenLastCalledWithParams_callsAssertEquals() {
+    // Arrange
+    final MethodSpy spy = new MethodSpy('method');
+    final FakeAsserter fakeAsserter = new FakeAsserter();
+    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+      spy,
+      fakeAsserter
+    );
+    final List<Object> param = new List<Object>{ new Account() };
+
+    // Act
+    sut.hasBeenLastCalledWithParams(param);
+
+    // Assert
+    System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+  }
+
+  @isTest
+  static void givenNullList_hasBeenLastCalledWithParams_callsAssertEquals() {
+    // Arrange
+    final MethodSpy spy = new MethodSpy('method');
+    final FakeAsserter fakeAsserter = new FakeAsserter();
+    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+      spy,
+      fakeAsserter
+    );
+    final List<Object> params = null;
+
+    // Act
+    sut.hasBeenLastCalledWithParams(params);
+
+    // Assert
+    System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+  }
+
+  @isTest
+  static void givenParametersMatcher_hasBeenLastCalledWithParams_callsAssertEquals() {
+    // Arrange
+    final MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    final FakeAsserter fakeAsserter = new FakeAsserter();
+    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+      spy,
+      fakeAsserter
+    );
+    final List<Object> spyCallParam = new List<Object>{ 'param' };
+    spy.call(spyCallParam);
+    final ParametersMatcherStub param = new ParametersMatcherStub();
+    param.expected = spyCallParam;
+
+    // Act
+    sut.hasBeenLastCalledWithParams(param);
+
+    // Assert
+    System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
+    System.assertEquals(true, fakeAsserter.assertEqualsLastActual);
+  }
+
+  @isTest
   static void givenNullParametersMatcher_hasBeenLastCalledWithParams_callsAssertEquals() {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
@@ -249,6 +332,18 @@ private class AssertionsTest {
     sut.hasBeenCalledTimes(2);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+  }
+
+  @isTest
+  static void givenExpectedEqualsAssert_systemAsserter_doNotThrow() {
+    // Arrange
+    Assertions.SystemAsserter systemAsserter = new Assertions.SystemAsserter();
+
+    // Act
+    systemAsserter.assertEquals(true, true, 'it works');
+
+    // Assert
+    System.assert(true, 'This assertions should be reached');
   }
 
   class ParametersMatcherStub implements ParametersMatcher {
