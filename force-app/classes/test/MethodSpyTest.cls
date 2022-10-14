@@ -321,6 +321,20 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatcher_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    final MethodSpy sut = new MethodSpy('methodName');
+    ParametersMatcherStub stub = new ParametersMatcherStub();
+    stub.expected = param;
+
+    // Act & Assert
+    System.assert(!sut.hasBeenLastCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenLastCalledWith(stub));
+  }
+
+  @IsTest
   static void givenSpyCalledMultipleTimes_hasBeenCalledWith_returnsTrueForCalledParamsElseFalse() {
     // Arrange
     List<Object> first = new List<Object>{ new Opportunity() };
@@ -336,21 +350,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatcher_returnsMatches() {
-    // Arrange
-    List<Object> param = new List<Object>();
-    final MethodSpy sut = new MethodSpy('methodName');
-    ParametersMatcherStub stub = new ParametersMatcherStub();
-    stub.expected = param;
-
-    // Act & Assert
-    System.assert(!sut.hasBeenLastCalledWith(stub));
-    sut.call(param);
-    System.assert(sut.hasBeenLastCalledWith(stub));
-  }
-
-  @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenCalledWithMatcher_returnsMatches() {
+  static void givenSpyCalledWithParams_hasBeenCalledWithMatcher_returnsMatches() {
     // Arrange
     List<Object> param = new List<Object>();
     final MethodSpy sut = new MethodSpy('methodName');
@@ -361,6 +361,98 @@ private class MethodSpyTest {
     System.assert(!sut.hasBeenCalledWith(stub));
     sut.call(param);
     System.assert(sut.hasBeenCalledWith(stub));
+  }
+
+  @IsTest
+  static void givenSpyCalledWithParam_hasBeenCalledWithJSONMatcher() {
+    // Arrange
+    List<Object> param = new List<Object>{ new Account(Name = 'test') };
+    final MethodSpy sut = new MethodSpy('methodName');
+    JSONMatcher stub = new JSONMatcher();
+    stub.expected = JSON.serialize(param);
+
+    // Act & Assert
+    System.assert(!sut.hasBeenCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenCalledWith(stub));
+  }
+
+  @IsTest
+  static void givenSpyCalledWithCustomApex_hasBeenCalledWithReturnsTrue() {
+    // Arrange
+    final CustomApex param = new CustomApex('test');
+    final MethodSpy sut = new MethodSpy('methodName');
+    final Object expected = new Account();
+    sut.whenCalledWith(param).thenReturn(expected);
+
+    // Act
+    final Object actual = sut.call(new List<Object>{ param });
+
+    // Assert
+    System.assertEquals(
+      expected,
+      actual,
+      'custom apex identical list should match'
+    );
+  }
+
+  @IsTest
+  static void givenSpyCalledWithListOf2_hasBeenCalledWithListOf1ReturnsFalse() {
+    // Arrange
+    final List<Object> objects = new List<Object>{
+      new Account(),
+      new Account()
+    };
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWithParams(objects).thenReturn(true);
+
+    // Act
+    try {
+      final Object actual = sut.call(new List<Object>{ new Account() });
+
+      // Assert
+      System.assert(false); // Should not reach this point
+    } catch (IllegalArgumentException ex) {
+      System.assertNotEquals(null, ex, 'exception should be thrown');
+    }
+  }
+
+  @IsTest
+  static void givenSpyCalledWithCustomApexWithEquals_hasBeenCalledWithReturnsTrue() {
+    // Arrange
+    final CustomApexWithEquals param = new CustomApexWithEquals('test');
+    final MethodSpy sut = new MethodSpy('methodName');
+    final Object expected = new Account();
+    sut.whenCalledWith(param).thenReturn(expected);
+
+    // Act
+    final Object actual = sut.call(new List<Object>{ param });
+
+    // Assert
+    System.assertEquals(
+      expected,
+      actual,
+      'custom apex with equals identical list should match'
+    );
+  }
+
+  @IsTest
+  static void givenSpyCalledWithNotSerializableCustomApex_hasBeenCalledWithReturnsTrue() {
+    // Arrange
+    final NotSerializableCustomApex param = new NotSerializableCustomApex();
+    final MethodSpy sut = new MethodSpy('methodName');
+    final Object expected = new Account();
+    sut.whenCalledWith(param).thenReturn(expected);
+
+    // Act
+    final Object actual = sut.call(new List<Object>{ param });
+
+    // Assert
+    System.assertEquals(
+      expected,
+      actual,
+      'Not serializable custom apex identical list should match'
+    );
   }
 
   @IsTest
@@ -497,11 +589,55 @@ private class MethodSpyTest {
     }
   }
 
+  class JSONMatcher implements ParametersMatcher {
+    public String expected;
+
+    public boolean matches(List<Object> params) {
+      return this.expected == JSON.serialize(params);
+    }
+  }
+
   class ParametersMatcherStub implements ParametersMatcher {
     public List<Object> expected;
 
     public boolean matches(List<Object> params) {
       return this.expected == params;
+    }
+  }
+
+  class CustomApex {
+    private String attribut;
+
+    public CustomApex(final String attribut) {
+      this.attribut = attribut;
+    }
+  }
+
+  class CustomApexWithEquals {
+    private String attribut;
+
+    public CustomApexWithEquals(final String attribut) {
+      this.attribut = attribut;
+    }
+
+    public Boolean equals(Object o) {
+      if ((o == null) || !(o instanceof CustomApexWithEquals)) {
+        return false;
+      }
+      final CustomApexWithEquals subject = (CustomApexWithEquals) o;
+      return this.attribut == subject.attribut;
+    }
+
+    public Integer hashCode() {
+      return this.attribut != null ? this.attribut.hashCode() : -1;
+    }
+  }
+
+  class NotSerializableCustomApex {
+    private Http notSerializableAttribut;
+
+    public NotSerializableCustomApex() {
+      this.notSerializableAttribut = new Http();
     }
   }
 

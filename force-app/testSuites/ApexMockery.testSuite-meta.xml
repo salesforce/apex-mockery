@@ -4,5 +4,4 @@
     <testClassName>FunctionalTest</testClassName>
     <testClassName>MethodSpyTest</testClassName>
     <testClassName>MockTest</testClassName>
-    <testClassName>ParameterizedMethodSpyCallTest</testClassName>
 </ApexTestSuite>
