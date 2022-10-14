@@ -321,6 +321,20 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatcher_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    final MethodSpy sut = new MethodSpy('methodName');
+    ParametersMatcherStub stub = new ParametersMatcherStub();
+    stub.expected = param;
+
+    // Act & Assert
+    System.assert(!sut.hasBeenLastCalledWith(stub));
+    sut.call(param);
+    System.assert(sut.hasBeenLastCalledWith(stub));
+  }
+
+  @IsTest
   static void givenSpyCalledMultipleTimes_hasBeenCalledWith_returnsTrueForCalledParamsElseFalse() {
     // Arrange
     List<Object> first = new List<Object>{ new Opportunity() };
@@ -336,7 +350,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatcher_returnsMatches() {
+  static void givenSpyCalledWithParams_hasBeenCalledWithMatcher_returnsMatches() {
     // Arrange
     List<Object> param = new List<Object>();
     final MethodSpy sut = new MethodSpy('methodName');
@@ -344,18 +358,18 @@ private class MethodSpyTest {
     stub.expected = param;
 
     // Act & Assert
-    System.assert(!sut.hasBeenLastCalledWith(stub));
+    System.assert(!sut.hasBeenCalledWith(stub));
     sut.call(param);
-    System.assert(sut.hasBeenLastCalledWith(stub));
+    System.assert(sut.hasBeenCalledWith(stub));
   }
 
   @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenCalledWithMatcher_returnsMatches() {
+  static void givenSpyCalledWithParam_hasBeenCalledWithJSONMatcher() {
     // Arrange
-    List<Object> param = new List<Object>();
+    List<Object> param = new List<Object>{ new Account(Name = 'test') };
     final MethodSpy sut = new MethodSpy('methodName');
-    ParametersMatcherStub stub = new ParametersMatcherStub();
-    stub.expected = param;
+    JSONMatcher stub = new JSONMatcher();
+    stub.expected = JSON.serialize(param);
 
     // Act & Assert
     System.assert(!sut.hasBeenCalledWith(stub));
@@ -572,6 +586,14 @@ private class MethodSpyTest {
       System.assert(false, 'test should have throw an exception');
     } catch (Exception e) {
       System.assertEquals('test exception', e.getMessage());
+    }
+  }
+
+  class JSONMatcher implements ParametersMatcher {
+    public String expected;
+
+    public boolean matches(List<Object> params) {
+      return this.expected == JSON.serialize(params);
     }
   }
 
