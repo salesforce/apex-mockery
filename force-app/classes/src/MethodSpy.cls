@@ -116,8 +116,12 @@ public class MethodSpy {
   }
 
   public MethodSpyCall whenCalledWithParams(List<Object> params) {
+    return whenCalledWithParams(new DeepEqualsListMatcher(params));
+  }
+
+  public MethodSpyCall whenCalledWithParams(ParametersMatcher matcher) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
-      params
+      matcher
     );
     this.parameterizedMethodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
@@ -171,18 +175,40 @@ public class MethodSpy {
     }
   }
 
+  private class DeepEqualsListMatcher implements ParametersMatcher {
+    private List<Object> paramsToMatch;
+
+    public DeepEqualsListMatcher(final List<Object> paramsToMatch) {
+      this.paramsToMatch = paramsToMatch;
+    }
+
+    public Boolean matches(List<Object> params) {
+      if (this.paramsToMatch.size() != params.size()) {
+        return false;
+      }
+      for (Integer i = 0; i < params.size(); i++) {
+        Object expectedParam = this.paramsToMatch.get(i);
+        Object actualParam = params.get(i);
+        if (actualParam != expectedParam) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
   public interface MethodSpyCall {
     void thenReturn(Object value);
     void thenThrow(Exception error);
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private List<Object> params;
+    private ParametersMatcher matcher;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
-    public ParameterizedMethodSpyCall(List<Object> params) {
-      this.params = params;
+    public ParameterizedMethodSpyCall(ParametersMatcher matcher) {
+      this.matcher = matcher;
     }
 
     public void thenReturn(Object value) {
@@ -198,17 +224,7 @@ public class MethodSpy {
     }
 
     public boolean matches(List<Object> params) {
-      if (this.params.size() != params.size()) {
-        return false;
-      }
-      for (Integer i = 0; i < params.size(); i++) {
-        Object expectedParam = this.params.get(i);
-        Object actualParam = params.get(i);
-        if (actualParam != expectedParam) {
-          return false;
-        }
-      }
-      return true;
+      return this.matcher.matches(params);
     }
   }
 }
