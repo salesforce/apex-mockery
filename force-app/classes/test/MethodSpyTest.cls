@@ -157,6 +157,30 @@ private class MethodSpyTest {
     // Assert
     System.assertEquals('Expected Result', result);
   }
+
+  @IsTest
+  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithWWrong_itShouldThrowIllegalArgumentException() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWithParams(new SObjectTypeMatcher(Account.getSObjectType()))
+      .thenReturn('Expected Result');
+
+    // Act
+    try {
+      final Object result = sut.call(
+        new List<Object>{ new Opportunity(), true }
+      );
+      // Assert
+      System.assert(false, 'test should have throw an exception');
+    } catch (Exception ex) {
+      System.assert(
+        ex instanceof IllegalArgumentException,
+        'Exception should be IllegalArgumentException'
+      );
+    }
+  }
+
+  @IsTest
   static void givenSpyConfiguredMultipleTimesToReturnOnMatchingParams_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
