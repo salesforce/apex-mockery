@@ -145,6 +145,18 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithRightType_itReturnsTheConfiguredValue() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWithParams(new SObjectTypeMatcher(Account.getSObjectType()))
+      .thenReturn('Expected Result');
+
+    // Act
+    final Object result = sut.call(new List<Object>{ new Account(), true });
+
+    // Assert
+    System.assertEquals('Expected Result', result);
+  }
   static void givenSpyConfiguredMultipleTimesToReturnOnMatchingParams_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
@@ -602,6 +614,19 @@ private class MethodSpyTest {
 
     public boolean matches(List<Object> params) {
       return this.expected == params;
+    }
+  }
+
+  class SObjectTypeMatcher implements ParametersMatcher {
+    private SObjectType matchingType;
+
+    public SObjectTypeMatcher(SObjectType matchingType) {
+      this.matchingType = matchingType;
+    }
+
+    public boolean matches(List<Object> params) {
+      SObject param0 = (SObject) params[0];
+      return this.matchingType == param0.getsObjectType();
     }
   }
 
