@@ -116,7 +116,7 @@ public class MethodSpy {
   }
 
   public MethodSpyCall whenCalledWithParams(List<Object> params) {
-    return whenCalledWithParams(new DeepEqualsListMatcher(params));
+    return whenCalledWithParams(new EqualsMatcher(params));
   }
 
   public MethodSpyCall whenCalledWithParams(ParametersMatcher matcher) {
@@ -171,29 +171,7 @@ public class MethodSpy {
     }
 
     public Boolean matches(List<Object> params) {
-      return this.paramsToMatch == params;
-    }
-  }
-
-  private class DeepEqualsListMatcher implements ParametersMatcher {
-    private List<Object> paramsToMatch;
-
-    public DeepEqualsListMatcher(final List<Object> paramsToMatch) {
-      this.paramsToMatch = paramsToMatch;
-    }
-
-    public Boolean matches(List<Object> params) {
-      if (this.paramsToMatch.size() != params.size()) {
-        return false;
-      }
-      for (Integer i = 0; i < params.size(); i++) {
-        Object expectedParam = this.paramsToMatch.get(i);
-        Object actualParam = params.get(i);
-        if (actualParam != expectedParam) {
-          return false;
-        }
-      }
-      return true;
+      return params == this.paramsToMatch;
     }
   }
 
