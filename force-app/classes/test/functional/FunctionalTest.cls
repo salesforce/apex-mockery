@@ -7,24 +7,119 @@
 @IsTest
 private class FunctionalTest {
   @isTest
-  static void givenASpy_andAMethodWithOneParameterReturningVoid_itShouldStub() {
+  static void whenCreatingNewCompany_itShouldInsertAccount() {
     // Arrange
     final Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
     final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
     final BusinessService sut = new BusinessService(
       (DMLDelegate) dmlDelegateMock.stub
     );
-    Account expected = new Account(NumberOfEmployees = 10);
 
     // Act
-    sut.businessScenario(10);
+    sut.createNewCompany(10);
 
     // Assert
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(expected);
+    Assertions.assertThat(insertSObjectSpy)
+      .hasBeenCalledWith(new Account(NumberOfEmployees = 10));
   }
 
-  // Call multiple time DML Delegate inside the same service
-  // Assert it has been called multiple time
+  @isTest
+  static void whenCreatingNewCompanyWithOpportunity_itShouldInsertAccountAndOpportunity() {
+    // Arrange
+    final Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
+    final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
+
+    insertSObjectSpy.whenCalledWithParams(
+        new SObjectTypeMatcher(Account.getSObjectType())
+      )
+      .thenReturn(succeed('001000000000000AAA'));
+
+    insertSObjectSpy.whenCalledWithParams(
+        new SObjectTypeMatcher(Opportunity.getSObjectType())
+      )
+      .thenReturn(succeed('006000000000000AAA'));
+
+    final BusinessService sut = new BusinessService(
+      (DMLDelegate) dmlDelegateMock.stub
+    );
+
+    // Act
+    sut.createNewCompanyWithOpportunity(10);
+
+    // Assert
+    Account expectedAccount = new Account(NumberOfEmployees = 10);
+    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(expectedAccount);
+    Assertions.assertThat(insertSObjectSpy)
+      .hasBeenCalledWith(new Opportunity(AccountId = '001000000000000AAA'));
+    Assertions.assertThat(insertSObjectSpy).hasBeenCalledTimes(2);
+  }
+
+  @isTest
+  static void whenCreatingNewCompanyWith1BEmployees_itThrows() {
+    // Arrange
+    final Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
+    final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
+    insertSObjectSpy.throwsException(
+      new DmlException('1 billion person cannot work in the same company')
+    );
+
+    final BusinessService sut = new BusinessService(
+      (DMLDelegate) dmlDelegateMock.stub
+    );
+
+    // Act
+    try {
+      sut.createNewCompany(1000000000);
+
+      // Assert
+      System.assert(false, 'We should not reach this statement');
+    } catch (DmlException dex) {
+      Assertions.assertThat(insertSObjectSpy)
+        .hasBeenCalledWith(new Account(NumberOfEmployees = 1000000000));
+    }
+  }
+
+  @isTest
+  static void whenCreatingNewCompaniesWithAllOrNoneFalseAndPartialSuccess_itReturnsSaveResult() {
+    // Arrange
+    Database.DMLOptions dmlOptions = new Database.DMLOptions();
+    dmlOptions.optAllOrNone = false;
+    Account expectedAccount = new Account(NumberOfEmployees = 10);
+    final JSONMatcher expected = new JSONMatcher(
+      new List<Object>{
+        new List<Account>{ expectedAccount, expectedAccount },
+        dmlOptions
+      }
+    );
+    final Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
+    final MethodSpy insertSObjectsSpy = dmlDelegateMock.spyOn('insertSObjects');
+    final MethodSpy rollbackSpy = dmlDelegateMock.spyOn('rollBack');
+
+    insertSObjectsSpy.whenCalledWithParams(expected)
+      .thenReturn(
+        partial(
+          new List<Id>{ '001000000000000AAA' },
+          new List<DBError>{
+            new DBError(
+              'Error is located approximately between the chair and the monitor',
+              '30'
+            )
+          }
+        )
+      );
+
+    final BusinessService sut = new BusinessService(
+      (DMLDelegate) dmlDelegateMock.stub
+    );
+
+    // Act
+    sut.createNewCompanies(new List<Integer>{ 10, 10 });
+
+    // Assert
+    Assertions.assertThat(insertSObjectsSpy).hasBeenCalled();
+    Assertions.assertThat(rollbackSpy).hasBeenCalled();
+    Assertions.assertThat(insertSObjectsSpy).hasBeenCalledTimes(1);
+  }
 
   // Call to DMLDelegate without dmlOptions throw an exception
   // Database class definition https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_database.htm#apex_System_Database_insert_5
@@ -32,4 +127,88 @@ private class FunctionalTest {
   // Call to DMLDelegate with dmlOptions partially succeed and we want to evaluate what happen
   // mock Database.SaveResult https://salesforce.stackexchange.com/questions/212144/how-to-mock-a-database-saveresult
   // SaveResult class definition https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_database_saveresult.htm
+
+  static Database.SaveResult succeed(Id recordId) {
+    return (Database.SaveResult) JSON.deserialize(
+      '{"success":true,"id":"' +
+      recordId +
+      '"}',
+      Database.SaveResult.class
+    );
+  }
+
+  static Database.SaveResult[] succeed(List<Id> recordIds) {
+    List<Database.SaveResult> results = new List<Database.SaveResult>();
+    for (Id recordId : recordIds) {
+      results.add(succeed(recordId));
+    }
+    return results;
+  }
+
+  static Database.SaveResult failed(DBError dbError) {
+    return (Database.SaveResult) JSON.deserialize(
+      '{"success":false,"errors":[{"message":"' +
+      dbError.message +
+      '","statusCode":"' +
+      dbError.statusCode +
+      '"}]}',
+      Database.SaveResult.class
+    );
+  }
+
+  static Database.SaveResult[] failed(List<DBError> dbErrors) {
+    List<Database.SaveResult> results = new List<Database.SaveResult>();
+    for (DBError dbError : dbErrors) {
+      results.add(failed(dbError));
+    }
+    return results;
+  }
+
+  static Database.SaveResult[] partial(
+    List<Id> successIds,
+    List<DBError> dbErrors
+  ) {
+    List<Database.SaveResult> results = new List<Database.SaveResult>();
+
+    results.addall(succeed(successIds));
+    results.addall(failed(dbErrors));
+
+    return results;
+  }
+
+  class DBError {
+    public String message;
+    public String statusCode;
+
+    public DBError(String message, String statusCode) {
+      this.message = message;
+      this.statusCode = statusCode;
+    }
+  }
+
+  class SObjectTypeMatcher implements ParametersMatcher {
+    private SObjectType matchingType;
+
+    public SObjectTypeMatcher(SObjectType matchingType) {
+      this.matchingType = matchingType;
+    }
+
+    public boolean matches(List<Object> params) {
+      SObject param0 = (SObject) params[0];
+      return this.matchingType == param0.getsObjectType();
+    }
+  }
+
+  class JSONMatcher implements ParametersMatcher {
+    private String expectedJSONRepresentation;
+
+    public JSONMatcher(List<Object> params) {
+      this.expectedJSONRepresentation = JSON.serialize(params);
+    }
+
+    public boolean matches(List<Object> params) {
+      String actualJSONRepresentation = JSON.serialize(params);
+      return this.expectedJSONRepresentation == actualJSONRepresentation;
+    }
+  }
 }

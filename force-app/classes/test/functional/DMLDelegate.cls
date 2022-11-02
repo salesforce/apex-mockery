@@ -5,9 +5,10 @@ public interface DMLDelegate {
     SObject recordToInsert,
     Database.DMLOptions dmlOptions
   );
-  Database.SaveResult[] insertSObject(List<SObject> recordsToInsert);
-  Database.SaveResult[] insertSObject(
+  Database.SaveResult[] insertSObjects(List<SObject> recordsToInsert);
+  Database.SaveResult[] insertSObjects(
     List<SObject> recordsToInsert,
     Database.DMLOptions dmlOptions
   );
+  void rollBack(System.Savepoint sp);
 }
