@@ -69,7 +69,7 @@ public class Assertions {
 
     public void hasBeenCalledWithParams(ParametersMatcher matcher) {
       this.asserter.assertEquals(
-        false,
+        true,
         this.spy.hasBeenCalled(),
         'Method ' +
         this.spy.methodName +
@@ -108,7 +108,7 @@ public class Assertions {
 
     public void hasBeenLastCalledWithParams(ParametersMatcher matcher) {
       this.asserter.assertEquals(
-        false,
+        true,
         this.spy.hasBeenCalled(),
         'Method ' +
         this.spy.methodName +
