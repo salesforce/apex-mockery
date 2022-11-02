@@ -689,16 +689,4 @@ private class MethodSpyTest {
       this.notSerializableAttribut = new Http();
     }
   }
-
-  /* ************** 
-    MethodSpy
-    Not Implemented Yet 
-
-    .returns("toto");
-    .whenCalledWith(1).thenThrows(E1);
-    .whenCalledWith(2).thenThrows(E2);
-    .call(1) -> throws E1
-    .call(2) -> throws E2
-    .call(3) -> "toto"
-  */
 }
