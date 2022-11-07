@@ -7,6 +7,34 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
+  static void givenSpy_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('overLoaded');
+    sut.whenCalledWithParams(new List<Object>{ new Account() })
+      .thenReturn('Account result');
+    sut.whenCalledWithParams(new List<Object>{ new Opportunity() })
+      .thenReturn('Opportunity result');
+
+    // Act && Assert
+    Object result = sut.call(new List<Object>{ new Account() });
+    System.assertEquals('Account result', result);
+    result = sut.call(new List<Object>{ new Opportunity() });
+    System.assertEquals('Opportunity result', result);
+  }
+
+  static void givenSpyConfiguredForMultipleOverload_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.returns('String result');
+
+    // Act && Assert
+    Object result = sut.call(new List<Object>{ new Account() });
+    System.assertEquals('String result', result);
+    result = sut.call(new List<Object>{ new Opportunity() });
+    System.assertEquals('String result', result);
+  }
+
+  @IsTest
   static void givenSpyConfiguredOnceToReturnSomething_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
