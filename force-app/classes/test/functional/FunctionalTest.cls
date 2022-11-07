@@ -82,21 +82,12 @@ private class FunctionalTest {
   @isTest
   static void whenCreatingNewCompaniesWithAllOrNoneFalseAndPartialSuccess_itReturnsSaveResult() {
     // Arrange
-    Database.DMLOptions dmlOptions = new Database.DMLOptions();
-    dmlOptions.optAllOrNone = false;
-    Account expectedAccount = new Account(NumberOfEmployees = 10);
-    final JSONMatcher expected = new JSONMatcher(
-      new List<Object>{
-        new List<Account>{ expectedAccount, expectedAccount },
-        dmlOptions
-      }
-    );
     final Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
     final MethodSpy insertSObjectsSpy = dmlDelegateMock.spyOn('insertSObjects');
     final MethodSpy rollbackSpy = dmlDelegateMock.spyOn('rollBack');
 
-    insertSObjectsSpy.whenCalledWithParams(expected)
-      .thenReturn(
+    insertSObjectsSpy
+      .returns(
         partial(
           new List<Id>{ '001000000000000AAA' },
           new List<DBError>{
@@ -116,17 +107,19 @@ private class FunctionalTest {
     sut.createNewCompanies(new List<Integer>{ 10, 10 });
 
     // Assert
-    Assertions.assertThat(insertSObjectsSpy).hasBeenCalled();
+    Database.DMLOptions dmlOptions = new Database.DMLOptions();
+    dmlOptions.optAllOrNone = false;
+    Account expectedAccount = new Account(NumberOfEmployees = 10);
+    final JSONMatcher expected = new JSONMatcher(
+      new List<Object>{
+        new List<Account>{ expectedAccount, expectedAccount },
+        dmlOptions
+      }
+    );
+
+    Assertions.assertThat(insertSObjectsSpy).hasBeenCalledWithParams(expected);
     Assertions.assertThat(rollbackSpy).hasBeenCalled();
-    Assertions.assertThat(insertSObjectsSpy).hasBeenCalledTimes(1);
   }
-
-  // Call to DMLDelegate without dmlOptions throw an exception
-  // Database class definition https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_database.htm#apex_System_Database_insert_5
-
-  // Call to DMLDelegate with dmlOptions partially succeed and we want to evaluate what happen
-  // mock Database.SaveResult https://salesforce.stackexchange.com/questions/212144/how-to-mock-a-database-saveresult
-  // SaveResult class definition https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_database_saveresult.htm
 
   static Database.SaveResult succeed(Id recordId) {
     return (Database.SaveResult) JSON.deserialize(
@@ -183,6 +176,21 @@ private class FunctionalTest {
     public DBError(String message, String statusCode) {
       this.message = message;
       this.statusCode = statusCode;
+    }
+  }
+
+  class TypeMatcher implements ParametersMatcher {
+    private System.Type matchingType;
+
+    public TypeMatcher(System.Type matchingType) {
+      this.matchingType = matchingType;
+    }
+
+    public boolean matches(List<Object> params) {
+      Object param0 = (Object) params[0];
+      String typeName = String.valueOf(param0).split(':')[0];
+      Type actualType = Type.forName(typeName);
+      return this.matchingType.isAssignableFrom(actualType);
     }
   }
 

@@ -188,7 +188,7 @@ private class AssertionsTest {
       // Assert
       System.assert(false); // Should not reach this point
     } catch (Exception ex) {
-      System.assertEquals(false, fakeAsserter.assertEqualsLastExpected);
+      System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
       System.assertEquals(
         spy.hasBeenCalled(),
         fakeAsserter.assertEqualsLastActual
@@ -299,7 +299,7 @@ private class AssertionsTest {
       // Assert
       System.assert(false); // Should not reach this point
     } catch (Exception ex) {
-      System.assertEquals(false, fakeAsserter.assertEqualsLastExpected);
+      System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
       System.assertEquals(
         spy.hasBeenCalled(),
         fakeAsserter.assertEqualsLastActual
