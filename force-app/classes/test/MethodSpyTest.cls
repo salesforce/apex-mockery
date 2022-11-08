@@ -7,7 +7,7 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
-  static void givenSpy_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
+  static void givenSpyConfiguredForMultipleOverload_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
     // Arrange
     final MethodSpy sut = new MethodSpy('overLoaded');
     sut.whenCalledWithParams(new List<Object>{ new Account() })
@@ -22,7 +22,7 @@ private class MethodSpyTest {
     System.assertEquals('Opportunity result', result);
   }
 
-  static void givenSpyConfiguredForMultipleOverload_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
+  static void givenSpy_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.returns('String result');
