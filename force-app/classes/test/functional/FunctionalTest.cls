@@ -178,45 +178,4 @@ private class FunctionalTest {
       this.statusCode = statusCode;
     }
   }
-
-  class TypeMatcher implements ParametersMatcher {
-    private System.Type matchingType;
-
-    public TypeMatcher(System.Type matchingType) {
-      this.matchingType = matchingType;
-    }
-
-    public boolean matches(List<Object> params) {
-      Object param0 = (Object) params[0];
-      String typeName = String.valueOf(param0).split(':')[0];
-      Type actualType = Type.forName(typeName);
-      return this.matchingType.isAssignableFrom(actualType);
-    }
-  }
-
-  class SObjectTypeMatcher implements ParametersMatcher {
-    private SObjectType matchingType;
-
-    public SObjectTypeMatcher(SObjectType matchingType) {
-      this.matchingType = matchingType;
-    }
-
-    public boolean matches(List<Object> params) {
-      SObject param0 = (SObject) params[0];
-      return this.matchingType == param0.getsObjectType();
-    }
-  }
-
-  class JSONMatcher implements ParametersMatcher {
-    private String expectedJSONRepresentation;
-
-    public JSONMatcher(List<Object> params) {
-      this.expectedJSONRepresentation = JSON.serialize(params);
-    }
-
-    public boolean matches(List<Object> params) {
-      String actualJSONRepresentation = JSON.serialize(params);
-      return this.expectedJSONRepresentation == actualJSONRepresentation;
-    }
-  }
 }

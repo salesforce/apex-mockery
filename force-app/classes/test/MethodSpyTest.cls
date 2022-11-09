@@ -432,8 +432,7 @@ private class MethodSpyTest {
     // Arrange
     List<Object> param = new List<Object>{ new Account(Name = 'test') };
     final MethodSpy sut = new MethodSpy('methodName');
-    JSONMatcher stub = new JSONMatcher();
-    stub.expected = JSON.serialize(param);
+    JSONMatcher stub = new JSONMatcher(param);
 
     // Act & Assert
     System.assert(!sut.hasBeenCalledWith(stub));
@@ -653,32 +652,11 @@ private class MethodSpyTest {
     }
   }
 
-  class JSONMatcher implements ParametersMatcher {
-    public String expected;
-
-    public boolean matches(List<Object> params) {
-      return this.expected == JSON.serialize(params);
-    }
-  }
-
   class ParametersMatcherStub implements ParametersMatcher {
     public List<Object> expected;
 
     public boolean matches(List<Object> params) {
       return this.expected == params;
-    }
-  }
-
-  class SObjectTypeMatcher implements ParametersMatcher {
-    private SObjectType matchingType;
-
-    public SObjectTypeMatcher(SObjectType matchingType) {
-      this.matchingType = matchingType;
-    }
-
-    public boolean matches(List<Object> params) {
-      SObject param0 = (SObject) params[0];
-      return this.matchingType == param0.getsObjectType();
     }
   }
 
