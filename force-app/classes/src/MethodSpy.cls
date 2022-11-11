@@ -87,7 +87,7 @@ public class MethodSpy {
   ) {
     final List<ArgumentMatcher> argumentMatchers = new List<ArgumentMatcher>();
     for (Object callArgument : expectedListOfArgs) {
-      if (callArgument != null && callArgument instanceof ArgumentMatcher) {
+      if (callArgument instanceof ArgumentMatcher) {
         argumentMatchers.add((ArgumentMatcher) callArgument);
       } else {
         argumentMatchers.add(new EqualsMatcher(callArgument));
