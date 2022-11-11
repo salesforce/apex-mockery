@@ -114,8 +114,8 @@ public class MethodSpy {
     for (
       ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls
     ) {
-      if (parameterizedCall?.matches(params) == true) {
-        if (parameterizedCall.shouldThrow() == true) {
+      if (parameterizedCall.matches(params)) {
+        if (parameterizedCall.shouldThrow()) {
           throw parameterizedCall.error;
         }
         return parameterizedCall.value;
