@@ -34,30 +34,66 @@ public class MethodSpy {
     return !this.callLog.isEmpty();
   }
 
-  public Boolean hasBeenCalledWith(List<Object> params) {
-    return this.hasBeenCalledWith(new EqualsMatcher(params));
-  }
+  public Boolean hasBeenCalledWith(final List<Object> expectedListOfArgs) {
+    final List<ArgumentMatcher> expectedMatchers = this.buildMatchers(
+      expectedListOfArgs
+    );
 
-  public Boolean hasBeenCalledWith(ParametersMatcher matcher) {
-    Iterator<MethodCall> it = this.callLog.iterator();
+    final Iterator<MethodCall> it = this.callLog.iterator();
     while (it.hasNext()) {
-      if (matcher.matches(it.next().params)) {
-        return true;
+      final List<Object> actualListOfArgs = it.next().params;
+
+      if (actualListOfArgs.size() == expectedMatchers.size()) {
+        Boolean match = true;
+        for (Integer i = 0; i < actualListOfArgs.size(); ++i) {
+          if (!expectedMatchers[i].matches(actualListOfArgs[i])) {
+            match = false;
+            break;
+          }
+        }
+        if (match) {
+          return true;
+        }
       }
     }
 
     return false;
   }
 
-  public Boolean hasBeenLastCalledWith(List<Object> params) {
-    return this.hasBeenLastCalledWith(new EqualsMatcher(params));
-  }
-
-  public Boolean hasBeenLastCalledWith(ParametersMatcher matcher) {
+  public Boolean hasBeenLastCalledWith(List<Object> expectedListOfArgs) {
     if (this.callLog.isEmpty()) {
       return false;
     }
-    return matcher.matches(this.callLog.getLast());
+
+    final List<Object> actualListOfArgs = this.callLog.getLast();
+    if (actualListOfArgs.size() != expectedListOfArgs.size()) {
+      return false;
+    }
+
+    final List<ArgumentMatcher> expectedMatchers = this.buildMatchers(
+      expectedListOfArgs
+    );
+
+    for (Integer i = 0; i < actualListOfArgs.size(); ++i) {
+      if (!expectedMatchers[i].matches(actualListOfArgs[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private List<ArgumentMatcher> buildMatchers(
+    final List<Object> expectedListOfArgs
+  ) {
+    final List<ArgumentMatcher> argumentMatchers = new List<ArgumentMatcher>();
+    for (Object callArgument : expectedListOfArgs) {
+      if (callArgument != null && callArgument instanceof ArgumentMatcher) {
+        argumentMatchers.add((ArgumentMatcher) callArgument);
+      } else {
+        argumentMatchers.add(new EqualsMatcher(callArgument));
+      }
+    }
+    return argumentMatchers;
   }
 
   public Boolean hasBeenCalledTimes(final Integer count) {
@@ -78,8 +114,8 @@ public class MethodSpy {
     for (
       ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls
     ) {
-      if (parameterizedCall.matches(params)) {
-        if (parameterizedCall.shouldThrow()) {
+      if (parameterizedCall?.matches(params) == true) {
+        if (parameterizedCall.shouldThrow() == true) {
           throw parameterizedCall.error;
         }
         return parameterizedCall.value;
@@ -111,17 +147,10 @@ public class MethodSpy {
     this.exceptionToThrow = exceptionToThrow;
   }
 
-  public MethodSpyCall whenCalledWith(Object param) {
-    return whenCalledWithParams(new List<Object>{ param });
-  }
-
-  public MethodSpyCall whenCalledWithParams(List<Object> params) {
-    return whenCalledWithParams(new EqualsMatcher(params));
-  }
-
-  public MethodSpyCall whenCalledWithParams(ParametersMatcher matcher) {
+  public MethodSpyCall whenCalledWith(final List<Object> listOfArgs) {
+    final List<ArgumentMatcher> matchers = this.buildMatchers(listOfArgs);
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
-      matcher
+      matchers
     );
     this.parameterizedMethodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
@@ -163,30 +192,18 @@ public class MethodSpy {
     }
   }
 
-  private class EqualsMatcher implements ParametersMatcher {
-    private List<Object> paramsToMatch;
-
-    public EqualsMatcher(final List<Object> paramsToMatch) {
-      this.paramsToMatch = paramsToMatch;
-    }
-
-    public Boolean matches(List<Object> params) {
-      return params == this.paramsToMatch;
-    }
-  }
-
   public interface MethodSpyCall {
     void thenReturn(Object value);
     void thenThrow(Exception error);
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private ParametersMatcher matcher;
+    private List<ArgumentMatcher> matchers;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
-    public ParameterizedMethodSpyCall(ParametersMatcher matcher) {
-      this.matcher = matcher;
+    public ParameterizedMethodSpyCall(List<ArgumentMatcher> matchers) {
+      this.matchers = matchers;
     }
 
     public void thenReturn(Object value) {
@@ -201,8 +218,21 @@ public class MethodSpy {
       return this.error != null;
     }
 
-    public boolean matches(List<Object> params) {
-      return this.matcher.matches(params);
+    public boolean matches(final List<Object> callArguments) {
+      if (this.matchers.size() != callArguments.size()) {
+        return false;
+      }
+
+      for (Integer i = 0; i < this.matchers.size(); ++i) {
+        if (!this.matchers[i].matches(callArguments[i])) {
+          return false;
+        }
+      }
+
+      return true;
     }
+  }
+
+  class MatcherException extends Exception {
   }
 }
