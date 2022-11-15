@@ -171,12 +171,6 @@
     </rule>
 
     <!-- Error Prone -->
-    <rule
-    ref="category/apex/errorprone.xml/AvoidHardcodingId"
-    message="Avoid hardcoding ID's"
-  >
-        <priority>1</priority>
-    </rule>
     <rule ref="category/apex/errorprone.xml/AvoidNonExistentAnnotations">
         <priority>2</priority>
     </rule>
