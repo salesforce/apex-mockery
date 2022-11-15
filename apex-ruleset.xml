@@ -9,12 +9,6 @@
 
     <!-- Best Practices -->
     <rule
-    ref="category/apex/bestpractices.xml/ApexAssertionsShouldIncludeMessage"
-    message="Apex assertions should include a message"
-  >
-        <priority>3</priority>
-    </rule>
-    <rule
     ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts"
     message="Apex unit test classes should have at least one System.assert() or assertEquals() or AssertNotEquals() call"
   >
@@ -35,12 +29,6 @@
     <rule
     ref="category/apex/bestpractices.xml/AvoidGlobalModifier"
     message="Avoid using global modifier"
-  >
-        <priority>3</priority>
-    </rule>
-    <rule
-    ref="category/apex/bestpractices.xml/AvoidLogicInTrigger"
-    message="Avoid logic in triggers"
   >
         <priority>3</priority>
     </rule>
@@ -75,12 +63,6 @@
     message="Variable declarations should use camelCase"
   >
         <priority>3</priority>
-    </rule>
-    <rule
-    ref="category/apex/codestyle.xml/MethodNamingConventions"
-    message="Method name does not begin with a lower case character"
-  >
-        <priority>2</priority>
     </rule>
     <rule ref="category/apex/codestyle.xml/OneDeclarationPerLine">
         <priority>2</priority>
@@ -188,21 +170,7 @@
         </properties>
     </rule>
 
-    <!-- Documentation -->
-    <!--rule
-    ref="category/apex/documentation.xml/ApexDoc"
-    message="ApexDoc comments should be present and valid for classes, methods, and properties that are public or global"
-  >
-        <priority>4</priority>
-    </rule-->
-
     <!-- Error Prone -->
-    <rule
-    ref="category/apex/errorprone.xml/AvoidDirectAccessTriggerMap"
-    message="Avoid directly accessing Trigger.old and Trigger.new"
-  >
-        <priority>3</priority>
-    </rule>
     <rule
     ref="category/apex/errorprone.xml/AvoidHardcodingId"
     message="Avoid hardcoding ID's"
