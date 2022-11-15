@@ -20,7 +20,9 @@ private class FunctionalTest {
 
     // Assert
     Assertions.assertThat(insertSObjectSpy)
-      .hasBeenCalledWith(new Account(NumberOfEmployees = 10));
+      .hasBeenCalledWith(
+        new List<Object>{ new Account(NumberOfEmployees = 10) }
+      );
   }
 
   @isTest
@@ -29,13 +31,13 @@ private class FunctionalTest {
     final Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
     final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
 
-    insertSObjectSpy.whenCalledWithParams(
-        new SObjectTypeMatcher(Account.getSObjectType())
+    insertSObjectSpy.whenCalledWith(
+        new List<Object>{ new SObjectTypeMatcher(Account.getSObjectType()) }
       )
       .thenReturn(succeed('001000000000000AAA'));
 
-    insertSObjectSpy.whenCalledWithParams(
-        new SObjectTypeMatcher(Opportunity.getSObjectType())
+    insertSObjectSpy.whenCalledWith(
+        new List<Object>{ new SObjectTypeMatcher(Opportunity.getSObjectType()) }
       )
       .thenReturn(succeed('006000000000000AAA'));
 
@@ -48,9 +50,12 @@ private class FunctionalTest {
 
     // Assert
     Account expectedAccount = new Account(NumberOfEmployees = 10);
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(expectedAccount);
     Assertions.assertThat(insertSObjectSpy)
-      .hasBeenCalledWith(new Opportunity(AccountId = '001000000000000AAA'));
+      .hasBeenCalledWith(new List<Object>{ expectedAccount });
+    Assertions.assertThat(insertSObjectSpy)
+      .hasBeenCalledWith(
+        new List<Object>{ new Opportunity(AccountId = '001000000000000AAA') }
+      );
     Assertions.assertThat(insertSObjectSpy).hasBeenCalledTimes(2);
   }
 
@@ -75,7 +80,9 @@ private class FunctionalTest {
       System.assert(false, 'We should not reach this statement');
     } catch (DmlException dex) {
       Assertions.assertThat(insertSObjectSpy)
-        .hasBeenCalledWith(new Account(NumberOfEmployees = 1000000000));
+        .hasBeenCalledWith(
+          new List<Object>{ new Account(NumberOfEmployees = 1000000000) }
+        );
     }
   }
 
@@ -110,14 +117,15 @@ private class FunctionalTest {
     Database.DMLOptions dmlOptions = new Database.DMLOptions();
     dmlOptions.optAllOrNone = false;
     Account expectedAccount = new Account(NumberOfEmployees = 10);
-    final JSONMatcher expected = new JSONMatcher(
-      new List<Object>{
-        new List<Account>{ expectedAccount, expectedAccount },
-        dmlOptions
-      }
-    );
-
-    Assertions.assertThat(insertSObjectsSpy).hasBeenCalledWithParams(expected);
+    Assertions.assertThat(insertSObjectsSpy)
+      .hasBeenCalledWith(
+        new List<Object>{
+          new JSONMatcher(
+            new List<Account>{ expectedAccount, expectedAccount }
+          ),
+          new JSONMatcher(dmlOptions)
+        }
+      );
     Assertions.assertThat(rollbackSpy).hasBeenCalled();
   }
 
@@ -176,47 +184,6 @@ private class FunctionalTest {
     public DBError(String message, String statusCode) {
       this.message = message;
       this.statusCode = statusCode;
-    }
-  }
-
-  class TypeMatcher implements ParametersMatcher {
-    private System.Type matchingType;
-
-    public TypeMatcher(System.Type matchingType) {
-      this.matchingType = matchingType;
-    }
-
-    public boolean matches(List<Object> params) {
-      Object param0 = (Object) params[0];
-      String typeName = String.valueOf(param0).split(':')[0];
-      Type actualType = Type.forName(typeName);
-      return this.matchingType.isAssignableFrom(actualType);
-    }
-  }
-
-  class SObjectTypeMatcher implements ParametersMatcher {
-    private SObjectType matchingType;
-
-    public SObjectTypeMatcher(SObjectType matchingType) {
-      this.matchingType = matchingType;
-    }
-
-    public boolean matches(List<Object> params) {
-      SObject param0 = (SObject) params[0];
-      return this.matchingType == param0.getsObjectType();
-    }
-  }
-
-  class JSONMatcher implements ParametersMatcher {
-    private String expectedJSONRepresentation;
-
-    public JSONMatcher(List<Object> params) {
-      this.expectedJSONRepresentation = JSON.serialize(params);
-    }
-
-    public boolean matches(List<Object> params) {
-      String actualJSONRepresentation = JSON.serialize(params);
-      return this.expectedJSONRepresentation == actualJSONRepresentation;
     }
   }
 }
