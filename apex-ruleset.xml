@@ -189,12 +189,12 @@
     </rule>
 
     <!-- Documentation -->
-    <rule
+    <!--rule
     ref="category/apex/documentation.xml/ApexDoc"
     message="ApexDoc comments should be present and valid for classes, methods, and properties that are public or global"
   >
         <priority>4</priority>
-    </rule>
+    </rule-->
 
     <!-- Error Prone -->
     <rule
