@@ -21,7 +21,9 @@ public class MatcherTest {
     System.assert(sut.matches(new List<Object>()));
     System.assert(sut.matches(new Set<Object>()));
     System.assert(sut.matches(new Map<Id, Object>()));
-    System.assert(sut.matches(new CustomType()));
+    System.assert(
+      sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
+    );
   }
 
   @isTest
@@ -46,7 +48,9 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType()));
+    System.assert(
+      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
+    );
   }
 
   @isTest
@@ -71,7 +75,9 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType()));
+    System.assert(
+      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
+    );
   }
 
   @isTest
@@ -137,7 +143,9 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType()));
+    System.assert(
+      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
+    );
   }
 
   @isTest
@@ -186,7 +194,9 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType()));
+    System.assert(
+      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
+    );
   }
 
   @isTest
@@ -373,18 +383,11 @@ public class MatcherTest {
     System.assert(!sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
-  static void givenJSONMatcher_matchesCompositeType() {
-  }
-
   virtual class CustomType {
     public String name;
     public Integer size;
     public SObject sob;
     public List<Object> lo = new List<Object>();
-
-    public CustomType() {
-    }
 
     public CustomType(
       final String name,
