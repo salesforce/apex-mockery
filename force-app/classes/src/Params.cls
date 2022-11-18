@@ -20,57 +20,57 @@ public class Params {
     }
   }
 
-  public static Params args() {
+  public static Params of() {
     return new Params();
   }
 
-  public static Params args(final Object arg) {
-    final Params params = args();
+  public static Params of(final Object arg) {
+    final Params params = of();
     params.add(arg);
     return params;
   }
 
-  public static Params args(final Object arg1, final Object arg2) {
-    final Params params = args(arg1);
+  public static Params of(final Object arg1, final Object arg2) {
+    final Params params = of(arg1);
     params.add(arg2);
     return params;
   }
 
-  public static Params args(
+  public static Params of(
     final Object arg1,
     final Object arg2,
     final Object arg3
   ) {
-    final Params params = args(arg1, arg2);
+    final Params params = of(arg1, arg2);
     params.add(arg3);
     return params;
   }
 
-  public static Params args(
+  public static Params of(
     final Object arg1,
     final Object arg2,
     final Object arg3,
     final Object arg4
   ) {
-    final Params params = args(arg1, arg2, arg3);
+    final Params params = of(arg1, arg2, arg3);
     params.add(arg4);
     return params;
   }
 
-  public static Params args(
+  public static Params of(
     final Object arg1,
     final Object arg2,
     final Object arg3,
     final Object arg4,
     final Object arg5
   ) {
-    final Params params = args(arg1, arg2, arg3, arg4);
+    final Params params = of(arg1, arg2, arg3, arg4);
     params.add(arg5);
     return params;
   }
 
-  public static Params fromList(final List<Object> listOfArgs) {
-    final Params params = args();
+  public static Params of(final List<Object> listOfArgs) {
+    final Params params = of();
     for (Object callArgument : listOfArgs) {
       params.add(callArgument);
     }

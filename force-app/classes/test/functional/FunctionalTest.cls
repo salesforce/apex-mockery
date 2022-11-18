@@ -20,7 +20,7 @@ private class FunctionalTest {
 
     // Assert
     Assertions.assertThat(insertSObjectSpy)
-      .hasBeenCalledWith(Params.args(new Account(NumberOfEmployees = 10)));
+      .hasBeenCalledWith(Params.of(new Account(NumberOfEmployees = 10)));
   }
 
   @isTest
@@ -30,12 +30,12 @@ private class FunctionalTest {
     final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
 
     insertSObjectSpy.whenCalledWith(
-        Params.args(Matcher.ofType(Account.getSObjectType()))
+        Params.of(Matcher.ofType(Account.getSObjectType()))
       )
       .thenReturn(succeed('001000000000000AAA'));
 
     insertSObjectSpy.whenCalledWith(
-        Params.args(Matcher.ofType(Opportunity.getSObjectType()))
+        Params.of(Matcher.ofType(Opportunity.getSObjectType()))
       )
       .thenReturn(succeed('006000000000000AAA'));
 
@@ -49,10 +49,10 @@ private class FunctionalTest {
     // Assert
     Account expectedAccount = new Account(NumberOfEmployees = 10);
     Assertions.assertThat(insertSObjectSpy)
-      .hasBeenCalledWith(Params.args(expectedAccount));
+      .hasBeenCalledWith(Params.of(expectedAccount));
     Assertions.assertThat(insertSObjectSpy)
       .hasBeenCalledWith(
-        Params.args(new Opportunity(AccountId = '001000000000000AAA'))
+        Params.of(new Opportunity(AccountId = '001000000000000AAA'))
       );
     Assertions.assertThat(insertSObjectSpy).hasBeenCalledTimes(2);
   }
@@ -79,7 +79,7 @@ private class FunctionalTest {
     } catch (DmlException dex) {
       Assertions.assertThat(insertSObjectSpy)
         .hasBeenCalledWith(
-          Params.args(new Account(NumberOfEmployees = 1000000000))
+          Params.of(new Account(NumberOfEmployees = 1000000000))
         );
     }
   }
@@ -117,7 +117,7 @@ private class FunctionalTest {
     Account expectedAccount = new Account(NumberOfEmployees = 10);
     Assertions.assertThat(insertSObjectsSpy)
       .hasBeenCalledWith(
-        Params.args(
+        Params.of(
           Matcher.jsonEquals(
             new List<Account>{ expectedAccount, expectedAccount }
           ),
