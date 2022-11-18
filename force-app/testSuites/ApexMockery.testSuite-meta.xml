@@ -5,4 +5,5 @@
     <testClassName>MatcherTest</testClassName>
     <testClassName>MethodSpyTest</testClassName>
     <testClassName>MockTest</testClassName>
+    <testClassName>ParamsTest</testClassName>
 </ApexTestSuite>
