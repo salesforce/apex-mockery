@@ -117,7 +117,7 @@ private class AssertionsTest {
     );
     final List<Object> param = new List<Object>{
       new Account(),
-      new EqualsMatcher('test')
+      Matcher.equals('test')
     };
 
     // Act
@@ -161,7 +161,7 @@ private class AssertionsTest {
     );
     final List<Object> spyCallParam = new List<Object>{ 'param' };
     spy.call(spyCallParam);
-    final Object param = new EqualsMatcher('param');
+    final Object param = Matcher.equals('param');
 
     // Act
     sut.hasBeenCalledWith(new List<Object>{ param });
@@ -244,7 +244,7 @@ private class AssertionsTest {
     );
     final List<Object> param = new List<Object>{
       new Account(),
-      new EqualsMatcher('test')
+      Matcher.equals('test')
     };
 
     // Act
@@ -287,7 +287,7 @@ private class AssertionsTest {
       fakeAsserter
     );
     spy.call(new List<Object>{ 'param' });
-    final Object param = new EqualsMatcher('param');
+    final Object param = Matcher.equals('param');
 
     // Act
     sut.hasBeenLastCalledWith(new List<Object>{ param });

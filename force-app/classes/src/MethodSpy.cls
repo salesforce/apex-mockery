@@ -90,7 +90,7 @@ public class MethodSpy {
       if (callArgument instanceof ArgumentMatcher) {
         argumentMatchers.add((ArgumentMatcher) callArgument);
       } else {
-        argumentMatchers.add(new EqualsMatcher(callArgument));
+        argumentMatchers.add(Matcher.equals(callArgument));
       }
     }
     return argumentMatchers;

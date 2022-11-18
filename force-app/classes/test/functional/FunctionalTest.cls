@@ -32,12 +32,12 @@ private class FunctionalTest {
     final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
 
     insertSObjectSpy.whenCalledWith(
-        new List<Object>{ new SObjectTypeMatcher(Account.getSObjectType()) }
+        new List<Object>{ Matcher.ofType(Account.getSObjectType()) }
       )
       .thenReturn(succeed('001000000000000AAA'));
 
     insertSObjectSpy.whenCalledWith(
-        new List<Object>{ new SObjectTypeMatcher(Opportunity.getSObjectType()) }
+        new List<Object>{ Matcher.ofType(Opportunity.getSObjectType()) }
       )
       .thenReturn(succeed('006000000000000AAA'));
 
@@ -120,10 +120,10 @@ private class FunctionalTest {
     Assertions.assertThat(insertSObjectsSpy)
       .hasBeenCalledWith(
         new List<Object>{
-          new JSONMatcher(
+          Matcher.jsonEquals(
             new List<Account>{ expectedAccount, expectedAccount }
           ),
-          new JSONMatcher(dmlOptions)
+          Matcher.jsonEquals(dmlOptions)
         }
       );
     Assertions.assertThat(rollbackSpy).hasBeenCalled();

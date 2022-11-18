@@ -61,7 +61,7 @@ private class MethodSpyTest {
     List<Object> listOfArgs = new List<Object>{
       'param',
       new Account(Name = 'Test'),
-      new AnyMatcher()
+      Matcher.any()
     };
     sut.whenCalledWith(listOfArgs).thenReturn('Expected Result');
 
@@ -84,7 +84,7 @@ private class MethodSpyTest {
     List<Object> listOfArgs = new List<Object>{
       'param',
       new Account(Name = 'Test'),
-      new AnyMatcher()
+      Matcher.any()
     };
     sut.whenCalledWith(listOfArgs).thenReturn('Expected Result');
 
@@ -125,9 +125,9 @@ private class MethodSpyTest {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     List<Object> listOfArgs = new List<Object>{
-      new JsonMatcher(new List<String>{ 'test' }),
-      new SObjectTypeMatcher(Account.getSObjectType()),
-      new AnyMatcher()
+      Matcher.jsonEquals(new List<String>{ 'test' }),
+      Matcher.ofType(Account.getSObjectType()),
+      Matcher.any()
     };
     sut.whenCalledWith(listOfArgs).thenReturn('Expected Result');
 
@@ -322,10 +322,7 @@ private class MethodSpyTest {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(
-        new List<Object>{
-          new SObjectTypeMatcher(Account.getSObjectType()),
-          true
-        }
+        new List<Object>{ Matcher.ofType(Account.getSObjectType()), true }
       )
       .thenReturn('Expected Result');
 
@@ -341,7 +338,7 @@ private class MethodSpyTest {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(
-        new List<Object>{ new SObjectTypeMatcher(Account.getSObjectType()) }
+        new List<Object>{ Matcher.ofType(Account.getSObjectType()) }
       )
       .thenReturn('Expected Result');
 
@@ -554,7 +551,7 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    Object expected = new AnyMatcher();
+    Object expected = Matcher.any();
     System.assert(!sut.hasBeenLastCalledWith(new List<Object>{ expected }));
     sut.call(new List<Object>{ param });
     System.assert(sut.hasBeenLastCalledWith(new List<Object>{ expected }));
@@ -595,7 +592,7 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    Object expected = new AnyMatcher();
+    Object expected = Matcher.any();
     System.assert(!sut.hasBeenCalledWith(new List<Object>{ expected }));
     sut.call(new List<Object>{ param });
     System.assert(sut.hasBeenCalledWith(new List<Object>{ expected }));
@@ -608,7 +605,7 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    Object expected = new JSONMatcher(param);
+    Object expected = Matcher.jsonEquals(param);
     System.assert(!sut.hasBeenCalledWith(new List<Object>{ expected }));
     sut.call(new List<Object>{ param });
     System.assert(sut.hasBeenCalledWith(new List<Object>{ expected }));
