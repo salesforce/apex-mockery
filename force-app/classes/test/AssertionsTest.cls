@@ -38,10 +38,7 @@ private class AssertionsTest {
     // Assert
     System.assertEquals(1, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(false, fakeAsserter.assertEqualsLastExpected);
-    System.assertEquals(
-      spy.hasBeenCalled(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -60,10 +57,7 @@ private class AssertionsTest {
     // Assert
     System.assertEquals(1, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
-    System.assertEquals(
-      spy.hasBeenCalled(),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -75,10 +69,9 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final Object param = new Account();
 
     // Act
-    sut.hasBeenCalledWith(new List<Object>{ param });
+    sut.hasBeenCalledWith(Params.args(new Account()));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -95,10 +88,9 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> param = new List<Object>{ new Account() };
 
     // Act
-    sut.hasBeenCalledWith(param);
+    sut.hasBeenCalledWith(Params.args(new List<Object>{ new Account() }));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -115,13 +107,9 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> param = new List<Object>{
-      new Account(),
-      Matcher.equals('test')
-    };
 
     // Act
-    sut.hasBeenCalledWith(param);
+    sut.hasBeenCalledWith(Params.args(new Account(), Matcher.equals('test')));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -138,10 +126,9 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> params = new List<Object>();
 
     // Act
-    sut.hasBeenCalledWith(params);
+    sut.hasBeenCalledWith(Params.args());
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -159,12 +146,10 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> spyCallParam = new List<Object>{ 'param' };
-    spy.call(spyCallParam);
-    final Object param = Matcher.equals('param');
+    spy.call(new List<Object>{ 'param' });
 
     // Act
-    sut.hasBeenCalledWith(new List<Object>{ param });
+    sut.hasBeenCalledWith(Params.args(Matcher.equals('param')));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -185,13 +170,10 @@ private class AssertionsTest {
     spy.call(new List<Object>());
 
     // Act
-    sut.hasBeenCalledWith(new List<Object>{ expected });
+    sut.hasBeenCalledWith(Params.args(null));
 
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
-    System.assertEquals(
-      spy.hasBeenCalledWith(new List<Object>{ expected }),
-      fakeAsserter.assertEqualsLastActual
-    );
+    System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
   }
 
   @isTest
@@ -222,10 +204,9 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> param = new List<Object>{ new Account() };
 
     // Act
-    sut.hasBeenLastCalledWith(param);
+    sut.hasBeenLastCalledWith(Params.args(new Account()));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -242,13 +223,11 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> param = new List<Object>{
-      new Account(),
-      Matcher.equals('test')
-    };
 
     // Act
-    sut.hasBeenLastCalledWith(param);
+    sut.hasBeenLastCalledWith(
+      Params.args(new Account(), Matcher.equals('test'))
+    );
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -265,10 +244,9 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final List<Object> params = null;
 
     // Act
-    sut.hasBeenLastCalledWith(params);
+    sut.hasBeenLastCalledWith(Params.args(null));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -287,10 +265,9 @@ private class AssertionsTest {
       fakeAsserter
     );
     spy.call(new List<Object>{ 'param' });
-    final Object param = Matcher.equals('param');
 
     // Act
-    sut.hasBeenLastCalledWith(new List<Object>{ param });
+    sut.hasBeenLastCalledWith(Params.args(Matcher.equals('param')));
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -307,21 +284,17 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    final Object param = null;
     spy.call(null);
 
     // Act
     try {
-      sut.hasBeenLastCalledWith(new List<Object>{ param });
+      sut.hasBeenLastCalledWith(Params.args(null));
 
       // Assert
       System.assert(false); // Should not reach this point
     } catch (Exception ex) {
       System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
-      System.assertEquals(
-        spy.hasBeenCalled(),
-        fakeAsserter.assertEqualsLastActual
-      );
+      System.assertEquals(true, fakeAsserter.assertEqualsLastActual);
       System.assert(ex instanceof NullPointerException);
     }
   }
