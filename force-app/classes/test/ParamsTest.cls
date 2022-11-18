@@ -7,72 +7,84 @@
 @IsTest
 private class ParamsTest {
   @isTest
-  static void givenNothing_whenArgIsCalled_listOfArgsContains0Element() {
+  static void givenNothing_whenOfIsCalled_listOfArgsContains0Element() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.args();
+    sut = Params.of();
 
     // Assert
     System.assertEquals(0, sut.listOfArgs.size());
   }
 
   @isTest
-  static void given1Object_whenArgIsCalled_listOfArgsContains1Element() {
+  static void given1Object_whenOfIsCalled_listOfArgsContains1Element() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.args('test');
+    sut = Params.of('test');
 
     // Assert
     System.assertEquals(1, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   @isTest
-  static void given2Objects_whenArgIsCalled_listOfArgsContains2Elements() {
+  static void given2Objects_whenOfIsCalled_listOfArgsContains2Elements() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.args('test', 10);
+    sut = Params.of('test', 10);
 
     // Assert
     System.assertEquals(2, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   @isTest
-  static void given3Objects_whenArgIsCalled_listOfArgsContains3Elements() {
+  static void given3Objects_whenOfIsCalled_listOfArgsContains3Elements() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.args('test', 10, new Account());
+    sut = Params.of('test', 10, new Account());
 
     // Assert
     System.assertEquals(3, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   @isTest
-  static void given4Objects_whenArgIsCalled_listOfArgsContains4Elements() {
+  static void given4Objects_whenOfIsCalled_listOfArgsContains4Elements() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.args('test', 10, new Account(), new List<Date>());
+    sut = Params.of('test', 10, new Account(), new List<Date>());
 
     // Assert
     System.assertEquals(4, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   @isTest
-  static void given5Objects_whenArgIsCalled_listOfArgsContains5Elements() {
+  static void given5Objects_whenOfIsCalled_listOfArgsContains5Elements() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.args(
+    sut = Params.of(
       'test',
       10,
       new Account(),
@@ -82,15 +94,18 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(5, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   @isTest
-  static void givenListOf10MixType_whenFromListIsCalled_listOfArgsContains5Elements() {
+  static void givenListOf10MixType_whenOfIsCalledWithList_listOfArgsContains10Elements() {
     // Arrange
     Params sut;
 
     // Act
-    sut = Params.fromList(
+    sut = Params.of(
       new List<Object>{
         Matcher.equals('test'),
         Matcher.equals(10),
@@ -101,18 +116,21 @@ private class ParamsTest {
         new List<Account>(),
         Blob.valueOf('test'),
         new CustomMatcher(),
-        Matcher.ofType(CustomMatcher.class)
+        Matcher.ofType(CustomType.class)
       }
     );
 
     // Assert
     System.assertEquals(10, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   @isTest
   static void givenAParam_whenAddIsCalled_listOfArgsContains1ElementMore() {
     // Arrange
-    Params sut = Params.args();
+    Params sut = Params.of();
 
     // Act
     System.assertEquals(0, sut.listOfArgs.size());
@@ -120,11 +138,17 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(1, sut.listOfArgs.size());
+    for (Object matcher : sut.listOfArgs) {
+      System.assert(matcher instanceof ArgumentMatcher);
+    }
   }
 
   private class CustomMatcher implements ArgumentMatcher {
     public Boolean matches(Object callArgument) {
       return true;
     }
+  }
+
+  private class CustomType {
   }
 }
