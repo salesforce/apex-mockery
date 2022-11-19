@@ -28,9 +28,7 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(1, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
-    }
+    assertListOfArgsElementsAreArgumentMatcher(sut);
   }
 
   @isTest
@@ -43,9 +41,7 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(2, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
-    }
+    assertListOfArgsElementsAreArgumentMatcher(sut);
   }
 
   @isTest
@@ -58,9 +54,7 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(3, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
-    }
+    assertListOfArgsElementsAreArgumentMatcher(sut);
   }
 
   @isTest
@@ -73,9 +67,7 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(4, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
-    }
+    assertListOfArgsElementsAreArgumentMatcher(sut);
   }
 
   @isTest
@@ -94,9 +86,7 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(5, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
-    }
+    assertListOfArgsElementsAreArgumentMatcher(sut);
   }
 
   @isTest
@@ -122,9 +112,7 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(10, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
-    }
+    assertListOfArgsElementsAreArgumentMatcher(sut);
   }
 
   @isTest
@@ -138,17 +126,21 @@ private class ParamsTest {
 
     // Assert
     System.assertEquals(1, sut.listOfArgs.size());
-    for (Object matcher : sut.listOfArgs) {
-      System.assert(matcher instanceof ArgumentMatcher);
+    assertListOfArgsElementsAreArgumentMatcher(sut);
+  }
+
+  static void assertListOfArgsElementsAreArgumentMatcher(final Params params) {
+    for (Object argument : params.listOfArgs) {
+      System.assert(argument instanceof ArgumentMatcher);
     }
   }
 
-  private class CustomMatcher implements ArgumentMatcher {
+  class CustomMatcher implements ArgumentMatcher {
     public Boolean matches(Object callArgument) {
       return true;
     }
   }
 
-  private class CustomType {
+  class CustomType {
   }
 }
