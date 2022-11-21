@@ -12,7 +12,7 @@ private class ParamsTest {
     Params sut;
 
     // Act
-    sut = Params.of();
+    sut = Params.empty();
 
     // Assert
     System.assertEquals(0, sut.listOfArgs.size());
@@ -95,7 +95,7 @@ private class ParamsTest {
     Params sut;
 
     // Act
-    sut = Params.of(
+    sut = Params.ofList(
       new List<Object>{
         Matcher.equals('test'),
         Matcher.equals(10),
@@ -118,7 +118,7 @@ private class ParamsTest {
   @isTest
   static void givenAParam_whenAddIsCalled_listOfArgsContains1ElementMore() {
     // Arrange
-    Params sut = Params.of();
+    Params sut = Params.empty();
 
     // Act
     System.assertEquals(0, sut.listOfArgs.size());

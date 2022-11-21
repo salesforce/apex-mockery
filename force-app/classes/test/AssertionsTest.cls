@@ -90,7 +90,9 @@ private class AssertionsTest {
     );
 
     // Act
-    sut.hasBeenCalledWith(Params.of(new List<Object>{ new Account() }));
+    sut.hasBeenCalledWith(
+      Params.ofList(new List<Object>{ new Account(), new Opportunity() })
+    );
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
@@ -128,7 +130,7 @@ private class AssertionsTest {
     );
 
     // Act
-    sut.hasBeenCalledWith(Params.of());
+    sut.hasBeenCalledWith(Params.empty());
 
     // Assert
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);

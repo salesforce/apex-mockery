@@ -20,12 +20,12 @@ public class Params {
     }
   }
 
-  public static Params of() {
+  public static Params empty() {
     return new Params();
   }
 
   public static Params of(final Object arg) {
-    final Params params = of();
+    final Params params = empty();
     params.add(arg);
     return params;
   }
@@ -69,8 +69,8 @@ public class Params {
     return params;
   }
 
-  public static Params of(final List<Object> listOfArgs) {
-    final Params params = of();
+  public static Params ofList(final List<Object> listOfArgs) {
+    final Params params = empty();
     for (Object callArgument : listOfArgs) {
       params.add(callArgument);
     }
