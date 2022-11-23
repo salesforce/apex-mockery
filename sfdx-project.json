@@ -8,5 +8,5 @@
   "name": "apex-mockery",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "54.0"
+  "sourceApiVersion": "56.0"
 }

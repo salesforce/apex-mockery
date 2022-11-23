@@ -20,9 +20,7 @@ private class FunctionalTest {
 
     // Assert
     Assertions.assertThat(insertSObjectSpy)
-      .hasBeenCalledWith(
-        new List<Object>{ new Account(NumberOfEmployees = 10) }
-      );
+      .hasBeenCalledWith(Params.of(new Account(NumberOfEmployees = 10)));
   }
 
   @isTest
@@ -32,12 +30,12 @@ private class FunctionalTest {
     final MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
 
     insertSObjectSpy.whenCalledWith(
-        new List<Object>{ new SObjectTypeMatcher(Account.getSObjectType()) }
+        Params.of(Matcher.ofType(Account.getSObjectType()))
       )
       .thenReturn(succeed('001000000000000AAA'));
 
     insertSObjectSpy.whenCalledWith(
-        new List<Object>{ new SObjectTypeMatcher(Opportunity.getSObjectType()) }
+        Params.of(Matcher.ofType(Opportunity.getSObjectType()))
       )
       .thenReturn(succeed('006000000000000AAA'));
 
@@ -51,10 +49,10 @@ private class FunctionalTest {
     // Assert
     Account expectedAccount = new Account(NumberOfEmployees = 10);
     Assertions.assertThat(insertSObjectSpy)
-      .hasBeenCalledWith(new List<Object>{ expectedAccount });
+      .hasBeenCalledWith(Params.of(expectedAccount));
     Assertions.assertThat(insertSObjectSpy)
       .hasBeenCalledWith(
-        new List<Object>{ new Opportunity(AccountId = '001000000000000AAA') }
+        Params.of(new Opportunity(AccountId = '001000000000000AAA'))
       );
     Assertions.assertThat(insertSObjectSpy).hasBeenCalledTimes(2);
   }
@@ -81,7 +79,7 @@ private class FunctionalTest {
     } catch (DmlException dex) {
       Assertions.assertThat(insertSObjectSpy)
         .hasBeenCalledWith(
-          new List<Object>{ new Account(NumberOfEmployees = 1000000000) }
+          Params.of(new Account(NumberOfEmployees = 1000000000))
         );
     }
   }
@@ -119,12 +117,12 @@ private class FunctionalTest {
     Account expectedAccount = new Account(NumberOfEmployees = 10);
     Assertions.assertThat(insertSObjectsSpy)
       .hasBeenCalledWith(
-        new List<Object>{
-          new JSONMatcher(
+        Params.of(
+          Matcher.jsonEquals(
             new List<Account>{ expectedAccount, expectedAccount }
           ),
-          new JSONMatcher(dmlOptions)
-        }
+          Matcher.jsonEquals(dmlOptions)
+        )
       );
     Assertions.assertThat(rollbackSpy).hasBeenCalled();
   }

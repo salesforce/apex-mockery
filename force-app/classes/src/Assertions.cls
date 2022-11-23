@@ -63,7 +63,7 @@ public class Assertions {
       );
     }
 
-    public void hasBeenCalledWith(List<Object> params) {
+    public void hasBeenCalledWith(final Params params) {
       this.asserter.assertEquals(
         true,
         this.spy.hasBeenCalled(),
@@ -81,7 +81,7 @@ public class Assertions {
       );
     }
 
-    public void hasBeenLastCalledWith(List<Object> params) {
+    public void hasBeenLastCalledWith(final Params params) {
       this.asserter.assertEquals(
         true,
         this.spy.hasBeenCalled(),
