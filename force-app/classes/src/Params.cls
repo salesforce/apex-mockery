@@ -20,6 +20,10 @@ public class Params {
     }
   }
 
+  override public String toString() {
+    return '[' + listOfArgs + ']';
+  }
+
   public static Params empty() {
     return new Params();
   }
@@ -71,8 +75,10 @@ public class Params {
 
   public static Params ofList(final List<Object> listOfArgs) {
     final Params params = empty();
-    for (Object callArgument : listOfArgs) {
-      params.add(callArgument);
+    if (listOfArgs != null) {
+      for (Object callArgument : listOfArgs) {
+        params.add(callArgument);
+      }
     }
     return params;
   }
