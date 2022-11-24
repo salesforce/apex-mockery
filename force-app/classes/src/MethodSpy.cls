@@ -135,6 +135,16 @@ public class MethodSpy {
     return parameterizedMethodCall;
   }
 
+  public List<Params> getCallLogParams() {
+    final List<Params> reversedCallsTrace = new List<Params>();
+    final List<MethodCall> calls = this.callLog.callParams;
+    for (Integer i = calls.size() - 1; i >= 0; i--) {
+      final MethodCall call = calls[i];
+      reversedCallsTrace.add(Params.ofList(call.params));
+    }
+    return reversedCallsTrace;
+  }
+
   private class CallLog implements Iterable<MethodCall> {
     private List<MethodCall> callParams = new List<MethodCall>();
 

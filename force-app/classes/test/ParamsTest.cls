@@ -90,7 +90,7 @@ private class ParamsTest {
   }
 
   @isTest
-  static void givenListOf10MixType_whenOfIsCalledWithList_listOfArgsContains10Elements() {
+  static void givenListOf10MixType_whenOfListIsCalledWithList_listOfArgsContains10Elements() {
     // Arrange
     Params sut;
 
@@ -113,6 +113,15 @@ private class ParamsTest {
     // Assert
     System.assertEquals(10, sut.listOfArgs.size());
     assertListOfArgsElementsAreArgumentMatcher(sut);
+  }
+
+  @isTest
+  static void whenOfListIsCalledWithNull_listOfArgsIsEmpty() {
+    // Act
+    final Params result = Params.ofList(null);
+
+    // Assert
+    System.assertEquals(0, result.listOfArgs.size());
   }
 
   @isTest

@@ -39,6 +39,10 @@ private class AssertionsTest {
     System.assertEquals(1, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(false, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was called',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -58,6 +62,10 @@ private class AssertionsTest {
     System.assertEquals(1, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -77,6 +85,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called with [(Account:{})]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -98,6 +110,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called with [(Account:{}, Opportunity:{})]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -117,6 +133,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called with [(Account:{}, test)]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -136,6 +156,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called with [()]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -195,6 +219,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not last called with null',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -214,6 +242,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not last called with [(Account:{})]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -233,6 +265,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not last called with [(Account:{}, test)]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -252,6 +288,10 @@ private class AssertionsTest {
     System.assertEquals(2, fakeAsserter.assertEqualsCallCount);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not last called with [(null)]',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -318,10 +358,18 @@ private class AssertionsTest {
     sut.hasBeenCalledTimes(0);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called 0 times\nmethod call history:\n\t#1 method([()])\n',
+      fakeAsserter.assertEqualsLastMessage
+    );
 
     sut.hasBeenCalledTimes(2);
     System.assertEquals(true, fakeAsserter.assertEqualsLastExpected);
     System.assertEquals(false, fakeAsserter.assertEqualsLastActual);
+    System.assertEquals(
+      'Method method was not called 2 times\nmethod call history:\n\t#1 method([()])\n',
+      fakeAsserter.assertEqualsLastMessage
+    );
   }
 
   @isTest
@@ -340,6 +388,7 @@ private class AssertionsTest {
     public Integer assertEqualsCallCount = 0;
     public Object assertEqualsLastExpected;
     public Object assertEqualsLastActual;
+    public String assertEqualsLastMessage;
 
     public override void assertEquals(
       Object expected,
@@ -349,6 +398,7 @@ private class AssertionsTest {
       this.assertEqualsCallCount++;
       this.assertEqualsLastExpected = expected;
       this.assertEqualsLastActual = actual;
+      this.assertEqualsLastMessage = message;
     }
   }
 }

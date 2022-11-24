@@ -37,6 +37,10 @@ public class Matcher {
     public Boolean matches(final Object callArgument) {
       return true;
     }
+
+    override public String toString() {
+      return 'any';
+    }
   }
 
   private class EqualsMatcher implements ArgumentMatcher {
@@ -49,17 +53,27 @@ public class Matcher {
     public Boolean matches(final Object callArgument) {
       return callArgument == this.callArgumentToMatch;
     }
+
+    override public String toString() {
+      return callArgumentToMatch + '';
+    }
   }
 
   private class JSONMatcher implements ArgumentMatcher {
-    private String callArgumentToMatch;
+    private Object callArgumentToMatch;
+    private String jsonValue;
 
     public JSONMatcher(final Object callArgumentToMatch) {
-      this.callArgumentToMatch = JSON.serialize(callArgumentToMatch);
+      this.callArgumentToMatch = callArgumentToMatch;
+      this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
     public boolean matches(final Object callArgument) {
-      return this.callArgumentToMatch == JSON.serialize(callArgument);
+      return this.jsonValue == JSON.serialize(callArgument);
+    }
+
+    override public String toString() {
+      return 'json(' + callArgumentToMatch + ')';
     }
   }
 
@@ -102,6 +116,10 @@ public class Matcher {
         result = message.substringBefore(' to Date');
       }
       return result;
+    }
+
+    override public String toString() {
+      return callArgumentToMatch + '.Type';
     }
   }
 }
