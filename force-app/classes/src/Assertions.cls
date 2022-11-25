@@ -78,12 +78,12 @@ public class Assertions {
   private class MethodSpyAsserter implements Asserter {
     public void isTrue(Boolean value, ErrorMessage message) {
       if (!value) {
-        throw new AssertException(message.toString());
+        Assert.fail(message.toString());
       }
     }
     public void isFalse(Boolean value, ErrorMessage message) {
       if (value) {
-        throw new AssertException(message.toString());
+        Assert.fail(message.toString());
       }
     }
   }
