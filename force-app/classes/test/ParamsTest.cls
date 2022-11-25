@@ -124,20 +124,6 @@ private class ParamsTest {
     System.assertEquals(0, result.listOfArgs.size());
   }
 
-  @isTest
-  static void givenAParam_whenAddIsCalled_listOfArgsContains1ElementMore() {
-    // Arrange
-    Params sut = Params.empty();
-
-    // Act
-    System.assertEquals(0, sut.listOfArgs.size());
-    sut.add(Matcher.equals('test'));
-
-    // Assert
-    System.assertEquals(1, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
-  }
-
   static void assertListOfArgsElementsAreArgumentMatcher(final Params params) {
     for (Object argument : params.listOfArgs) {
       System.assert(argument instanceof ArgumentMatcher);

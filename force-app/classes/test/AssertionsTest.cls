@@ -16,7 +16,7 @@ private class AssertionsTest {
     final MethodSpy spy = new MethodSpy('method');
 
     // Act
-    final Assertions.MethodSpyAssert result = Assertions.assertThat(spy);
+    final Assertions.MethodSpyAssertions result = Assertions.assertThat(spy);
 
     // Assert
     System.assertNotEquals(null, result);
@@ -27,7 +27,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -50,7 +50,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -73,7 +73,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -96,7 +96,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -121,7 +121,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -144,7 +144,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -168,7 +168,7 @@ private class AssertionsTest {
     final MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -188,7 +188,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -207,7 +207,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -230,7 +230,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -253,7 +253,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -276,7 +276,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -300,7 +300,7 @@ private class AssertionsTest {
     final MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -320,7 +320,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -344,7 +344,7 @@ private class AssertionsTest {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssert sut = new Assertions.MethodSpyAssert(
+    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(
       spy,
       fakeAsserter
     );
@@ -375,29 +375,33 @@ private class AssertionsTest {
   @isTest
   static void givenExpectedEqualsAssert_systemAsserter_doNotThrow() {
     // Arrange
-    Assertions.SystemAsserter systemAsserter = new Assertions.SystemAsserter();
+    final Assertions.SystemAsserter systemAsserter = new Assertions.SystemAsserter();
 
     // Act
-    systemAsserter.assertEquals(true, true, 'it works');
+    systemAsserter.isTrue(true, 'it works');
+    systemAsserter.isFalse(false, 'it works too');
 
     // Assert
     System.assert(true, 'This assertions should be reached');
   }
 
-  class FakeAsserter extends Assertions.SystemAsserter {
+  class FakeAsserter implements Assertions.Asserter {
     public Integer assertEqualsCallCount = 0;
     public Object assertEqualsLastExpected;
     public Object assertEqualsLastActual;
     public String assertEqualsLastMessage;
 
-    public override void assertEquals(
-      Object expected,
-      Object actual,
-      String message
-    ) {
+    public void isTrue(Boolean value, String message) {
       this.assertEqualsCallCount++;
-      this.assertEqualsLastExpected = expected;
-      this.assertEqualsLastActual = actual;
+      this.assertEqualsLastExpected = true;
+      this.assertEqualsLastActual = value;
+      this.assertEqualsLastMessage = message;
+    }
+
+    public void isFalse(Boolean value, String message) {
+      this.assertEqualsCallCount++;
+      this.assertEqualsLastExpected = false;
+      this.assertEqualsLastActual = value;
       this.assertEqualsLastMessage = message;
     }
   }

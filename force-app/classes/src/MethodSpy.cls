@@ -7,14 +7,12 @@
 
 /**
  * MethodSpy represents an apex method spy on which you can register some value to be returned
- *
- *  - always return the same value using spy.returns(value)
- *  - return value based on calling arguments list
- *        spy.whenCalledWith(param).thenReturn(value)
- *        spy.whenCalledWith(new List<Object>{param1, param2}).thenReturn(value)
- *        spy.whenCalledWith(new List<Object>{param1, param2}).thenThrow(error)
- *    note: the matching algorithm is currently based on equality (equals method or reference comparison)
- *
+ *  - spy.returns(value): always return the same value using spy.returns(value)
+ *  - spy.whenCalledWith(Params params).thenReturn(value)
+ *  - spy.whenCalledWith(Params params).thenThrow(error)
+ *  note: the matching algorithm is based on Matcher specified in the Params instanciation (defaulting to equals)
+ *  @see Params
+ *  @see Matcher
  */
 @IsTest
 public class MethodSpy {
