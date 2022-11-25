@@ -53,7 +53,7 @@ public class Assertions {
    * @see       MethodSpy
    */
   public static MethodSpyAssertions assertThat(MethodSpy spy) {
-    return assertThat(spy, CUSTOM_ASSERTER);
+    return assertThat(spy, METHOD_SPY_ASSERTER);
   }
 
   /**
@@ -70,15 +70,6 @@ public class Assertions {
   }
 
   @TestVisible
-  private class SystemAsserter implements Asserter {
-    public void isTrue(Boolean value, String message) {
-      System.assertEquals(true, value, message);
-    }
-    public void isFalse(Boolean value, String message) {
-      System.assertEquals(false, value, message);
-    }
-  }
-
   private class MethodSpyAsserter implements Asserter {
     public void isTrue(Boolean value, String message) {
       if (!value) {
@@ -92,8 +83,7 @@ public class Assertions {
     }
   }
 
-  private static final Asserter SYSTEM_ASSERTER = new SystemAsserter();
-  private static final Asserter CUSTOM_ASSERTER = new MethodSpyAsserter();
+  private static final Asserter METHOD_SPY_ASSERTER = new MethodSpyAsserter();
 
   private class DefaultMethodSpyAssertions implements MethodSpyAssertions {
     private MethodSpy spy;
@@ -101,7 +91,7 @@ public class Assertions {
 
     private DefaultMethodSpyAssertions(MethodSpy spy) {
       this.spy = spy;
-      this.asserter = CUSTOM_ASSERTER;
+      this.asserter = METHOD_SPY_ASSERTER;
     }
 
     private DefaultMethodSpyAssertions(MethodSpy spy, Asserter asserter) {

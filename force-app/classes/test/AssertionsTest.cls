@@ -373,13 +373,13 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenExpectedEqualsAssert_systemAsserter_doNotThrow() {
+  static void givenExpectedEqualsAssert_MethodSpyAsserter_doNotThrow() {
     // Arrange
-    final Assertions.SystemAsserter systemAsserter = new Assertions.SystemAsserter();
+    final Assertions.Asserter sut = new Assertions.MethodSpyAsserter();
 
     // Act
-    systemAsserter.isTrue(true, 'it works');
-    systemAsserter.isFalse(false, 'it works too');
+    sut.isTrue(true, 'it works');
+    sut.isFalse(false, 'it works too');
 
     // Assert
     System.assert(true, 'This assertions should be reached');
