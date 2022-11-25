@@ -66,7 +66,8 @@ public class Assertions {
    * @param spy      the MethodSpy to assert
    * @param asserter the Assert to use during assertions
    */
-  public static MethodSpyAssertions assertThat(
+  @TestVisible
+  private static MethodSpyAssertions assertThat(
     MethodSpy spy,
     Asserter asserter
   ) {
