@@ -41,9 +41,13 @@ public class Assertions {
     void hasBeenLastCalledWith(final Params params);
   }
 
+  public interface ErrorMessage {
+    String toString();
+  }
+
   public interface Asserter {
-    void isTrue(Boolean value, String message);
-    void isFalse(Boolean value, String message);
+    void isTrue(Boolean value, ErrorMessage message);
+    void isFalse(Boolean value, ErrorMessage message);
   }
 
   /**
@@ -71,14 +75,14 @@ public class Assertions {
 
   @TestVisible
   private class MethodSpyAsserter implements Asserter {
-    public void isTrue(Boolean value, String message) {
+    public void isTrue(Boolean value, ErrorMessage message) {
       if (!value) {
-        throw new AssertException(message);
+        throw new AssertException(message.toString());
       }
     }
-    public void isFalse(Boolean value, String message) {
+    public void isFalse(Boolean value, ErrorMessage message) {
       if (value) {
-        throw new AssertException(message);
+        throw new AssertException(message.toString());
       }
     }
   }
@@ -168,15 +172,18 @@ public class Assertions {
     }
   }
 
-  private class ErrorMessage {
-    private String headline;
-    private List<ErrorMessageRow> callTraces;
-    ErrorMessage(MethodSpy spy, ErrorMessageType error) {
+  private class ErrorMessageImpl implements ErrorMessage {
+    private MethodSpy spy;
+    private ErrorMessageType error;
+    private Object argument;
+
+    ErrorMessageImpl(MethodSpy spy, ErrorMessageType error) {
       this(spy, error, null);
     }
-    ErrorMessage(MethodSpy spy, ErrorMessageType error, Object argument) {
-      this.headline = this.buildHeadline(spy, error, argument);
-      this.callTraces = this.buildCallTraces(spy);
+    ErrorMessageImpl(MethodSpy spy, ErrorMessageType error, Object argument) {
+      this.spy = spy;
+      this.error = error;
+      this.argument = argument;
     }
 
     private String buildHeadline(
@@ -223,8 +230,11 @@ public class Assertions {
     }
 
     override public String toString() {
+      final String headline = this.buildHeadline(spy, error, argument);
+      final List<ErrorMessageRow> callTraces = this.buildCallTraces(spy);
+
       final List<String> lines = new List<String>();
-      lines.add(this.headline);
+      lines.add(headline);
       if (!callTraces.isEmpty()) {
         for (ErrorMessageRow row : callTraces) {
           final String prefix = row.tabbed ? '\t' : '';
@@ -237,18 +247,18 @@ public class Assertions {
     }
   }
 
-  private static String buildErrorMessage(
+  private static ErrorMessage buildErrorMessage(
     MethodSpy spy,
     ErrorMessageType error
   ) {
-    return new ErrorMessage(spy, error, null).toString();
+    return new ErrorMessageImpl(spy, error, null);
   }
 
-  private static String buildErrorMessage(
+  private static ErrorMessage buildErrorMessage(
     MethodSpy spy,
     ErrorMessageType error,
     Object argument
   ) {
-    return new ErrorMessage(spy, error, argument).toString();
+    return new ErrorMessageImpl(spy, error, argument);
   }
 }

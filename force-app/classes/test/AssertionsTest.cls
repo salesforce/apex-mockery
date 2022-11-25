@@ -378,11 +378,21 @@ private class AssertionsTest {
     final Assertions.Asserter sut = new Assertions.MethodSpyAsserter();
 
     // Act
-    sut.isTrue(true, 'it works');
-    sut.isFalse(false, 'it works too');
+    sut.isTrue(true, new FakeErrorMessage('it works'));
+    sut.isFalse(false, new FakeErrorMessage('it works too'));
 
     // Assert
     System.assert(true, 'This assertions should be reached');
+  }
+
+  class FakeErrorMessage implements Assertions.ErrorMessage {
+    private String message;
+    FakeErrorMessage(String message) {
+      this.message = message;
+    }
+    public override String toString() {
+      return message;
+    }
   }
 
   class FakeAsserter implements Assertions.Asserter {
@@ -391,18 +401,18 @@ private class AssertionsTest {
     public Object assertEqualsLastActual;
     public String assertEqualsLastMessage;
 
-    public void isTrue(Boolean value, String message) {
+    public void isTrue(Boolean value, Assertions.ErrorMessage message) {
       this.assertEqualsCallCount++;
       this.assertEqualsLastExpected = true;
       this.assertEqualsLastActual = value;
-      this.assertEqualsLastMessage = message;
+      this.assertEqualsLastMessage = message.toString();
     }
 
-    public void isFalse(Boolean value, String message) {
+    public void isFalse(Boolean value, Assertions.ErrorMessage message) {
       this.assertEqualsCallCount++;
       this.assertEqualsLastExpected = false;
       this.assertEqualsLastActual = value;
-      this.assertEqualsLastMessage = message;
+      this.assertEqualsLastMessage = message.toString();
     }
   }
 }
