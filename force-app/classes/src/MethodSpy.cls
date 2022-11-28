@@ -85,17 +85,11 @@ public class MethodSpy {
   public Object call(List<Object> params) {
     this.callLog.add(new MethodCall(params));
 
-    if (
-      this.parameterizedMethodCalls.isEmpty() &&
-      !this.configuredGlobalReturn &&
-      this.exceptionToThrow == null
-    ) {
+    if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && this.exceptionToThrow == null) {
       return null;
     }
 
-    for (
-      ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls
-    ) {
+    for (ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls) {
       if (parameterizedCall.matches(params)) {
         if (parameterizedCall.shouldThrow()) {
           throw parameterizedCall.error;
@@ -112,11 +106,7 @@ public class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw new IllegalArgumentException(
-      this.methodName +
-      ': No stub value found for a call with params ' +
-      params
-    );
+    throw new IllegalArgumentException(this.methodName + ': No stub value found for a call with params ' + params);
   }
 
   public void returns(Object value) {
@@ -133,9 +123,7 @@ public class MethodSpy {
     if (params == null) {
       throw new Matcher.MatcherException('Params cannot be null');
     }
-    final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
-      params
-    );
+    final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(params);
     this.parameterizedMethodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
   }
