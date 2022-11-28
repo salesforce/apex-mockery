@@ -12,12 +12,16 @@ public class Params {
     this.listOfArgs = new List<ArgumentMatcher>();
   }
 
-  public void add(final Object callArgument) {
-    if (callArgument instanceof ArgumentMatcher) {
-      this.listOfArgs.add((ArgumentMatcher) callArgument);
-    } else {
-      this.listOfArgs.add(Matcher.equals(callArgument));
+  private Params(List<Object> callArguments) {
+    final List<ArgumentMatcher> listOfArgs = new List<ArgumentMatcher>();
+    for (Object callArgument : callArguments) {
+      if (callArgument instanceof ArgumentMatcher) {
+        listOfArgs.add((ArgumentMatcher) callArgument);
+      } else {
+        listOfArgs.add(Matcher.equals(callArgument));
+      }
     }
+    this.listOfArgs = listOfArgs;
   }
 
   override public String toString() {
@@ -29,15 +33,11 @@ public class Params {
   }
 
   public static Params of(final Object arg) {
-    final Params params = empty();
-    params.add(arg);
-    return params;
+    return new Params(new List<Object>{ arg });
   }
 
   public static Params of(final Object arg1, final Object arg2) {
-    final Params params = of(arg1);
-    params.add(arg2);
-    return params;
+    return new Params(new List<Object>{ arg1, arg2 });
   }
 
   public static Params of(
@@ -45,9 +45,7 @@ public class Params {
     final Object arg2,
     final Object arg3
   ) {
-    final Params params = of(arg1, arg2);
-    params.add(arg3);
-    return params;
+    return new Params(new List<Object>{ arg1, arg2, arg3 });
   }
 
   public static Params of(
@@ -56,9 +54,7 @@ public class Params {
     final Object arg3,
     final Object arg4
   ) {
-    final Params params = of(arg1, arg2, arg3);
-    params.add(arg4);
-    return params;
+    return new Params(new List<Object>{ arg1, arg2, arg3, arg4 });
   }
 
   public static Params of(
@@ -68,18 +64,13 @@ public class Params {
     final Object arg4,
     final Object arg5
   ) {
-    final Params params = of(arg1, arg2, arg3, arg4);
-    params.add(arg5);
-    return params;
+    return new Params(new List<Object>{ arg1, arg2, arg3, arg4, arg5 });
   }
 
   public static Params ofList(final List<Object> listOfArgs) {
-    final Params params = empty();
-    if (listOfArgs != null) {
-      for (Object callArgument : listOfArgs) {
-        params.add(callArgument);
-      }
+    if (listOfArgs == null) {
+      return Params.empty();
     }
-    return params;
+    return new Params(listOfArgs);
   }
 }

@@ -6,76 +6,142 @@
  */
 @IsTest
 public class Assertions {
-  public virtual class SystemAsserter {
-    public virtual void assertEquals(
-      Object expected,
-      Object actual,
-      String message
-    ) {
-      System.assertEquals(expected, actual, message);
+  public interface MethodSpyAssertions {
+    /**
+     * Assert that a method spy has never been called
+     */
+    void hasNotBeenCalled();
+
+    /**
+     * Assert that a method spy has been called at least one time with any parameters
+     */
+    void hasBeenCalled();
+
+    /**
+     * Assert that a method spy has been called exactly N times with any parameters
+     *
+     * @param count number of times the method spy should have been called
+     */
+    void hasBeenCalledTimes(final Integer count);
+
+    /**
+     * Assert that a method spy has been called at least one time with matching parameters
+     *
+     * @param params params that should match one call paramters
+     * @see          Params
+     */
+    void hasBeenCalledWith(final Params params);
+
+    /**
+     * Assert that a method spy has been lastly called with matching parameters
+     *
+     * @param params params that should match last call paramters
+     * @see          Params
+     */
+    void hasBeenLastCalledWith(final Params params);
+  }
+
+  public interface ErrorMessage {
+    String toString();
+  }
+
+  public interface Asserter {
+    void isTrue(Boolean value, ErrorMessage message);
+    void isFalse(Boolean value, ErrorMessage message);
+  }
+
+  /**
+   * Starts to build assertions on a method spy
+   *
+   * @param spy the MethodSpy to assert
+   * @see       MethodSpy
+   */
+  public static MethodSpyAssertions assertThat(MethodSpy spy) {
+    return assertThat(spy, METHOD_SPY_ASSERTER);
+  }
+
+  /**
+   * Starts to build assertions on a method spy using a custom asserter
+   *
+   * @param spy      the MethodSpy to assert
+   * @param asserter the Assert to use during assertions
+   */
+  @TestVisible
+  private static MethodSpyAssertions assertThat(
+    MethodSpy spy,
+    Asserter asserter
+  ) {
+    return new DefaultMethodSpyAssertions(spy, asserter);
+  }
+
+  @TestVisible
+  private class MethodSpyAsserter implements Asserter {
+    public void isTrue(Boolean value, ErrorMessage message) {
+      if (!value) {
+        Assert.fail(message.toString());
+      }
+    }
+    public void isFalse(Boolean value, ErrorMessage message) {
+      if (value) {
+        Assert.fail(message.toString());
+      }
     }
   }
 
-  public class MethodSpyAssert {
-    private MethodSpy spy;
-    private SystemAsserter asserter;
+  private static final Asserter METHOD_SPY_ASSERTER = new MethodSpyAsserter();
 
-    private MethodSpyAssert(MethodSpy spy) {
+  private class DefaultMethodSpyAssertions implements MethodSpyAssertions {
+    private MethodSpy spy;
+    private Asserter asserter;
+
+    private DefaultMethodSpyAssertions(MethodSpy spy) {
       this.spy = spy;
-      this.asserter = new SystemAsserter();
+      this.asserter = METHOD_SPY_ASSERTER;
     }
 
-    @TestVisible
-    private MethodSpyAssert(MethodSpy spy, SystemAsserter asserter) {
+    private DefaultMethodSpyAssertions(MethodSpy spy, Asserter asserter) {
       this.spy = spy;
       this.asserter = asserter;
     }
 
     public void hasNotBeenCalled() {
-      this.asserter.assertEquals(
-        false,
+      this.asserter.isFalse(
         this.spy.hasBeenCalled(),
         buildErrorMessage(this.spy, ErrorMessageType.CALLED)
       );
     }
 
     public void hasBeenCalled() {
-      this.asserter.assertEquals(
-        true,
+      this.asserter.isTrue(
         this.spy.hasBeenCalled(),
         buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED)
       );
     }
 
     public void hasBeenCalledTimes(final Integer count) {
-      this.asserter.assertEquals(
-        true,
+      this.asserter.isTrue(
         this.spy.hasBeenCalledTimes(count),
         buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count)
       );
     }
 
     public void hasBeenCalledWith(final Params params) {
-      this.asserter.assertEquals(
-        true,
+      this.asserter.isTrue(
         this.spy.hasBeenCalled(),
         buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED)
       );
-      this.asserter.assertEquals(
-        true,
+      this.asserter.isTrue(
         this.spy.hasBeenCalledWith(params),
         buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params)
       );
     }
 
     public void hasBeenLastCalledWith(final Params params) {
-      this.asserter.assertEquals(
-        true,
+      this.asserter.isTrue(
         this.spy.hasBeenCalled(),
         buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED)
       );
-      this.asserter.assertEquals(
-        true,
+      this.asserter.isTrue(
         this.spy.hasBeenLastCalledWith(params),
         buildErrorMessage(
           this.spy,
@@ -84,10 +150,6 @@ public class Assertions {
         )
       );
     }
-  }
-
-  public static MethodSpyAssert assertThat(MethodSpy spy) {
-    return new MethodSpyAssert(spy);
   }
 
   private enum ErrorMessageType {
@@ -111,15 +173,18 @@ public class Assertions {
     }
   }
 
-  private class ErrorMessage {
-    private String headline;
-    private List<ErrorMessageRow> callTraces;
-    ErrorMessage(MethodSpy spy, ErrorMessageType error) {
+  private class ErrorMessageImpl implements ErrorMessage {
+    private MethodSpy spy;
+    private ErrorMessageType error;
+    private Object argument;
+
+    ErrorMessageImpl(MethodSpy spy, ErrorMessageType error) {
       this(spy, error, null);
     }
-    ErrorMessage(MethodSpy spy, ErrorMessageType error, Object argument) {
-      this.headline = this.buildHeadline(spy, error, argument);
-      this.callTraces = this.buildCallTraces(spy);
+    ErrorMessageImpl(MethodSpy spy, ErrorMessageType error, Object argument) {
+      this.spy = spy;
+      this.error = error;
+      this.argument = argument;
     }
 
     private String buildHeadline(
@@ -166,8 +231,11 @@ public class Assertions {
     }
 
     override public String toString() {
+      final String headline = this.buildHeadline(spy, error, argument);
+      final List<ErrorMessageRow> callTraces = this.buildCallTraces(spy);
+
       final List<String> lines = new List<String>();
-      lines.add(this.headline);
+      lines.add(headline);
       if (!callTraces.isEmpty()) {
         for (ErrorMessageRow row : callTraces) {
           final String prefix = row.tabbed ? '\t' : '';
@@ -180,18 +248,18 @@ public class Assertions {
     }
   }
 
-  private static String buildErrorMessage(
+  private static ErrorMessage buildErrorMessage(
     MethodSpy spy,
     ErrorMessageType error
   ) {
-    return new ErrorMessage(spy, error, null).toString();
+    return new ErrorMessageImpl(spy, error, null);
   }
 
-  private static String buildErrorMessage(
+  private static ErrorMessage buildErrorMessage(
     MethodSpy spy,
     ErrorMessageType error,
     Object argument
   ) {
-    return new ErrorMessage(spy, error, argument).toString();
+    return new ErrorMessageImpl(spy, error, argument);
   }
 }

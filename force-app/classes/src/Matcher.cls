@@ -4,6 +4,16 @@
  * SPDX-License-Identifier: BSD-3-Clause
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
+
+/**
+ * Matcher offers publis static methods to build out-of-the-box matchers to be used with Assertions
+ *    - Matcher.any()
+ *    - Matcher.equals(Object object)
+ *    - Matcher.jsonEquals(Object object)
+ *    - Matcher.ofType(String typeName)
+ *    - Matcher.ofType(Type type)
+ *    - Matcher.ofType(Schema.SObjectType sobjectType)
+ */
 @IsTest
 public class Matcher {
   private Matcher() {
