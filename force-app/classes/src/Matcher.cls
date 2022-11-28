@@ -132,4 +132,7 @@ public class Matcher {
       return callArgumentToMatch + '.Type';
     }
   }
+
+  public class MatcherException extends Exception {
+  }
 }

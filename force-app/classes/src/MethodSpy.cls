@@ -33,16 +33,17 @@ public class MethodSpy {
   }
 
   public Boolean hasBeenCalledWith(final Params params) {
-    final List<ArgumentMatcher> expectedMatchers = params.listOfArgs;
-
+    if (params == null) {
+      throw new Matcher.MatcherException('Params cannot be null');
+    }
     final Iterator<MethodCall> it = this.callLog.iterator();
     while (it.hasNext()) {
       final List<Object> actualListOfArgs = it.next().params;
 
-      if (actualListOfArgs.size() == expectedMatchers.size()) {
+      if (actualListOfArgs.size() == params.listOfArgs.size()) {
         Boolean match = true;
         for (Integer i = 0; i < actualListOfArgs.size(); ++i) {
-          if (!expectedMatchers[i].matches(actualListOfArgs[i])) {
+          if (!params.listOfArgs[i].matches(actualListOfArgs[i])) {
             match = false;
             break;
           }
@@ -57,6 +58,9 @@ public class MethodSpy {
   }
 
   public Boolean hasBeenLastCalledWith(final Params params) {
+    if (params == null) {
+      throw new Matcher.MatcherException('Params cannot be null');
+    }
     if (this.callLog.isEmpty()) {
       return false;
     }
@@ -126,6 +130,9 @@ public class MethodSpy {
   }
 
   public MethodSpyCall whenCalledWith(final Params params) {
+    if (params == null) {
+      throw new Matcher.MatcherException('Params cannot be null');
+    }
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(
       params
     );
@@ -220,6 +227,6 @@ public class MethodSpy {
     }
   }
 
-  class MatcherException extends Exception {
+  public class MatcherException extends Exception {
   }
 }

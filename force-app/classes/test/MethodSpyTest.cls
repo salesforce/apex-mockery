@@ -8,24 +8,23 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
-  static void givenSpyConfiguredWithNull_callWithLegitInput_itThrowsNPE() {
+  static void givenSpy_whenCalledWithConfiguredWithNull_itThrowsMatcherException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(null);
 
     try {
       // Act
-      sut.call(new List<Object>());
+      sut.whenCalledWith(null);
 
       // Assert
       System.assert(false, 'it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof NullPointerException);
+      System.assert(ex instanceof Matcher.MatcherException);
     }
   }
 
   @IsTest
-  static void givenSpy_hasBeenCalledWithNull_itThrowsNPE() {
+  static void givenSpyNotCalled_hasBeenCalledWithNull_itThrowsMatcherException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
 
@@ -36,7 +35,57 @@ private class MethodSpyTest {
       // Assert
       System.assert(false, 'it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof NullPointerException);
+      System.assert(ex instanceof Matcher.MatcherException);
+    }
+  }
+
+  @IsTest
+  static void givenSpyCalled_hasBeenCalledWithNull_itThrowsMatcherException() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.call(new List<Object>());
+
+    try {
+      // Act
+      sut.hasBeenCalledWith(null);
+
+      // Assert
+      System.assert(false, 'it should not reach this line');
+    } catch (Exception ex) {
+      System.assert(ex instanceof Matcher.MatcherException);
+    }
+  }
+
+  @IsTest
+  static void givenSpyNotCalled_hasBeenLastCalledWithNull_itThrowsMatcherException() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+
+    try {
+      // Act
+      sut.hasBeenLastCalledWith(null);
+
+      // Assert
+      System.assert(false, 'it should not reach this line');
+    } catch (Exception ex) {
+      System.assert(ex instanceof Matcher.MatcherException);
+    }
+  }
+
+  @IsTest
+  static void givenSpyCalled_hasBeenLastCalledWithNull_itThrowsMatcherException() {
+    // Arrange
+    final MethodSpy sut = new MethodSpy('methodName');
+    sut.call(new List<Object>());
+
+    try {
+      // Act
+      sut.hasBeenLastCalledWith(null);
+
+      // Assert
+      System.assert(false, 'it should not reach this line');
+    } catch (Exception ex) {
+      System.assert(ex instanceof Matcher.MatcherException);
     }
   }
 

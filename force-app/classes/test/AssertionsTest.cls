@@ -173,7 +173,7 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenNullArgumentMatchers_hasBeenCalledWithEmptyParams_callsAssertEquals() {
+  static void givenNullParam_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
@@ -181,7 +181,6 @@ private class AssertionsTest {
       spy,
       fakeAsserter
     );
-    ArgumentMatcher expected = null;
     spy.call(new List<Object>());
 
     // Act
@@ -196,7 +195,7 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenNull_hasBeenLastCalledWith_callsAssertEquals() {
+  static void givenNullParam_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
@@ -206,13 +205,13 @@ private class AssertionsTest {
     );
 
     // Act
-    sut.hasBeenLastCalledWith(null);
+    sut.hasBeenLastCalledWith(Params.of((Object) null));
 
     // Assert
     System.assertEquals(2, fakeAsserter.callCount);
     System.assertEquals(true, fakeAsserter.failed);
     System.assertEquals(
-      'Method method was not last called with null',
+      'Method method was not last called with [(null)]',
       fakeAsserter.errorMessage
     );
   }
