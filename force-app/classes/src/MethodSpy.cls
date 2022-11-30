@@ -108,7 +108,8 @@ public class MethodSpy {
     return parameterizedMethodCall;
   }
 
-  public List<Params> getCallLogParams() {
+  @TestVisible
+  private List<Params> getCallLogParams() {
     final List<Params> reversedCallsTrace = new List<Params>();
     final List<MethodCall> calls = this.callLog.callParams;
     for (Integer i = calls.size() - 1; i >= 0; i--) {
