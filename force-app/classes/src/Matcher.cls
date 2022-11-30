@@ -16,6 +16,10 @@
  */
 @IsTest
 public class Matcher {
+  public interface ArgumentMatcher {
+    Boolean matches(Object callArgument);
+  }
+
   private Matcher() {
   }
 

@@ -13,9 +13,11 @@ private class ParamsTest {
 
     // Act
     sut = Params.empty();
+    // TODO match stuff and assert the result
+    final Boolean result = sut.matches(new List<Object>());
 
     // Assert
-    System.assertEquals(0, sut.listOfArgs.size());
+    System.assertEquals(true, result);
   }
 
   @isTest

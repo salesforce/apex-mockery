@@ -38,19 +38,8 @@ public class MethodSpy {
     }
     final Iterator<MethodCall> it = this.callLog.iterator();
     while (it.hasNext()) {
-      final List<Object> actualListOfArgs = it.next().params;
-
-      if (actualListOfArgs.size() == params.listOfArgs.size()) {
-        Boolean match = true;
-        for (Integer i = 0; i < actualListOfArgs.size(); ++i) {
-          if (!params.listOfArgs[i].matches(actualListOfArgs[i])) {
-            match = false;
-            break;
-          }
-        }
-        if (match) {
-          return true;
-        }
+      if (params.matches(it.next().params)) {
+        return true;
       }
     }
 
@@ -66,16 +55,7 @@ public class MethodSpy {
     }
 
     final List<Object> actualListOfArgs = this.callLog.getLast();
-    if (actualListOfArgs.size() != params.listOfArgs.size()) {
-      return false;
-    }
-
-    for (Integer i = 0; i < actualListOfArgs.size(); ++i) {
-      if (!params.listOfArgs[i].matches(actualListOfArgs[i])) {
-        return false;
-      }
-    }
-    return true;
+    return params.matches(actualListOfArgs);
   }
 
   public Boolean hasBeenCalledTimes(final Integer count) {
@@ -180,12 +160,12 @@ public class MethodSpy {
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private Params matchers;
+    private Params paramsMatcher;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
     public ParameterizedMethodSpyCall(final Params paramsMatcher) {
-      this.matchers = paramsMatcher;
+      this.paramsMatcher = paramsMatcher;
     }
 
     public void thenReturn(Object value) {
@@ -201,17 +181,7 @@ public class MethodSpy {
     }
 
     public boolean matches(final List<Object> callArguments) {
-      if (this.matchers.listOfArgs.size() != callArguments.size()) {
-        return false;
-      }
-
-      for (Integer i = 0; i < this.matchers.listOfArgs.size(); ++i) {
-        if (!this.matchers.listOfArgs[i].matches(callArguments[i])) {
-          return false;
-        }
-      }
-
-      return true;
+      return this.paramsMatcher.matches(callArguments);
     }
   }
 
