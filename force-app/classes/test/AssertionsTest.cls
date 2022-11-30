@@ -232,12 +232,12 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenNullArgumentMatchers_hasBeenLastCalledWithParams_callsAssertEquals() {
+  static void givenNullArgumentMatchers_hasBeenLastCalledWithParamsOfNull_callsAssertEquals() {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
     final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
-    spy.call(null);
+    spy.call(new List<Object>());
 
     // Act
     try {
@@ -257,7 +257,7 @@ private class AssertionsTest {
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
     final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
-    spy.call(null);
+    spy.call(new List<Object>());
 
     // Act & Assert
     sut.hasBeenCalledTimes(1);
