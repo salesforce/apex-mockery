@@ -184,7 +184,4 @@ public class MethodSpy {
       return this.paramsMatcher.matches(callArguments);
     }
   }
-
-  public class MatcherException extends Exception {
-  }
 }

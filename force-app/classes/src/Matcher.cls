@@ -20,6 +20,9 @@ public class Matcher {
     Boolean matches(Object callArgument);
   }
 
+  public class MatcherException extends Exception {
+  }
+
   private Matcher() {
   }
 
@@ -134,8 +137,5 @@ public class Matcher {
     override public String toString() {
       return callArgumentToMatch + '.Type';
     }
-  }
-
-  public class MatcherException extends Exception {
   }
 }
