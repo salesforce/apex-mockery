@@ -20,7 +20,7 @@ private class MockTest {
     final String result = sut.dummyMethod();
 
     // Assert
-    System.assertEquals(expected, result);
+    Assert.areEqual(expected, result);
   }
 
   @IsTest
@@ -36,7 +36,7 @@ private class MockTest {
     final Object result = sut.dummyMethod();
 
     // Assert
-    System.assertEquals(null, result);
+    Assert.areEqual(null, result);
   }
 
   // Unit test
@@ -50,7 +50,7 @@ private class MockTest {
     final MethodSpy result = sut.spyOn(expected);
 
     // Assert
-    System.assertEquals(expected, result.methodName);
+    Assert.areEqual(expected, result.methodName);
   }
 
   @IsTest
@@ -64,7 +64,7 @@ private class MockTest {
     final MethodSpy result = sut.spyOn(methodName);
 
     // Assert
-    System.assertEquals(expected, result);
+    Assert.areEqual(expected, result);
   }
 
   @IsTest
@@ -77,7 +77,7 @@ private class MockTest {
     final MethodSpy result = sut.getSpy(methodName);
 
     // Assert
-    System.assertEquals(null, result);
+    Assert.areEqual(null, result);
   }
 
   @IsTest
@@ -91,7 +91,7 @@ private class MockTest {
     final MethodSpy result = sut.getSpy(methodName);
 
     // Assert
-    System.assertEquals(expected, result);
+    Assert.areEqual(expected, result);
   }
 
   @IsTest
@@ -103,7 +103,7 @@ private class MockTest {
     final Mock result = Mock.forType(param);
 
     // Assert
-    System.assertNotEquals(null, result);
+    Assert.areNotEqual(null, result);
   }
 
   @IsTest
@@ -115,9 +115,9 @@ private class MockTest {
     try {
       final Mock result = Mock.forType(param);
       // Assert
-      System.assert(false);
+      Assert.fail('it should not reach this line');
     } catch (Exception ex) {
-      System.assertNotEquals(null, ex);
+      Assert.areNotEqual(null, ex);
     }
   }
 }
