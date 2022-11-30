@@ -40,30 +40,15 @@ public class Params {
     return new Params(new List<Object>{ arg1, arg2 });
   }
 
-  public static Params of(
-    final Object arg1,
-    final Object arg2,
-    final Object arg3
-  ) {
+  public static Params of(final Object arg1, final Object arg2, final Object arg3) {
     return new Params(new List<Object>{ arg1, arg2, arg3 });
   }
 
-  public static Params of(
-    final Object arg1,
-    final Object arg2,
-    final Object arg3,
-    final Object arg4
-  ) {
+  public static Params of(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
     return new Params(new List<Object>{ arg1, arg2, arg3, arg4 });
   }
 
-  public static Params of(
-    final Object arg1,
-    final Object arg2,
-    final Object arg3,
-    final Object arg4,
-    final Object arg5
-  ) {
+  public static Params of(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
     return new Params(new List<Object>{ arg1, arg2, arg3, arg4, arg5 });
   }
 

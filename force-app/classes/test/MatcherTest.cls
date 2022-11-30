@@ -21,9 +21,7 @@ public class MatcherTest {
     System.assert(sut.matches(new List<Object>()));
     System.assert(sut.matches(new Set<Object>()));
     System.assert(sut.matches(new Map<Id, Object>()));
-    System.assert(
-      sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
@@ -48,9 +46,7 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(
-      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
@@ -75,24 +71,16 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(
-      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatcher_matchesCustomType() {
     // Arrange
-    ArgumentMatcher sut = Matcher.equals(
-      new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))
-    );
+    ArgumentMatcher sut = Matcher.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
-    System.assert(
-      sut.matches(
-        new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))
-      )
-    );
+    System.assert(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
 
     System.assert(!sut.matches(null));
     System.assert(!sut.matches(Date.today()));
@@ -109,24 +97,16 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(
-      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatcher_matchesCollection() {
     // Arrange
-    ArgumentMatcher sut = Matcher.equals(
-      new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }
-    );
+    ArgumentMatcher sut = Matcher.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
-    System.assert(
-      sut.matches(
-        new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }
-      )
-    );
+    System.assert(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
 
     System.assert(!sut.matches(null));
     System.assert(!sut.matches(Date.today()));
@@ -143,9 +123,7 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(
-      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
@@ -194,9 +172,7 @@ public class MatcherTest {
     System.assert(!sut.matches(new List<Object>()));
     System.assert(!sut.matches(new Set<Object>()));
     System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(
-      !sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
@@ -205,9 +181,7 @@ public class MatcherTest {
     ArgumentMatcher sut = Matcher.ofType(CustomType.class);
 
     // Act & Assert
-    System.assert(
-      sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
 
     System.assert(!sut.matches(null));
     System.assert(!sut.matches(Date.today()));
@@ -326,14 +300,10 @@ public class MatcherTest {
   @isTest
   static void givenJSONMatcher_matchesCustomType() {
     // Arrange
-    ArgumentMatcher sut = Matcher.jsonEquals(
-      new CustomType('test', 10, new Account(Name = 'test'))
-    );
+    ArgumentMatcher sut = Matcher.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
-    System.assert(
-      sut.matches(new CustomType('test', 10, new Account(Name = 'test')))
-    );
+    System.assert(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
 
     System.assert(!sut.matches(null));
     System.assert(!sut.matches(Date.today()));
@@ -355,16 +325,10 @@ public class MatcherTest {
   @isTest
   static void givenJSONMatcher_matchesCollection() {
     // Arrange
-    ArgumentMatcher sut = Matcher.jsonEquals(
-      new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }
-    );
+    ArgumentMatcher sut = Matcher.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
-    System.assert(
-      sut.matches(
-        new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }
-      )
-    );
+    System.assert(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
 
     System.assert(!sut.matches(null));
     System.assert(!sut.matches(Date.today()));
@@ -389,11 +353,7 @@ public class MatcherTest {
     public SObject sob;
     public List<Object> lo = new List<Object>();
 
-    public CustomType(
-      final String name,
-      final Integer size,
-      final SObject sob
-    ) {
+    public CustomType(final String name, final Integer size, final SObject sob) {
       this.name = name;
       this.size = size;
       this.sob = sob;
@@ -401,11 +361,7 @@ public class MatcherTest {
   }
 
   class CustomTypeWithEquals extends CustomType {
-    public CustomTypeWithEquals(
-      final String name,
-      final Integer size,
-      final SObject sob
-    ) {
+    public CustomTypeWithEquals(final String name, final Integer size, final SObject sob) {
       super(name, size, sob);
     }
     public Boolean equals(Object o) {
@@ -418,9 +374,7 @@ public class MatcherTest {
       }
 
       final CustomType other = (CustomType) o;
-      return this.name == other.name &&
-        this.size == other.size &&
-        this.sob == other.sob;
+      return this.name == other.name && this.size == other.size && this.sob == other.sob;
     }
 
     public Integer hashCode() {

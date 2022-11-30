@@ -121,8 +121,7 @@ public class Matcher {
       try {
         Date typeCheck = (Date) callArgument;
       } catch (System.TypeException te) {
-        String message = te.getMessage()
-          .substringAfter('Invalid conversion from runtime type ');
+        String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
         result = message.substringBefore(' to Date');
       }
       return result;
@@ -131,5 +130,8 @@ public class Matcher {
     override public String toString() {
       return callArgumentToMatch + '.Type';
     }
+  }
+
+  public class MatcherException extends Exception {
   }
 }

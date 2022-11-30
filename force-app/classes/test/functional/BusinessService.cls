@@ -19,10 +19,7 @@ public class BusinessService {
     }
     Database.DMLOptions dmlOptions = new Database.DMLOptions();
     dmlOptions.optAllOrNone = false;
-    Database.SaveResult[] saveResults = this.dmlDelegate.insertSObjects(
-      accountToInsert,
-      dmlOptions
-    );
+    Database.SaveResult[] saveResults = this.dmlDelegate.insertSObjects(accountToInsert, dmlOptions);
     Boolean allSucceed = true;
     for (Database.SaveResult saveResult : saveResults) {
       allSucceed &= saveResult.isSuccess();
@@ -34,9 +31,7 @@ public class BusinessService {
 
   public void createNewCompanyWithOpportunity(final Integer numberOfEmployees) {
     Account anAccount = new Account(NumberOfEmployees = numberOfEmployees);
-    Database.SaveResult accountSaveResult = this.dmlDelegate.insertSObject(
-      anAccount
-    );
+    Database.SaveResult accountSaveResult = this.dmlDelegate.insertSObject(anAccount);
     Opportunity anOppy = new Opportunity(AccountId = accountSaveResult.getId());
     this.dmlDelegate.insertSObject(anOppy);
   }

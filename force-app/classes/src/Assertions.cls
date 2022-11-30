@@ -67,10 +67,7 @@ public class Assertions {
    * @param asserter the Assert to use during assertions
    */
   @TestVisible
-  private static MethodSpyAssertions assertThat(
-    MethodSpy spy,
-    Asserter asserter
-  ) {
+  private static MethodSpyAssertions assertThat(MethodSpy spy, Asserter asserter) {
     return new DefaultMethodSpyAssertions(spy, asserter);
   }
 
@@ -105,50 +102,25 @@ public class Assertions {
     }
 
     public void hasNotBeenCalled() {
-      this.asserter.isFalse(
-        this.spy.hasBeenCalled(),
-        buildErrorMessage(this.spy, ErrorMessageType.CALLED)
-      );
+      this.asserter.isFalse(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.CALLED));
     }
 
     public void hasBeenCalled() {
-      this.asserter.isTrue(
-        this.spy.hasBeenCalled(),
-        buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED)
-      );
+      this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
     }
 
     public void hasBeenCalledTimes(final Integer count) {
-      this.asserter.isTrue(
-        this.spy.hasBeenCalledTimes(count),
-        buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count)
-      );
+      this.asserter.isTrue(this.spy.hasBeenCalledTimes(count), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count));
     }
 
     public void hasBeenCalledWith(final Params params) {
-      this.asserter.isTrue(
-        this.spy.hasBeenCalled(),
-        buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED)
-      );
-      this.asserter.isTrue(
-        this.spy.hasBeenCalledWith(params),
-        buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params)
-      );
+      this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
+      this.asserter.isTrue(this.spy.hasBeenCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params));
     }
 
     public void hasBeenLastCalledWith(final Params params) {
-      this.asserter.isTrue(
-        this.spy.hasBeenCalled(),
-        buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED)
-      );
-      this.asserter.isTrue(
-        this.spy.hasBeenLastCalledWith(params),
-        buildErrorMessage(
-          this.spy,
-          ErrorMessageType.NOT_LAST_CALLED_WITH,
-          params
-        )
-      );
+      this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
+      this.asserter.isTrue(this.spy.hasBeenLastCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, params));
     }
   }
 
@@ -187,11 +159,7 @@ public class Assertions {
       this.argument = argument;
     }
 
-    private String buildHeadline(
-      MethodSpy spy,
-      ErrorMessageType error,
-      Object argument
-    ) {
+    private String buildHeadline(MethodSpy spy, ErrorMessageType error, Object argument) {
       final Map<ErrorMessageType, String> messages = new Map<ErrorMessageType, String>{
         ErrorMessageType.CALLED => 'Method {0} was called',
         ErrorMessageType.NEVER_CALLED => 'Method {0} was not called',
@@ -199,10 +167,7 @@ public class Assertions {
         ErrorMessageType.NOT_LAST_CALLED_WITH => 'Method {0} was not last called with {1}',
         ErrorMessageType.NOT_CALLED_TIMES => 'Method {0} was not called {1} times'
       };
-      return String.format(
-        messages.get(error),
-        new List<String>{ spy.methodName, argument + '' }
-      );
+      return String.format(messages.get(error), new List<String>{ spy.methodName, argument + '' });
     }
 
     private List<ErrorMessageRow> buildCallTraces(MethodSpy spy) {
@@ -217,15 +182,7 @@ public class Assertions {
       for (Integer i = 0; i < callLogParams.size(); i++) {
         final Params params = callLogParams[i];
         final Integer count = callLogParams.size() - i;
-        rows.add(
-          new ErrorMessageRow(
-            String.format(
-              template,
-              new List<Object>{ count, spy.methodName, params }
-            ),
-            true
-          )
-        );
+        rows.add(new ErrorMessageRow(String.format(template, new List<Object>{ count, spy.methodName, params }), true));
       }
       return rows;
     }
@@ -248,18 +205,11 @@ public class Assertions {
     }
   }
 
-  private static ErrorMessage buildErrorMessage(
-    MethodSpy spy,
-    ErrorMessageType error
-  ) {
+  private static ErrorMessage buildErrorMessage(MethodSpy spy, ErrorMessageType error) {
     return new ErrorMessageImpl(spy, error, null);
   }
 
-  private static ErrorMessage buildErrorMessage(
-    MethodSpy spy,
-    ErrorMessageType error,
-    Object argument
-  ) {
+  private static ErrorMessage buildErrorMessage(MethodSpy spy, ErrorMessageType error, Object argument) {
     return new ErrorMessageImpl(spy, error, argument);
   }
 }

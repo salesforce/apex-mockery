@@ -76,13 +76,7 @@ private class ParamsTest {
     Params sut;
 
     // Act
-    sut = Params.of(
-      'test',
-      10,
-      new Account(),
-      new List<Date>(),
-      new Map<Id, Set<String>>()
-    );
+    sut = Params.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
 
     // Assert
     System.assertEquals(5, sut.listOfArgs.size());
