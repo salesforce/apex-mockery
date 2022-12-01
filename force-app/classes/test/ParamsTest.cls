@@ -7,89 +7,89 @@
 @IsTest
 private class ParamsTest {
   @isTest
-  static void givenNothing_whenOfIsCalled_listOfArgsContains0Element() {
+  static void givenNothing_whenOfIsCalled_matchesEmptyList() {
     // Arrange
-    Params sut;
+    final Params sut = Params.empty();
 
     // Act
-    sut = Params.empty();
+    final Boolean result = sut.matches(new List<Object>());
 
     // Assert
-    System.assertEquals(0, sut.listOfArgs.size());
+    Assert.isTrue(result);
   }
 
   @isTest
-  static void given1Object_whenOfIsCalled_listOfArgsContains1Element() {
+  static void given1Object_whenOfIsCalled_matchesTheElement() {
     // Arrange
-    Params sut;
+    final Params sut = Params.of('test');
 
     // Act
-    sut = Params.of('test');
+    final Boolean result = sut.matches(new List<Object>{ 'test' });
 
     // Assert
-    System.assertEquals(1, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
+    Assert.isTrue(result);
   }
 
   @isTest
-  static void given2Objects_whenOfIsCalled_listOfArgsContains2Elements() {
+  static void given2Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut;
+    final Params sut = Params.of('test', 10);
 
     // Act
-    sut = Params.of('test', 10);
+    final Boolean positive = sut.matches(new List<Object>{ 'test', 10 });
+    final Boolean negative = sut.matches(new List<Object>{ 10, 'test' });
 
     // Assert
-    System.assertEquals(2, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
   }
 
   @isTest
-  static void given3Objects_whenOfIsCalled_listOfArgsContains3Elements() {
+  static void given3Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut;
+    final Params sut = Params.of('test', 10, new Account());
 
     // Act
-    sut = Params.of('test', 10, new Account());
+    final Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account() });
+    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account() });
 
     // Assert
-    System.assertEquals(3, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
   }
 
   @isTest
-  static void given4Objects_whenOfIsCalled_listOfArgsContains4Elements() {
+  static void given4Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut;
+    final Params sut = Params.of('test', 10, new Account(), new List<Date>());
 
     // Act
-    sut = Params.of('test', 10, new Account(), new List<Date>());
+    final Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>() });
+    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>() });
 
     // Assert
-    System.assertEquals(4, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
   }
 
   @isTest
-  static void given5Objects_whenOfIsCalled_listOfArgsContains5Elements() {
+  static void given5Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut;
+    final Params sut = Params.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
 
     // Act
-    sut = Params.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
+    final Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
 
     // Assert
-    System.assertEquals(5, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
   }
 
   @isTest
-  static void givenListOf10MixType_whenOfListIsCalledWithList_listOfArgsContains10Elements() {
+  static void givenListOf10MixType_whenOfListIsCalledWithList_matchesElementsInOrder() {
     // Arrange
-    Params sut;
-
-    // Act
-    sut = Params.ofList(
+    final Params sut = Params.ofList(
       new List<Object>{
         Matcher.equals('test'),
         Matcher.equals(10),
@@ -104,27 +104,41 @@ private class ParamsTest {
       }
     );
 
+    // Act
+    final Boolean positive = sut.matches(
+      new List<Object>{
+        'test',
+        10,
+        new Account(),
+        new List<Date>(),
+        new Map<Id, Set<String>>(),
+        new Set<Date>(),
+        new List<Account>(),
+        Blob.valueOf('test'),
+        'test',
+        new CustomType()
+      }
+    );
+    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+
     // Assert
-    System.assertEquals(10, sut.listOfArgs.size());
-    assertListOfArgsElementsAreArgumentMatcher(sut);
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
   }
 
   @isTest
-  static void whenOfListIsCalledWithNull_listOfArgsIsEmpty() {
+  static void whenOfListIsCalledWithNull_matchesEmptyList() {
     // Act
-    final Params result = Params.ofList(null);
+    final Params sut = Params.ofList(null);
+
+    // Act
+    final Boolean result = sut.matches(new List<Object>());
 
     // Assert
-    System.assertEquals(0, result.listOfArgs.size());
+    Assert.isTrue(result);
   }
 
-  static void assertListOfArgsElementsAreArgumentMatcher(final Params params) {
-    for (Object argument : params.listOfArgs) {
-      System.assert(argument instanceof ArgumentMatcher);
-    }
-  }
-
-  class CustomMatcher implements ArgumentMatcher {
+  class CustomMatcher implements Matcher.ArgumentMatcher {
     public Boolean matches(Object callArgument) {
       return true;
     }

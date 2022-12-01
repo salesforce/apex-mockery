@@ -6,25 +6,38 @@
  */
 @IsTest
 public class Params {
-  public List<ArgumentMatcher> listOfArgs { get; private set; }
+  private List<Matcher.ArgumentMatcher> listOfArgs;
 
   private Params() {
-    this.listOfArgs = new List<ArgumentMatcher>();
+    this.listOfArgs = new List<Matcher.ArgumentMatcher>();
   }
 
-  private Params(List<Object> callArguments) {
-    final List<ArgumentMatcher> listOfArgs = new List<ArgumentMatcher>();
+  private Params(final List<Object> callArguments) {
+    this();
     for (Object callArgument : callArguments) {
-      if (callArgument instanceof ArgumentMatcher) {
-        listOfArgs.add((ArgumentMatcher) callArgument);
+      if (callArgument instanceof Matcher.ArgumentMatcher) {
+        this.listOfArgs.add((Matcher.ArgumentMatcher) callArgument);
       } else {
-        listOfArgs.add(Matcher.equals(callArgument));
+        this.listOfArgs.add(Matcher.equals(callArgument));
       }
     }
-    this.listOfArgs = listOfArgs;
   }
 
-  override public String toString() {
+  public boolean matches(final List<Object> callArguments) {
+    if (this.listOfArgs.size() != callArguments?.size()) {
+      return false;
+    }
+
+    for (Integer i = 0; i < this.listOfArgs.size(); ++i) {
+      if (!this.listOfArgs[i].matches(callArguments[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public override String toString() {
     return '[' + listOfArgs + ']';
   }
 

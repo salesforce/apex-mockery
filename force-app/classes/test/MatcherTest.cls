@@ -3,348 +3,348 @@ public class MatcherTest {
   @isTest
   static void givenAnyMatcher_matchesAnyKindOfArgument() {
     // Arrange
-    ArgumentMatcher sut = Matcher.any();
+    final Matcher.ArgumentMatcher sut = Matcher.any();
 
     // Act & Assert
-    System.assert(sut.matches(null));
-    System.assert(sut.matches(Date.today()));
-    System.assert(sut.matches(DateTime.now()));
-    System.assert(sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(sut.matches(Blob.valueOf('test')));
-    System.assert(sut.matches(false));
-    System.assert(sut.matches(true));
-    System.assert(sut.matches(new Account(Name = 'test')));
-    System.assert(sut.matches(10));
-    System.assert(sut.matches(10.2));
-    System.assert(sut.matches('test'));
-    System.assert(sut.matches('001000000000011AAA'));
-    System.assert(sut.matches(new List<Object>()));
-    System.assert(sut.matches(new Set<Object>()));
-    System.assert(sut.matches(new Map<Id, Object>()));
-    System.assert(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isTrue(sut.matches(null));
+    Assert.isTrue(sut.matches(Date.today()));
+    Assert.isTrue(sut.matches(DateTime.now()));
+    Assert.isTrue(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isTrue(sut.matches(Blob.valueOf('test')));
+    Assert.isTrue(sut.matches(false));
+    Assert.isTrue(sut.matches(true));
+    Assert.isTrue(sut.matches(new Account(Name = 'test')));
+    Assert.isTrue(sut.matches(10));
+    Assert.isTrue(sut.matches(10.2));
+    Assert.isTrue(sut.matches('test'));
+    Assert.isTrue(sut.matches('001000000000011AAA'));
+    Assert.isTrue(sut.matches(new List<Object>()));
+    Assert.isTrue(sut.matches(new Set<Object>()));
+    Assert.isTrue(sut.matches(new Map<Id, Object>()));
+    Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatcher_matchesPrimitive() {
     // Arrange
-    ArgumentMatcher sut = Matcher.equals(10);
+    final Matcher.ArgumentMatcher sut = Matcher.equals(10);
 
     // Act & Assert
-    System.assert(sut.matches(10));
+    Assert.isTrue(sut.matches(10));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatcher_matchesSObject() {
     // Arrange
-    ArgumentMatcher sut = Matcher.equals(new Account(Name = 'test'));
+    final Matcher.ArgumentMatcher sut = Matcher.equals(new Account(Name = 'test'));
 
     // Act & Assert
-    System.assert(sut.matches(new Account(Name = 'test')));
+    Assert.isTrue(sut.matches(new Account(Name = 'test')));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatcher_matchesCustomType() {
     // Arrange
-    ArgumentMatcher sut = Matcher.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
+    final Matcher.ArgumentMatcher sut = Matcher.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
-    System.assert(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
+    Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatcher_matchesCollection() {
     // Arrange
-    ArgumentMatcher sut = Matcher.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
+    final Matcher.ArgumentMatcher sut = Matcher.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
-    System.assert(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
+    Assert.isTrue(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenTypeMatcher_matchesPrimitive() {
     // Arrange
-    ArgumentMatcher sut = Matcher.ofType('Integer');
+    final Matcher.ArgumentMatcher sut = Matcher.ofType('Integer');
 
     // Act & Assert
-    System.assert(sut.matches(10));
+    Assert.isTrue(sut.matches(10));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenTypeMatcher_matchesSObject() {
     // Arrange
-    ArgumentMatcher sut = Matcher.ofType(Account.getSObjectType());
+    final Matcher.ArgumentMatcher sut = Matcher.ofType(Account.getSObjectType());
 
     // Act & Assert
-    System.assert(sut.matches(new Account()));
+    Assert.isTrue(sut.matches(new Account()));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
-    System.assert(!sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenTypeMatcher_matchesCustomType() {
     // Arrange
-    ArgumentMatcher sut = Matcher.ofType(CustomType.class);
+    final Matcher.ArgumentMatcher sut = Matcher.ofType(CustomType.class);
 
     // Act & Assert
-    System.assert(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenTypeMatcher_matchesDeriveType() {
     // Arrange
-    ArgumentMatcher sut = Matcher.ofType(ArgumentMatcher.class);
+    final Matcher.ArgumentMatcher sut = Matcher.ofType(Matcher.ArgumentMatcher.class);
 
     // Act & Assert
-    System.assert(sut.matches(new ArgumentMatcherStub()));
+    Assert.isTrue(sut.matches(new ArgumentMatcherStub()));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenTypeMatcher_matchesCollection() {
     // Arrange
-    ArgumentMatcher sut = Matcher.ofType('List');
+    final Matcher.ArgumentMatcher sut = Matcher.ofType('List');
 
     // Act & Assert
-    System.assert(sut.matches(new List<Object>{ 10, 'String', new Account() }));
+    Assert.isTrue(sut.matches(new List<Object>{ 10, 'String', new Account() }));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenJSONMatcher_matchesPrimitive() {
     // Arrange
-    ArgumentMatcher sut = Matcher.jsonEquals(10);
+    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(10);
 
     // Act & Assert
-    System.assert(sut.matches(10));
+    Assert.isTrue(sut.matches(10));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenJSONMatcher_matchesSObject() {
     // Arrange
-    ArgumentMatcher sut = Matcher.jsonEquals(new Account(Name = 'test'));
+    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new Account(Name = 'test'));
 
     // Act & Assert
-    System.assert(sut.matches(new Account(Name = 'test')));
+    Assert.isTrue(sut.matches(new Account(Name = 'test')));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenJSONMatcher_matchesCustomType() {
     // Arrange
-    ArgumentMatcher sut = Matcher.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
+    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
-    System.assert(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   @isTest
   static void givenJSONMatcher_matchesCollection() {
     // Arrange
-    ArgumentMatcher sut = Matcher.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
+    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
-    System.assert(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
+    Assert.isTrue(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
 
-    System.assert(!sut.matches(null));
-    System.assert(!sut.matches(Date.today()));
-    System.assert(!sut.matches(DateTime.now()));
-    System.assert(!sut.matches(Time.newInstance(12, 12, 12, 12)));
-    System.assert(!sut.matches(Blob.valueOf('test')));
-    System.assert(!sut.matches(false));
-    System.assert(!sut.matches(true));
-    System.assert(!sut.matches(10));
-    System.assert(!sut.matches(10.2));
-    System.assert(!sut.matches('test'));
-    System.assert(!sut.matches('001000000000011AAA'));
-    System.assert(!sut.matches(new Account(Name = 'test')));
-    System.assert(!sut.matches(new List<Object>()));
-    System.assert(!sut.matches(new Set<Object>()));
-    System.assert(!sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
   virtual class CustomType {
@@ -382,7 +382,7 @@ public class MatcherTest {
     }
   }
 
-  public class ArgumentMatcherStub implements ArgumentMatcher {
+  public class ArgumentMatcherStub implements Matcher.ArgumentMatcher {
     public Boolean matches(final Object callArgument) {
       return true;
     }

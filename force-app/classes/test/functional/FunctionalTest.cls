@@ -56,7 +56,7 @@ private class FunctionalTest {
       sut.createNewCompany(1000000000);
 
       // Assert
-      System.assert(false, 'We should not reach this statement');
+      Assert.fail('it shoud not reach this line');
     } catch (DmlException dex) {
       Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Params.of(new Account(NumberOfEmployees = 1000000000)));
     }

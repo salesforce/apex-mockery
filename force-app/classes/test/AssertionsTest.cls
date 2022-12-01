@@ -6,7 +6,7 @@
  */
 @IsTest
 private class AssertionsTest {
-  // As System.Assert* methods throws are not catchable
+  // As Assert.* methods throws are not catchable
   // Test are white box (implementation test instead of behavioural test)
   // We implemented a FakeAsserter class for the occasion
 
@@ -19,7 +19,7 @@ private class AssertionsTest {
     final Assertions.MethodSpyAssertions result = Assertions.assertThat(spy);
 
     // Assert
-    System.assertNotEquals(null, result);
+    Assert.isNotNull(result);
   }
 
   @isTest
@@ -33,8 +33,8 @@ private class AssertionsTest {
     sut.hasNotBeenCalled();
 
     // Assert
-    System.assertEquals(1, fakeAsserter.callCount);
-    System.assertEquals(false, fakeAsserter.failed);
+    Assert.areEqual(1, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
   }
 
   @isTest
@@ -48,9 +48,9 @@ private class AssertionsTest {
     sut.hasBeenCalled();
 
     // Assert
-    System.assertEquals(1, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called', fakeAsserter.errorMessage);
+    Assert.areEqual(1, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -64,9 +64,9 @@ private class AssertionsTest {
     sut.hasBeenCalledWith(Params.of(new Account()));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called with [(Account:{})]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called with [(Account:{})]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -80,9 +80,9 @@ private class AssertionsTest {
     sut.hasBeenCalledWith(Params.ofList(new List<Object>{ new Account(), new Opportunity() }));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called with [(Account:{}, Opportunity:{})]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called with [(Account:{}, Opportunity:{})]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -96,9 +96,9 @@ private class AssertionsTest {
     sut.hasBeenCalledWith(Params.of(new Account(), Matcher.equals('test')));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called with [(Account:{}, test)]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called with [(Account:{}, test)]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -112,9 +112,9 @@ private class AssertionsTest {
     sut.hasBeenCalledWith(Params.empty());
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called with [()]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called with [()]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -130,8 +130,8 @@ private class AssertionsTest {
     sut.hasBeenCalledWith(Params.of(Matcher.equals('param')));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(false, fakeAsserter.failed);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
   }
 
   @isTest
@@ -145,9 +145,9 @@ private class AssertionsTest {
     // Act
     sut.hasBeenCalledWith(Params.of((Object) null));
 
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called with [(null)]\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called with [(null)]\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -161,9 +161,9 @@ private class AssertionsTest {
     sut.hasBeenLastCalledWith(Params.of((Object) null));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not last called with [(null)]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not last called with [(null)]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -177,9 +177,9 @@ private class AssertionsTest {
     sut.hasBeenLastCalledWith(Params.of(new Account()));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not last called with [(Account:{})]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not last called with [(Account:{})]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -193,9 +193,9 @@ private class AssertionsTest {
     sut.hasBeenLastCalledWith(Params.of(new Account(), Matcher.equals('test')));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not last called with [(Account:{}, test)]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not last called with [(Account:{}, test)]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -209,9 +209,9 @@ private class AssertionsTest {
     sut.hasBeenLastCalledWith(Params.of((Object) null));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not last called with [(null)]', fakeAsserter.errorMessage);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not last called with [(null)]', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -227,28 +227,24 @@ private class AssertionsTest {
     sut.hasBeenLastCalledWith(Params.of(Matcher.equals('param')));
 
     // Assert
-    System.assertEquals(2, fakeAsserter.callCount);
-    System.assertEquals(false, fakeAsserter.failed);
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
   }
 
   @isTest
-  static void givenNullArgumentMatchers_hasBeenLastCalledWithParams_callsAssertEquals() {
+  static void givenNullArgumentMatchers_hasBeenLastCalledWithParamsOfNull_callsAssertEquals() {
     // Arrange
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
     final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
-    spy.call(null);
+    spy.call(new List<Object>());
 
     // Act
-    try {
-      sut.hasBeenLastCalledWith(Params.of((Object) null));
+    sut.hasBeenLastCalledWith(Params.of((Object) null));
 
-      // Assert
-      System.assert(false); // Should not reach this point
-    } catch (Exception ex) {
-      System.assertEquals(false, fakeAsserter.failed);
-      System.assert(ex instanceof NullPointerException);
-    }
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not last called with [(null)]\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -257,19 +253,19 @@ private class AssertionsTest {
     final MethodSpy spy = new MethodSpy('method');
     final FakeAsserter fakeAsserter = new FakeAsserter();
     final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
-    spy.call(null);
+    spy.call(new List<Object>());
 
     // Act & Assert
     sut.hasBeenCalledTimes(1);
-    System.assertEquals(false, fakeAsserter.failed);
+    Assert.isFalse(fakeAsserter.failed);
 
     sut.hasBeenCalledTimes(0);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called 0 times\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called 0 times\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
 
     sut.hasBeenCalledTimes(2);
-    System.assertEquals(true, fakeAsserter.failed);
-    System.assertEquals('Method method was not called 2 times\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called 2 times\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -282,7 +278,7 @@ private class AssertionsTest {
     sut.isFalse(false, new FakeErrorMessage('it works too'));
 
     // Assert
-    System.assert(true, 'This assertions should be reached');
+    Assert.isTrue(true, 'This assertions should be reached');
   }
 
   class FakeErrorMessage implements Assertions.ErrorMessage {

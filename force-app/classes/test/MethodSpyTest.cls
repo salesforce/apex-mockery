@@ -17,9 +17,9 @@ private class MethodSpyTest {
       sut.whenCalledWith(null);
 
       // Assert
-      System.assert(false, 'it should not reach this line');
+      Assert.fail('it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof Matcher.MatcherException);
+      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
   }
 
@@ -33,9 +33,9 @@ private class MethodSpyTest {
       sut.hasBeenCalledWith(null);
 
       // Assert
-      System.assert(false, 'it should not reach this line');
+      Assert.fail('it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof Matcher.MatcherException);
+      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
   }
 
@@ -50,9 +50,9 @@ private class MethodSpyTest {
       sut.hasBeenCalledWith(null);
 
       // Assert
-      System.assert(false, 'it should not reach this line');
+      Assert.fail('it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof Matcher.MatcherException);
+      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
   }
 
@@ -66,9 +66,9 @@ private class MethodSpyTest {
       sut.hasBeenLastCalledWith(null);
 
       // Assert
-      System.assert(false, 'it should not reach this line');
+      Assert.fail('it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof Matcher.MatcherException);
+      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
   }
 
@@ -83,9 +83,9 @@ private class MethodSpyTest {
       sut.hasBeenLastCalledWith(null);
 
       // Assert
-      System.assert(false, 'it should not reach this line');
+      Assert.fail('it should not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof Matcher.MatcherException);
+      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
   }
 
@@ -99,9 +99,9 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>());
 
     // Assert
-    System.assertEquals('test', result);
-    System.assertEquals(true, sut.hasBeenCalledWith(Params.empty()));
-    System.assertEquals(true, sut.hasBeenLastCalledWith(Params.empty()));
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(Params.empty()));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.empty()));
   }
 
   @IsTest
@@ -115,10 +115,10 @@ private class MethodSpyTest {
 
     // Assert
     final Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
-    System.assertEquals('Expected Result', result);
-    System.assertEquals(true, sut.hasBeenCalledWith(expectedArgs));
-    System.assertEquals(false, sut.hasBeenLastCalledWith(Params.empty()));
-    System.assertEquals(true, sut.hasBeenLastCalledWith(expectedArgs));
+    Assert.areEqual('Expected Result', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(expectedArgs));
+    Assert.areEqual(false, sut.hasBeenLastCalledWith(Params.empty()));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(expectedArgs));
   }
 
   @IsTest
@@ -132,10 +132,10 @@ private class MethodSpyTest {
       final Object result = sut.call(new List<Object>{ 'param' });
 
       // Assert
-      System.assert(false, 'we shoud not reach this line');
+      Assert.fail('it shoud not reach this line');
     } catch (IllegalArgumentException iaex) {
       final Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
-      System.assertEquals(false, sut.hasBeenCalledWith(expectedArgs));
+      Assert.areEqual(false, sut.hasBeenCalledWith(expectedArgs));
     }
   }
 
@@ -150,10 +150,10 @@ private class MethodSpyTest {
       final Object result = sut.call(new List<Object>{ new Opportunity() });
 
       // Assert
-      System.assert(false, 'we shoud not reach this line');
+      Assert.fail('it shoud not reach this line');
     } catch (IllegalArgumentException iaex) {
       Params expectedArgs = Params.of('param', new Account(Name = 'Test'));
-      System.assertEquals(false, sut.hasBeenCalledWith(expectedArgs));
+      Assert.areEqual(false, sut.hasBeenCalledWith(expectedArgs));
     }
   }
 
@@ -169,10 +169,10 @@ private class MethodSpyTest {
 
     // Assert
     final Params expectedArgs = Params.of(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any());
-    System.assertEquals('Expected Result', result);
-    System.assertEquals(true, sut.hasBeenCalledWith(expectedArgs));
-    System.assertEquals(false, sut.hasBeenLastCalledWith(Params.empty()));
-    System.assertEquals(true, sut.hasBeenLastCalledWith(expectedArgs));
+    Assert.areEqual('Expected Result', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(expectedArgs));
+    Assert.areEqual(false, sut.hasBeenLastCalledWith(Params.empty()));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(expectedArgs));
   }
 
   @IsTest
@@ -184,9 +184,9 @@ private class MethodSpyTest {
 
     // Act && Assert
     final Object firstCallResult = sut.call(new List<Object>{ new Account() });
-    System.assertEquals('Account result', firstCallResult);
+    Assert.areEqual('Account result', firstCallResult);
     final Object secondCallResult = sut.call(new List<Object>{ new Opportunity() });
-    System.assertEquals('Opportunity result', secondCallResult);
+    Assert.areEqual('Opportunity result', secondCallResult);
   }
 
   static void givenSpy_whenCalledWithDifferentArgumentType_itCallsTheSameSpy() {
@@ -196,9 +196,9 @@ private class MethodSpyTest {
 
     // Act && Assert
     final Object result = sut.call(new List<Object>{ new Account() });
-    System.assertEquals('String result', result);
+    Assert.areEqual('String result', result);
     result = sut.call(new List<Object>{ new Opportunity() });
-    System.assertEquals('String result', result);
+    Assert.areEqual('String result', result);
   }
 
   @IsTest
@@ -211,7 +211,7 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>{});
 
     // Assert
-    System.assertEquals('String result', result);
+    Assert.areEqual('String result', result);
   }
 
   @IsTest
@@ -226,7 +226,7 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>{});
 
     // Assert
-    System.assertEquals('Last Configuration', result);
+    Assert.areEqual('Last Configuration', result);
   }
 
   @IsTest
@@ -238,10 +238,10 @@ private class MethodSpyTest {
     try {
       // Act
       sut.call(new List<Object>{});
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it shoud not reach this line');
     } catch (Exception e) {
       // Assert
-      System.assertEquals('test exception', e.getMessage());
+      Assert.areEqual('test exception', e.getMessage());
     }
   }
 
@@ -259,10 +259,10 @@ private class MethodSpyTest {
     try {
       // Act
       sut.call(new List<Object>{});
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it shoud not reach this line');
     } catch (Exception e) {
       // Assert
-      System.assertEquals(exception3.getMessage(), e.getMessage());
+      Assert.areEqual(exception3.getMessage(), e.getMessage());
     }
   }
 
@@ -275,10 +275,10 @@ private class MethodSpyTest {
     try {
       // Act
       sut.call(new List<Object>{ 'Expected Param' });
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it shoud not reach this line');
     } catch (Exception e) {
       // Assert
-      System.assertEquals('test exception', e.getMessage());
+      Assert.areEqual('test exception', e.getMessage());
     }
   }
 
@@ -292,7 +292,7 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>{ 'Expected Param' });
 
     // Assert
-    System.assertEquals('Expected Result', result);
+    Assert.areEqual('Expected Result', result);
   }
 
   @IsTest
@@ -307,8 +307,8 @@ private class MethodSpyTest {
     final Object result2 = sut.call(new List<Object>{ 'Expected Param 2' });
 
     // Assert
-    System.assertEquals('Expected Result 1', result1);
-    System.assertEquals('Expected Result 2', result2);
+    Assert.areEqual('Expected Result 1', result1);
+    Assert.areEqual('Expected Result 2', result2);
   }
 
   @IsTest
@@ -321,7 +321,7 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>{ 'Expected First Param', true });
 
     // Assert
-    System.assertEquals('Expected Result', result);
+    Assert.areEqual('Expected Result', result);
   }
 
   @IsTest
@@ -334,7 +334,7 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>{ new Account(), true });
 
     // Assert
-    System.assertEquals('Expected Result', result);
+    Assert.areEqual('Expected Result', result);
   }
 
   @IsTest
@@ -347,9 +347,9 @@ private class MethodSpyTest {
     try {
       final Object result = sut.call(new List<Object>{ new Opportunity(), true });
       // Assert
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it shoud not reach this line');
     } catch (Exception ex) {
-      System.assert(ex instanceof IllegalArgumentException, 'Exception should be IllegalArgumentException');
+      Assert.isInstanceOfType(ex, IllegalArgumentException.class, 'Exception should be IllegalArgumentException');
     }
   }
 
@@ -365,8 +365,8 @@ private class MethodSpyTest {
     final Object result2 = sut.call(new List<Object>{ 'Expected First Param 2', false });
 
     // Assert
-    System.assertEquals('Expected Result 1', result1);
-    System.assertEquals('Expected Result 2', result2);
+    Assert.areEqual('Expected Result 1', result1);
+    Assert.areEqual('Expected Result 2', result2);
   }
 
   @IsTest
@@ -378,7 +378,7 @@ private class MethodSpyTest {
     final object actual = sut.call(new List<Object>{});
 
     // Assert
-    System.assertEquals(null, actual);
+    Assert.areEqual(null, actual);
   }
 
   @IsTest
@@ -389,10 +389,10 @@ private class MethodSpyTest {
     try {
       // Act
       sut.call(new List<Object>{ 'Another Param', false });
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it shoud not reach this line');
     } catch (IllegalArgumentException e) {
       // Assert
-      System.assertEquals('methodName: No stub value found for a call with params (Another Param, false)', e.getMessage());
+      Assert.areEqual('methodName: No stub value found for a call with params (Another Param, false)', e.getMessage());
     }
   }
 
@@ -408,8 +408,8 @@ private class MethodSpyTest {
     final Object result2 = sut.call(new List<Object>{ 'Another Param', false });
 
     // Assert
-    System.assertEquals('Expected Result', result1);
-    System.assertEquals('Default Result', result2);
+    Assert.areEqual('Expected Result', result1);
+    Assert.areEqual('Default Result', result2);
   }
 
   @IsTest
@@ -424,8 +424,8 @@ private class MethodSpyTest {
     final Object result2 = sut.call(new List<Object>{ 'Another Param', false });
 
     // Assert
-    System.assertEquals('Expected Result', result1);
-    System.assertEquals('Default Result', result2);
+    Assert.areEqual('Expected Result', result1);
+    Assert.areEqual('Default Result', result2);
   }
 
   @IsTest
@@ -438,7 +438,7 @@ private class MethodSpyTest {
     final Boolean hasBeenCalled = sut.hasBeenCalled();
 
     // Assert
-    System.assert(!hasBeenCalled);
+    Assert.isFalse(hasBeenCalled);
   }
 
   @IsTest
@@ -452,7 +452,7 @@ private class MethodSpyTest {
     final Boolean hasBeenCalled = sut.hasBeenCalled();
 
     // Assert
-    System.assert(hasBeenCalled);
+    Assert.isTrue(hasBeenCalled);
   }
 
   @IsTest
@@ -462,10 +462,10 @@ private class MethodSpyTest {
     sut.returns('any result');
 
     // Act && Assert
-    System.assert(!sut.hasBeenCalledTimes(-1));
-    System.assert(sut.hasBeenCalledTimes(0));
-    System.assert(!sut.hasBeenCalledTimes(1));
-    System.assert(!sut.hasBeenCalledTimes(5));
+    Assert.isFalse(sut.hasBeenCalledTimes(-1));
+    Assert.isTrue(sut.hasBeenCalledTimes(0));
+    Assert.isFalse(sut.hasBeenCalledTimes(1));
+    Assert.isFalse(sut.hasBeenCalledTimes(5));
   }
 
   @IsTest
@@ -476,10 +476,10 @@ private class MethodSpyTest {
     sut.call(new List<Object>{});
 
     // Act && Assert
-    System.assert(!sut.hasBeenCalledTimes(-1));
-    System.assert(!sut.hasBeenCalledTimes(0));
-    System.assert(sut.hasBeenCalledTimes(1));
-    System.assert(!sut.hasBeenCalledTimes(5));
+    Assert.isFalse(sut.hasBeenCalledTimes(-1));
+    Assert.isFalse(sut.hasBeenCalledTimes(0));
+    Assert.isTrue(sut.hasBeenCalledTimes(1));
+    Assert.isFalse(sut.hasBeenCalledTimes(5));
   }
 
   @IsTest
@@ -494,11 +494,11 @@ private class MethodSpyTest {
     sut.call(new List<Object>{});
 
     // Act && Assert
-    System.assert(!sut.hasBeenCalledTimes(-1));
-    System.assert(!sut.hasBeenCalledTimes(0));
-    System.assert(!sut.hasBeenCalledTimes(1));
-    System.assert(sut.hasBeenCalledTimes(5));
-    System.assert(!sut.hasBeenCalledTimes(6));
+    Assert.isFalse(sut.hasBeenCalledTimes(-1));
+    Assert.isFalse(sut.hasBeenCalledTimes(0));
+    Assert.isFalse(sut.hasBeenCalledTimes(1));
+    Assert.isTrue(sut.hasBeenCalledTimes(5));
+    Assert.isFalse(sut.hasBeenCalledTimes(6));
   }
 
   @IsTest
@@ -511,8 +511,8 @@ private class MethodSpyTest {
     sut.call(last);
 
     // Act && Assert
-    System.assert(!sut.hasBeenLastCalledWith(Params.of(new Opportunity())));
-    System.assert(sut.hasBeenLastCalledWith(Params.of(new Account())));
+    Assert.isFalse(sut.hasBeenLastCalledWith(Params.of(new Opportunity())));
+    Assert.isTrue(sut.hasBeenLastCalledWith(Params.of(new Account())));
   }
 
   @IsTest
@@ -522,9 +522,9 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    System.assert(!sut.hasBeenLastCalledWith(Params.empty()));
+    Assert.isFalse(sut.hasBeenLastCalledWith(Params.empty()));
     sut.call(param);
-    System.assert(sut.hasBeenLastCalledWith(Params.empty()));
+    Assert.isTrue(sut.hasBeenLastCalledWith(Params.empty()));
   }
 
   @IsTest
@@ -534,9 +534,9 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    System.assert(!sut.hasBeenLastCalledWith(Params.of(Matcher.any())));
+    Assert.isFalse(sut.hasBeenLastCalledWith(Params.of(Matcher.any())));
     sut.call(new List<Object>{ param });
-    System.assert(sut.hasBeenLastCalledWith(Params.of(Matcher.any())));
+    Assert.isTrue(sut.hasBeenLastCalledWith(Params.of(Matcher.any())));
   }
 
   @IsTest
@@ -550,9 +550,9 @@ private class MethodSpyTest {
 
     // Act && Assert
 
-    System.assert(sut.hasBeenCalledWith(Params.of(new Opportunity())));
-    System.assert(sut.hasBeenCalledWith(Params.of(new Account())));
-    System.assert(!sut.hasBeenCalledWith(Params.of(new Case())));
+    Assert.isTrue(sut.hasBeenCalledWith(Params.of(new Opportunity())));
+    Assert.isTrue(sut.hasBeenCalledWith(Params.of(new Account())));
+    Assert.isFalse(sut.hasBeenCalledWith(Params.of(new Case())));
   }
 
   @IsTest
@@ -562,9 +562,9 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    System.assert(!sut.hasBeenCalledWith(Params.empty()));
+    Assert.isFalse(sut.hasBeenCalledWith(Params.empty()));
     sut.call(param);
-    System.assert(sut.hasBeenCalledWith(Params.empty()));
+    Assert.isTrue(sut.hasBeenCalledWith(Params.empty()));
   }
 
   @IsTest
@@ -574,9 +574,9 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    System.assert(!sut.hasBeenCalledWith(Params.of(Matcher.any())));
+    Assert.isFalse(sut.hasBeenCalledWith(Params.of(Matcher.any())));
     sut.call(new List<Object>{ param });
-    System.assert(sut.hasBeenCalledWith(Params.of(Matcher.any())));
+    Assert.isTrue(sut.hasBeenCalledWith(Params.of(Matcher.any())));
   }
 
   @IsTest
@@ -586,9 +586,9 @@ private class MethodSpyTest {
     final MethodSpy sut = new MethodSpy('methodName');
 
     // Act & Assert
-    System.assert(!sut.hasBeenCalledWith(Params.of(Matcher.jsonEquals(param))));
+    Assert.isFalse(sut.hasBeenCalledWith(Params.of(Matcher.jsonEquals(param))));
     sut.call(new List<Object>{ param });
-    System.assert(sut.hasBeenCalledWith(Params.of(Matcher.jsonEquals(param))));
+    Assert.isTrue(sut.hasBeenCalledWith(Params.of(Matcher.jsonEquals(param))));
   }
 
   @IsTest
@@ -603,7 +603,7 @@ private class MethodSpyTest {
 
     // Assert
     final Object expected = new Account();
-    System.assertEquals(expected, actual, 'custom apex identical list should match');
+    Assert.areEqual(expected, actual, 'custom apex identical list should match');
   }
 
   @IsTest
@@ -618,9 +618,9 @@ private class MethodSpyTest {
       final Object actual = sut.call(new List<Object>{ new Account() });
 
       // Assert
-      System.assert(false); // Should not reach this point
+      Assert.fail('it should not reach this line');
     } catch (IllegalArgumentException ex) {
-      System.assertNotEquals(null, ex, 'exception should be thrown');
+      Assert.isNotNull(ex, 'exception should be thrown');
     }
   }
 
@@ -636,7 +636,7 @@ private class MethodSpyTest {
 
     // Assert
     final Object expected = new Account();
-    System.assertEquals(expected, actual, 'custom apex with equals identical list should match');
+    Assert.areEqual(expected, actual, 'custom apex with equals identical list should match');
   }
 
   @IsTest
@@ -651,7 +651,7 @@ private class MethodSpyTest {
 
     // Assert
     final Object expected = new Account();
-    System.assertEquals(expected, actual, 'Not serializable custom apex identical list should match');
+    Assert.areEqual(expected, actual, 'Not serializable custom apex identical list should match');
   }
 
   @IsTest
@@ -664,15 +664,15 @@ private class MethodSpyTest {
 
     // Act & Assert
     final Object result1 = sut.call(new List<Object>{ 1 });
-    System.assertEquals('result 1', result1);
+    Assert.areEqual('result 1', result1);
 
     // Act & Assert
     final Object result2 = sut.call(new List<Object>{ 2 });
-    System.assertEquals('result 2', result2);
+    Assert.areEqual('result 2', result2);
 
     // Act & Assert
     final Object resultDefault = sut.call(new List<Object>{ 3 });
-    System.assertEquals('result default', resultDefault);
+    Assert.areEqual('result default', resultDefault);
   }
 
   @IsTest
@@ -685,9 +685,9 @@ private class MethodSpyTest {
     // Act & Assert
     try {
       sut.call(new List<Object>{ 1 });
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it should not reach this line');
     } catch (Exception e) {
-      System.assertEquals('test exception', e.getMessage());
+      Assert.areEqual('test exception', e.getMessage());
     }
   }
 
@@ -702,7 +702,7 @@ private class MethodSpyTest {
     final Object result = sut.call(new List<Object>{ 1 });
 
     // Assert
-    System.assertEquals('result', result);
+    Assert.areEqual('result', result);
   }
 
   @IsTest
@@ -715,15 +715,15 @@ private class MethodSpyTest {
 
     // Act & Assert
     final Object result1 = sut.call(new List<Object>{ 1 });
-    System.assertEquals('result 1', result1);
+    Assert.areEqual('result 1', result1);
 
     // Act & Assert
     final Object result2 = sut.call(new List<Object>{ 2 });
-    System.assertEquals('result 2', result2);
+    Assert.areEqual('result 2', result2);
 
     // Act & Assert
     final Object resultDefault = sut.call(new List<Object>{ 3 });
-    System.assertEquals('result default', resultDefault);
+    Assert.areEqual('result default', resultDefault);
   }
 
   @IsTest
@@ -736,18 +736,18 @@ private class MethodSpyTest {
 
     // Act & Assert
     final Object result1 = sut.call(new List<Object>{ 1 });
-    System.assertEquals('result 1', result1);
+    Assert.areEqual('result 1', result1);
 
     // Act & Assert
     final Object result2 = sut.call(new List<Object>{ 2 });
-    System.assertEquals('result 2', result2);
+    Assert.areEqual('result 2', result2);
 
     // Act & Assert
     try {
       sut.call(new List<Object>{ 3 });
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it should not reach this line');
     } catch (Exception e) {
-      System.assertEquals('test exception', e.getMessage());
+      Assert.areEqual('test exception', e.getMessage());
     }
   }
 
@@ -761,18 +761,18 @@ private class MethodSpyTest {
 
     // Act & Assert
     final Object result1 = sut.call(new List<Object>{ 1 });
-    System.assertEquals('result 1', result1);
+    Assert.areEqual('result 1', result1);
 
     // Act & Assert
     final Object result2 = sut.call(new List<Object>{ 2 });
-    System.assertEquals('result 2', result2);
+    Assert.areEqual('result 2', result2);
 
     // Act & Assert
     try {
       sut.call(new List<Object>{ 3 });
-      System.assert(false, 'test should have throw an exception');
+      Assert.fail('it should not reach this line');
     } catch (Exception e) {
-      System.assertEquals('test exception', e.getMessage());
+      Assert.areEqual('test exception', e.getMessage());
     }
   }
 
