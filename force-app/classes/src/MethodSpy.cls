@@ -86,7 +86,25 @@ public class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw new IllegalArgumentException(this.methodName + ': No stub value found for a call with params ' + params);
+    throw buildStubConfigurationException(this.parameterizedMethodCalls, params, this.methodName);
+  }
+
+  private static Exception buildStubConfigurationException(
+    final List<ParameterizedMethodSpyCall> parameterizedMethodCalls,
+    final List<Object> params,
+    final String methodName
+  ) {
+    List<String> errorMessages = new List<String>();
+    for (ParameterizedMethodSpyCall parameterizedCall : parameterizedMethodCalls) {
+      errorMessages.add(parameterizedCall.toString());
+    }
+    return new IllegalArgumentException(
+      methodName +
+      ': No stub value found for a call with params ' +
+      params +
+      '\nHere are the configured stubs:\n\t' +
+      String.join(errorMessages, '\n\t')
+    );
   }
 
   public void returns(Object value) {
@@ -183,6 +201,10 @@ public class MethodSpy {
 
     public boolean matches(final List<Object> callArguments) {
       return this.paramsMatcher.matches(callArguments);
+    }
+
+    public override String toString() {
+      return 'whenCalledWith' + this.paramsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
     }
   }
 }
