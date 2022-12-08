@@ -133,7 +133,7 @@ private class MethodSpyTest {
 
       // Assert
       Assert.fail('it shoud not reach this line');
-    } catch (IllegalArgumentException iaex) {
+    } catch (MethodSpy.ConfigurationException cex) {
       final Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
       Assert.areEqual(false, sut.hasBeenCalledWith(expectedArgs));
     }
@@ -151,7 +151,7 @@ private class MethodSpyTest {
 
       // Assert
       Assert.fail('it shoud not reach this line');
-    } catch (IllegalArgumentException iaex) {
+    } catch (MethodSpy.ConfigurationException cex) {
       Params expectedArgs = Params.of('param', new Account(Name = 'Test'));
       Assert.areEqual(false, sut.hasBeenCalledWith(expectedArgs));
     }
@@ -338,7 +338,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithWWrong_itShouldThrowIllegalArgumentException() {
+  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithWWrong_itShouldThrowMethodSpyConfigurationException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(Params.of(Matcher.ofType(Account.getSObjectType()))).thenReturn('Expected Result');
@@ -349,7 +349,7 @@ private class MethodSpyTest {
       // Assert
       Assert.fail('it shoud not reach this line');
     } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, IllegalArgumentException.class, 'Exception should be IllegalArgumentException');
+      Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class, 'Exception should be MethodSpy.ConfigurationException');
     }
   }
 
@@ -382,7 +382,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpyWithOtherParams_itThrowsIllegalArgumentException() {
+  static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpyWithOtherParams_itThrowsMethodSpyConfigurationException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(Params.of('Another Param', true)).thenReturn('Expected Result');
@@ -392,11 +392,11 @@ private class MethodSpyTest {
       // Act
       sut.call(new List<Object>{ 'Another Param', false });
       Assert.fail('it shoud not reach this line');
-    } catch (IllegalArgumentException e) {
+    } catch (MethodSpy.ConfigurationException cex) {
       // Assert
       Assert.areEqual(
         'methodName: No stub value found for a call with params (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
-        e.getMessage()
+        cex.getMessage()
       );
 
       // TODO here
@@ -626,8 +626,8 @@ private class MethodSpyTest {
 
       // Assert
       Assert.fail('it should not reach this line');
-    } catch (IllegalArgumentException ex) {
-      Assert.isNotNull(ex, 'exception should be thrown');
+    } catch (MethodSpy.ConfigurationException cex) {
+      Assert.isNotNull(cex, 'exception should be thrown');
     }
   }
 

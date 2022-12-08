@@ -86,25 +86,7 @@ public class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw buildStubConfigurationException(this.parameterizedMethodCalls, params, this.methodName);
-  }
-
-  private static Exception buildStubConfigurationException(
-    final List<ParameterizedMethodSpyCall> parameterizedMethodCalls,
-    final List<Object> params,
-    final String methodName
-  ) {
-    List<String> errorMessages = new List<String>();
-    for (ParameterizedMethodSpyCall parameterizedCall : parameterizedMethodCalls) {
-      errorMessages.add(parameterizedCall.toString());
-    }
-    return new IllegalArgumentException(
-      methodName +
-      ': No stub value found for a call with params ' +
-      params +
-      '\nHere are the configured stubs:\n\t' +
-      String.join(errorMessages, '\n\t')
-    );
+    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallParams(params).build();
   }
 
   public void returns(Object value) {
@@ -206,5 +188,38 @@ public class MethodSpy {
     public override String toString() {
       return 'whenCalledWith' + this.paramsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
     }
+  }
+
+  private class ConfigurationExceptionBuilder {
+    private MethodSpy spy;
+    private List<Object> callParams;
+    private String methodName;
+
+    public ConfigurationExceptionBuilder withMethodSpy(final MethodSpy spy) {
+      this.spy = spy;
+      return this;
+    }
+
+    public ConfigurationExceptionBuilder withCallParams(final List<Object> callParams) {
+      this.callParams = callParams;
+      return this;
+    }
+
+    public ConfigurationException build() {
+      List<String> errorMessages = new List<String>();
+      for (ParameterizedMethodSpyCall parameterizedCall : this.spy.parameterizedMethodCalls) {
+        errorMessages.add(parameterizedCall.toString());
+      }
+      return new ConfigurationException(
+        this.spy.methodName +
+        ': No stub value found for a call with params ' +
+        this.callParams +
+        '\nHere are the configured stubs:\n\t' +
+        String.join(errorMessages, '\n\t')
+      );
+    }
+  }
+
+  public class ConfigurationException extends Exception {
   }
 }
