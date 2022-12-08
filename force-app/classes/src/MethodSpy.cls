@@ -86,7 +86,7 @@ public class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw new IllegalArgumentException(this.methodName + ': No stub value found for a call with params ' + params);
+    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallParams(params).build();
   }
 
   public void returns(Object value) {
@@ -184,5 +184,42 @@ public class MethodSpy {
     public boolean matches(final List<Object> callArguments) {
       return this.paramsMatcher.matches(callArguments);
     }
+
+    public override String toString() {
+      return 'whenCalledWith' + this.paramsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
+    }
+  }
+
+  private class ConfigurationExceptionBuilder {
+    private MethodSpy spy;
+    private List<Object> callParams;
+    private String methodName;
+
+    public ConfigurationExceptionBuilder withMethodSpy(final MethodSpy spy) {
+      this.spy = spy;
+      return this;
+    }
+
+    public ConfigurationExceptionBuilder withCallParams(final List<Object> callParams) {
+      this.callParams = callParams;
+      return this;
+    }
+
+    public ConfigurationException build() {
+      List<String> errorMessages = new List<String>();
+      for (ParameterizedMethodSpyCall parameterizedCall : this.spy.parameterizedMethodCalls) {
+        errorMessages.add(parameterizedCall.toString());
+      }
+      return new ConfigurationException(
+        this.spy.methodName +
+        ': No stub value found for a call with params ' +
+        this.callParams +
+        '\nHere are the configured stubs:\n\t' +
+        String.join(errorMessages, '\n\t')
+      );
+    }
+  }
+
+  public class ConfigurationException extends Exception {
   }
 }
