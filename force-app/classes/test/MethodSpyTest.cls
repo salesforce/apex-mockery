@@ -385,14 +385,21 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpyWithOtherParams_itThrowsIllegalArgumentException() {
     // Arrange
     final MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Params.of('Expected First Param', true)).thenReturn('Expected Result');
+    sut.whenCalledWith(Params.of('Another Param', true)).thenReturn('Expected Result');
+    sut.whenCalledWith(Params.of('Expected First Param', false)).thenReturn('Another expected Result');
+    sut.whenCalledWith(Params.of('Expected First Param', true)).thenReturn('Yet another expected Result');
     try {
       // Act
       sut.call(new List<Object>{ 'Another Param', false });
       Assert.fail('it shoud not reach this line');
     } catch (IllegalArgumentException e) {
       // Assert
-      Assert.areEqual('methodName: No stub value found for a call with params (Another Param, false)', e.getMessage());
+      Assert.areEqual(
+        'methodName: No stub value found for a call with params (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
+        e.getMessage()
+      );
+
+      // TODO here
     }
   }
 
