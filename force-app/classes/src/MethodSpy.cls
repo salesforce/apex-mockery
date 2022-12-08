@@ -193,7 +193,6 @@ public class MethodSpy {
   private class ConfigurationExceptionBuilder {
     private MethodSpy spy;
     private List<Object> callParams;
-    private String methodName;
 
     public ConfigurationExceptionBuilder withMethodSpy(final MethodSpy spy) {
       this.spy = spy;
