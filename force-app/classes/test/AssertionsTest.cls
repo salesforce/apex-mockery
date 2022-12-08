@@ -66,7 +66,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called with [(Account:{})]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called with (Account:{})', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -82,7 +82,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called with [(Account:{}, Opportunity:{})]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called with (Account:{}, Opportunity:{})', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -98,7 +98,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called with [(Account:{}, test)]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called with (Account:{}, test)', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -114,7 +114,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called with [()]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called with ()', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -147,7 +147,7 @@ private class AssertionsTest {
 
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called with [(null)]\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called with (null)\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -163,7 +163,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not last called with [(null)]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not last called with (null)', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -179,7 +179,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not last called with [(Account:{})]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not last called with (Account:{})', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -195,7 +195,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not last called with [(Account:{}, test)]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not last called with (Account:{}, test)', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -211,7 +211,7 @@ private class AssertionsTest {
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not last called with [(null)]', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not last called with (null)', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -244,7 +244,7 @@ private class AssertionsTest {
 
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not last called with [(null)]\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not last called with (null)\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
   }
 
   @isTest
@@ -261,11 +261,11 @@ private class AssertionsTest {
 
     sut.hasBeenCalledTimes(0);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called 0 times\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called 0 times\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
 
     sut.hasBeenCalledTimes(2);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not called 2 times\nmethod call history:\n\t#1 method([()])\n', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not called 2 times\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
   }
 
   @isTest
