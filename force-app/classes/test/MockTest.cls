@@ -115,7 +115,7 @@ private class MockTest {
     try {
       final Mock result = Mock.forType(param);
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.areNotEqual(null, ex);
     }

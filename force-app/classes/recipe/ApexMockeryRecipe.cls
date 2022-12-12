@@ -183,7 +183,7 @@ private class ApexMockeryRecipe {
       final OrderConfirmation order = sut.order(new Pastry('Opera'));
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, RecipeException.class);
     }
@@ -203,7 +203,7 @@ private class ApexMockeryRecipe {
       final OrderConfirmation order = sut.order(new Pastry('Opera'));
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, RecipeException.class);
     }
@@ -290,7 +290,7 @@ private class ApexMockeryRecipe {
       final OrderConfirmation order = sut.order(new Pastry('Opera'));
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
     }
@@ -327,7 +327,7 @@ private class ApexMockeryRecipe {
       final OrderConfirmation order = sut.order(new Pastry('Opera'));
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, RecipeException.class);
     }
@@ -349,7 +349,7 @@ private class ApexMockeryRecipe {
       final OrderConfirmation order = sut.order(new Pastry('Opera'));
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, RecipeException.class);
     }
@@ -405,7 +405,7 @@ private class ApexMockeryRecipe {
 
     try {
       order = sut.order(new Pastry('Opera'));
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, RecipeException.class);
     }

@@ -17,7 +17,7 @@ private class MethodSpyTest {
       sut.whenCalledWith(null);
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
@@ -33,7 +33,7 @@ private class MethodSpyTest {
       sut.hasBeenCalledWith(null);
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
@@ -50,7 +50,7 @@ private class MethodSpyTest {
       sut.hasBeenCalledWith(null);
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
@@ -66,7 +66,7 @@ private class MethodSpyTest {
       sut.hasBeenLastCalledWith(null);
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
@@ -83,7 +83,7 @@ private class MethodSpyTest {
       sut.hasBeenLastCalledWith(null);
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
     }
@@ -625,7 +625,7 @@ private class MethodSpyTest {
       final Object actual = sut.call(new List<Object>{ new Account() });
 
       // Assert
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (MethodSpy.ConfigurationException cex) {
       Assert.isNotNull(cex, 'exception should be thrown');
     }
@@ -692,7 +692,7 @@ private class MethodSpyTest {
     // Act & Assert
     try {
       sut.call(new List<Object>{ 1 });
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception e) {
       Assert.areEqual('test exception', e.getMessage());
     }
@@ -752,7 +752,7 @@ private class MethodSpyTest {
     // Act & Assert
     try {
       sut.call(new List<Object>{ 3 });
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception e) {
       Assert.areEqual('test exception', e.getMessage());
     }
@@ -777,7 +777,7 @@ private class MethodSpyTest {
     // Act & Assert
     try {
       sut.call(new List<Object>{ 3 });
-      Assert.fail('it should not reach this line');
+      Assert.fail('Expected exception was not thrown');
     } catch (Exception e) {
       Assert.areEqual('test exception', e.getMessage());
     }
