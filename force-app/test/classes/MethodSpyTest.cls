@@ -398,8 +398,6 @@ private class MethodSpyTest {
         'methodName: No stub value found for a call with params (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
         cex.getMessage()
       );
-
-      // TODO here
     }
   }
 
