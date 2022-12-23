@@ -78,7 +78,7 @@ Have a look at the [NoConfiguration recipe](force-app/recipes/classes/mocking/No
 
 ##### Global returns
 
-It can be configured to return a specific value, whatever the parameter received
+Configure it to return a specific value, whatever the parameter received
 
 ```java
 // Arrange
@@ -93,7 +93,7 @@ Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Returns.cl
 
 ##### Global throws
 
-It can be configured to throw a specific exception, whatever the parameter received
+Configure it to throw a specific exception, whatever the parameter received
 
 ```java
 // Arrange
@@ -113,8 +113,8 @@ Have a look at the [Throws recipe](force-app/recipes/classes/mocking/Throws.cls)
 
 ##### Parameterized configuration
 
-It can be configured to return a specific value, when call with specific parameters
-It can be configured to throw a specific value, when call with specific parameters
+Configure it to return a specific value, when call with specific parameters
+Configure it to throw a specific value, when call with specific parameters
 Use `Params` class to build the params matcher list and configure the spy to behave as you need
 
 ```java
@@ -145,7 +145,7 @@ try {
 }
 ```
 
-Have a look at the [recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what can be done with the mocking API.
+Have a look at the [recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
 
 ### Assert on a spy
 
@@ -170,7 +170,7 @@ Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.of(Matcher.any()));
 Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.of(Matcher.any()));
 ```
 
-Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what can be done with the assertion API
+Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
 ### Params
 
@@ -189,7 +189,7 @@ Params myMethodWithLongParameters = Params.ofList(new List<Object>{10, 'string',
 
 ### Matchers
 
-The library provide several OOTB (out of the box) Matchers ready for use and fully tested.
+The library provide OOTB (out of the box) Matchers ready for use and fully tested.
 The library accept your own matchers for specific use cases and reusability.
 
 #### Any
@@ -250,7 +250,7 @@ public class MyMatcher implements Matcher.ArgumentMatcher {
 Params param = Params.of(new MyMatcher());
 ```
 
-Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what can be done with the library
+Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
 
 ### Class diagram
 
@@ -263,7 +263,7 @@ Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverv
 
 ## Contributing
 
-Contributions are what make the trailblazer community such an amazing place. Any contributions you make are **appreciated**.
+Any contributions you make are **appreciated**.
 
 See [contributing.md](/CONTRIBUTING.md) for apex-mockery contribution principles.
 
