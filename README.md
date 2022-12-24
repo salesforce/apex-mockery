@@ -12,11 +12,9 @@ APIs design come from our experience with Mockito, chai.js, sinon.js and jest.
 The library aims to provide developers a simple way to stub, mock and assert their implementations.
 Dependency Injection and Inversion Of Control are key architectural concepts the system under test should implements
 
-The library repository has 3 parts:
+### Why you should use the library
 
-- Test classes in the `force-app/src` folder are what you need to use the lib, no more. Installation button deploy this folder.
-- Test classes in the `force-app/test` folder are what we need to maintain the library and is not required in production.
-- Test classes in the `force-app/recipes` folder are what you can use to have a deeper understanding of the library usages.
+// TODO
 
 ## Installation
 
@@ -292,7 +290,13 @@ Params param = Params.of(new MyMatcher(), ...otherParams);
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
 
-### Class diagram
+### Library architecture
+
+The library repository has 3 parts:
+
+- Test classes in the `force-app/src` folder are what you need to use the lib, no more. Installation button deploy this folder.
+- Test classes in the `force-app/test` folder are what we need to maintain the library and is not required in production.
+- Test classes in the `force-app/recipes` folder are what you can use to have a deeper understanding of the library usages.
 
 ![apex mockery class diagram](resources/class_diagram.png)
 
