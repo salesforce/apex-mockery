@@ -10,7 +10,7 @@
     "mock"
   ],
   "scripts": {
-    "lint": "npm run lint:apex ; npm run lint:doc",
+    "lint": "npm run lint:apex ; npm run lint:doc || true",
     "lint:apex": "sfdx scanner:run -v -t 'force-app/classes/src/*.cls' -f table -c 'apex-mockery'",
     "lint:doc": "write-good README.md --parse",
     "postinstall": "husky install ; ./postInstall.sh",
