@@ -21,6 +21,7 @@ public class MethodSpy {
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
   private Boolean configuredGlobalReturn = false;
+  private Boolean configuredGlobalThrow = false;
   private Exception exceptionToThrow;
 
   public MethodSpy(String methodName) {
@@ -65,7 +66,7 @@ public class MethodSpy {
   public Object call(List<Object> params) {
     this.callLog.add(new MethodCall(params));
 
-    if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && this.exceptionToThrow == null) {
+    if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
       return null;
     }
 
@@ -82,7 +83,7 @@ public class MethodSpy {
       return this.returnValue;
     }
 
-    if (this.exceptionToThrow != null) {
+    if (this.configuredGlobalThrow) {
       throw this.exceptionToThrow;
     }
 
@@ -91,10 +92,12 @@ public class MethodSpy {
 
   public void returns(Object value) {
     this.configuredGlobalReturn = true;
+    this.configuredGlobalThrow = false;
     this.returnValue = value;
   }
 
   public void throwsException(Exception exceptionToThrow) {
+    this.configuredGlobalThrow = true;
     this.configuredGlobalReturn = false;
     this.exceptionToThrow = exceptionToThrow;
   }
