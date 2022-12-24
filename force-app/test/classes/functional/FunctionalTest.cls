@@ -101,11 +101,7 @@ private class FunctionalTest {
 
   static Database.SaveResult failed(DBError dbError) {
     return (Database.SaveResult) JSON.deserialize(
-      '{"success":false,"errors":[{"message":"' +
-      dbError.message +
-      '","statusCode":"' +
-      dbError.statusCode +
-      '"}]}',
+      '{"success":false,"errors":[{"message":"' + dbError.message + '","statusCode":"' + dbError.statusCode + '"}]}',
       Database.SaveResult.class
     );
   }

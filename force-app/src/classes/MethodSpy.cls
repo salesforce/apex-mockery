@@ -211,10 +211,10 @@ public class MethodSpy {
       }
       return new ConfigurationException(
         this.spy.methodName +
-        ': No stub value found for a call with params ' +
-        this.callParams +
-        '\nHere are the configured stubs:\n\t' +
-        String.join(errorMessages, '\n\t')
+          ': No stub value found for a call with params ' +
+          this.callParams +
+          '\nHere are the configured stubs:\n\t' +
+          String.join(errorMessages, '\n\t')
       );
     }
   }
