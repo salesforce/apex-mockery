@@ -36,7 +36,7 @@ Or you can deploy the library from the managed package [here](TODO: url to the m
 ### Mock
 
 To mock an instance, use the `Mock.forType` method
-It returns a Mock instance containing the stub and all the mechanism to spy/configure how it behaves
+It returns a Mock instance containing the stub and all the mechanism to spy/configure/assert
 
 ```java
 final Mock myMock = Mock.forType(MyType.class);
@@ -44,17 +44,16 @@ final Mock myMock = Mock.forType(MyType.class);
 
 ### Stub
 
-To access the stub, use the `stub` attribut
-Use the stub with the system under test
+Use the `stub` attribut to access the stub,
 
 ```java
 final MyType myTypeStub = (MyType) myMock.stub
-final MyService myService = new MyServiceImpl(myTypeStub);
+final MyService myServiceInstance = new MyServiceImpl(myTypeStub);
 ```
 
 ### Spy
 
-To spy on a method, use the `spyOn` method from the mock.
+Use the `spyOn` method from the mock to spy on a method,
 It returns a `MethodSpy` instance containing all the tools to drive its behaviour and spy on it
 
 ```java
@@ -79,6 +78,7 @@ Have a look at the [NoConfiguration recipe](force-app/recipes/classes/mocking/No
 ##### Global returns
 
 Configure it to return a specific value, whatever the parameter received
+The stub will always return the configured value
 
 ```java
 // Arrange
@@ -94,6 +94,7 @@ Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Returns.cl
 ##### Global throws
 
 Configure it to throw a specific exception, whatever the parameter received
+The stub will always throw the configured exception
 
 ```java
 // Arrange
@@ -147,6 +148,45 @@ try {
 
 Have a look at the [recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
 
+##### Configuration order matters !
+
+**TL;DR**
+If no configuration at all, then return null (default behavior)
+Then, it check the `whenCalledWith` configurations
+Then, it check the global `returns` configurations
+Then, it check the global `throwsException` configurations
+If no configuration matches then it throws a `ConfigurationException`
+
+The order of the spy configuration drive how it will behave.
+If the spy is not configured it will return `null` (default behavior).
+
+When configured with a Param Matcher (`whenCalledWith()` API), the spy will always try to find if the parameters actually passed to the stub match the confiugration.
+
+Then it will look for global configuration (`returns()` or `throwException` APIs).
+
+The order of the global configuration matters
+If global returns is setup before global throw then `throwException` will apply
+
+```java
+myMethodSpy.returns(new Account(Name='Test'));
+myMethodSpy.throwsException(new MyException());
+Object result = myTypeStub.myMethod(); // throws
+```
+
+If global throw is setup before global return then `returns` will apply
+
+```java
+myMethodSpy.throwsException(new MyException());
+myMethodSpy.returns(new Account(Name='Test'));
+Object result = myTypeStub.myMethod(); // return configured value
+```
+
+Last global configuration will apply.
+Same as if you would have configured the spy twice to return (or throw), the last global configuration would be the one kept.
+
+If the spy does not find a match or does not have a global return neither a global throw configured then it will throw a `ConfigurationException` with an explanation.
+Use the exception message to help you understand the root cause of the issue (configuration/regression/you name it)
+
 ### Assert on a spy
 
 Use the `Assertion` class to assert on a spy
@@ -174,10 +214,11 @@ Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a dee
 
 ### Params
 
-Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Params matchers`.
+Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Params` matchers.
 
 `Params` offer the `of` API up to 5 parameters. Use `ofList` API to create parameters for a method exposing more than 5 parameters.
-It wrapes value with a `Matcher.equals` when called with `Object`.
+It wrapes value with a `Matcher.equals` when called with any kind of parameter.
+It uses the Matcher set when called with a `Matcher.ArgumentMatcher` type.
 
 ```java
 Params emptyParameters = Params.empty();
@@ -218,7 +259,7 @@ Params param = Params.of(Matcher.jsonEquals(new WithoutEqualsType(10, true, '...
 
 #### ofType
 
-`Matcher.ofType()` matches on the type of the param
+`Matcher.ofType()` matches on the parameter type
 
 ```java
 // To match any Integer
@@ -231,13 +272,12 @@ Params param = Params.of(Matcher.ofType(CustomType.class));
 
 #### BYOM (Build your own matcher)
 
-Implement the `Matcher.ArgumentMatcher` interface and then use it with `Params` APIs
+Use the `Matcher.ArgumentMatcher` interface and then use it with `Params` APIs
 
 ```java
 @isTest
 public class MyMatcher implements Matcher.ArgumentMatcher {
   public Boolean matches(final Object callArgument) {
-    MyType myType = (MyType) callArgument;
     boolean matches = false;
 
     // custom logic to determine if it matches here
@@ -247,7 +287,7 @@ public class MyMatcher implements Matcher.ArgumentMatcher {
   }
 }
 
-Params param = Params.of(new MyMatcher());
+Params param = Params.of(new MyMatcher(), ...otherParams);
 ```
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
