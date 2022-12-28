@@ -9,12 +9,16 @@ We want its usage to be simple, its maintainability to be easy and to provide th
 ## Principles
 
 APIs design come from our experience with Mockito, chai.js, sinon.js and jest.
-The library aims to provide developers a simple way to stub, mock and assert their implementations.
+The library aims to provide developers a simple way to stub, mock, spy and assert their implementations.
 Dependency Injection and Inversion Of Control are key architectural concepts the system under test should implements
 
 ### Why you should use the library
 
-// TODO
+It helps you isolate the code from its dependency in unit test.
+Using the library to mock your classes dependencies will contribute to improve code quality and maintanibility of your project.
+
+It helps you write unit test by driving the behavior of the class dependencies (instead of relying on it by integration).
+Using the library to mock DML and SOQL from your tests will help you save a lot of time in apex test execution (the tests will not sollicitate the database anymore).
 
 ## Installation
 
