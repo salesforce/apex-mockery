@@ -15,11 +15,11 @@ private class WhenCalledWithMatchingThrowsAndReturns {
     planDeliverySpy.returns(Date.today().addDays(2));
     planDeliverySpy.throwsException(new RecipeException());
     planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Opera'))).thenThrow(new RecipeException());
+    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Pain au Chocolat'))).thenThrow(new RecipeException());
 
     // Act
     try {
-      final OrderConfirmation order = sut.order(new Pastry('Opera'));
+      final OrderConfirmation order = sut.order(new Pastry('Pain au Chocolat'));
 
       // Assert
       Assert.fail('Expected exception was not thrown');
