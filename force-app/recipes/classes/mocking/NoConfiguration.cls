@@ -9,12 +9,12 @@ private class NoConfiguration {
   @isTest
   static void recipe() {
     // Arrange
-    final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
+    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
-    final OrderConfirmation order = sut.order(new Pastry('Opera'));
+    OrderConfirmation order = sut.order(new Pastry('Opera'));
 
     // Assert
     Assert.areEqual(null, order.deliveryDate);

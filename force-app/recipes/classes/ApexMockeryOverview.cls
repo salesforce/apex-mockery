@@ -9,9 +9,9 @@ private class ApexMockeryOverview {
   @isTest
   static void recipe() {
     // Arrange
-    final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
+    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(Params.of(new Pastry('Chocolatine'))).thenReturn(Date.today().addDays(3));
     planDeliverySpy.whenCalledWith(Params.of(new OperaPastryMatcher())).thenThrow(new RecipeException());
     planDeliverySpy.returns(Date.today().addDays(4));

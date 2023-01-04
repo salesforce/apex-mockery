@@ -41,7 +41,7 @@ To mock an instance, use the `Mock.forType` method
 It returns a Mock instance containing the stub and all the mechanism to spy/configure/assert
 
 ```java
-final Mock myMock = Mock.forType(MyType.class);
+Mock myMock = Mock.forType(MyType.class);
 ```
 
 ### Stub
@@ -49,8 +49,8 @@ final Mock myMock = Mock.forType(MyType.class);
 Use the `stub` attribut to access the stub,
 
 ```java
-final MyType myTypeStub = (MyType) myMock.stub
-final MyService myServiceInstance = new MyServiceImpl(myTypeStub);
+MyType myTypeStub = (MyType) myMock.stub
+MyService myServiceInstance = new MyServiceImpl(myTypeStub);
 ```
 
 ### Spy
@@ -59,7 +59,7 @@ Use the `spyOn` method from the mock to spy on a method,
 It returns a `MethodSpy` instance containing all the tools to drive its behaviour and spy on it
 
 ```java
-final MethodSpy myMethodSpy = myMock.spyOn('myMethod');
+MethodSpy myMethodSpy = myMock.spyOn('myMethod');
 ```
 
 #### How to Configure a spy
@@ -279,7 +279,7 @@ Use the `Matcher.ArgumentMatcher` interface and then use it with `Params` APIs
 ```java
 @isTest
 public class MyMatcher implements Matcher.ArgumentMatcher {
-  public Boolean matches(final Object callArgument) {
+  public Boolean matches(Object callArgument) {
     boolean matches = false;
 
     // custom logic to determine if it matches here

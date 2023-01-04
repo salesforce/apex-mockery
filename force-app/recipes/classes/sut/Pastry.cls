@@ -7,7 +7,7 @@
 public class Pastry {
   public String name;
 
-  public Pastry(final String name) {
+  public Pastry(String name) {
     this.name = name;
   }
 

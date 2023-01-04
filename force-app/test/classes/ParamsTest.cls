@@ -9,10 +9,10 @@ private class ParamsTest {
   @isTest
   static void givenNothing_whenOfIsCalled_matchesEmptyList() {
     // Arrange
-    final Params sut = Params.empty();
+    Params sut = Params.empty();
 
     // Act
-    final Boolean result = sut.matches(new List<Object>());
+    Boolean result = sut.matches(new List<Object>());
 
     // Assert
     Assert.isTrue(result);
@@ -21,10 +21,10 @@ private class ParamsTest {
   @isTest
   static void given1Object_whenOfIsCalled_matchesTheElement() {
     // Arrange
-    final Params sut = Params.of('test');
+    Params sut = Params.of('test');
 
     // Act
-    final Boolean result = sut.matches(new List<Object>{ 'test' });
+    Boolean result = sut.matches(new List<Object>{ 'test' });
 
     // Assert
     Assert.isTrue(result);
@@ -33,11 +33,11 @@ private class ParamsTest {
   @isTest
   static void given2Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    final Params sut = Params.of('test', 10);
+    Params sut = Params.of('test', 10);
 
     // Act
-    final Boolean positive = sut.matches(new List<Object>{ 'test', 10 });
-    final Boolean negative = sut.matches(new List<Object>{ 10, 'test' });
+    Boolean positive = sut.matches(new List<Object>{ 'test', 10 });
+    Boolean negative = sut.matches(new List<Object>{ 10, 'test' });
 
     // Assert
     Assert.isTrue(positive);
@@ -47,11 +47,11 @@ private class ParamsTest {
   @isTest
   static void given3Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    final Params sut = Params.of('test', 10, new Account());
+    Params sut = Params.of('test', 10, new Account());
 
     // Act
-    final Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account() });
-    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account() });
+    Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account() });
+    Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account() });
 
     // Assert
     Assert.isTrue(positive);
@@ -61,11 +61,11 @@ private class ParamsTest {
   @isTest
   static void given4Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    final Params sut = Params.of('test', 10, new Account(), new List<Date>());
+    Params sut = Params.of('test', 10, new Account(), new List<Date>());
 
     // Act
-    final Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>() });
-    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>() });
+    Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>() });
+    Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>() });
 
     // Assert
     Assert.isTrue(positive);
@@ -75,11 +75,11 @@ private class ParamsTest {
   @isTest
   static void given5Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    final Params sut = Params.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
+    Params sut = Params.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
 
     // Act
-    final Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>() });
-    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+    Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+    Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
 
     // Assert
     Assert.isTrue(positive);
@@ -89,7 +89,7 @@ private class ParamsTest {
   @isTest
   static void givenListOf10MixType_whenOfListIsCalledWithList_matchesElementsInOrder() {
     // Arrange
-    final Params sut = Params.ofList(
+    Params sut = Params.ofList(
       new List<Object>{
         Matcher.equals('test'),
         Matcher.equals(10),
@@ -105,7 +105,7 @@ private class ParamsTest {
     );
 
     // Act
-    final Boolean positive = sut.matches(
+    Boolean positive = sut.matches(
       new List<Object>{
         'test',
         10,
@@ -119,7 +119,7 @@ private class ParamsTest {
         new CustomType()
       }
     );
-    final Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+    Boolean negative = sut.matches(new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
 
     // Assert
     Assert.isTrue(positive);
@@ -129,10 +129,10 @@ private class ParamsTest {
   @isTest
   static void whenOfListIsCalledWithNull_matchesEmptyList() {
     // Act
-    final Params sut = Params.ofList(null);
+    Params sut = Params.ofList(null);
 
     // Act
-    final Boolean result = sut.matches(new List<Object>());
+    Boolean result = sut.matches(new List<Object>());
 
     // Assert
     Assert.isTrue(result);

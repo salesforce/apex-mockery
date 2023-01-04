@@ -9,14 +9,14 @@ private class Throws {
   @isTest
   static void recipe() {
     // Arrange
-    final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
+    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.throwsException(new RecipeException());
 
     // Act
     try {
-      final OrderConfirmation order = sut.order(new Pastry('Opera'));
+      OrderConfirmation order = sut.order(new Pastry('Opera'));
 
       // Assert
       Assert.fail('Expected exception was not thrown');
