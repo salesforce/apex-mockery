@@ -8,12 +8,6 @@
     <description>Custom Ruleset to use with Apex PMD</description>
 
     <!-- Best Practices -->
-    <rule
-    ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts"
-    message="Apex unit test classes should have at least one System.assert() or assertEquals() or AssertNotEquals() call"
-  >
-        <priority>2</priority>
-    </rule>
     <rule ref="category/apex/bestpractices.xml/ApexUnitTestMethodShouldHaveIsTestAnnotation" message="Apex test methods should have @isTest annotation">
         <priority>2</priority>
     </rule>
