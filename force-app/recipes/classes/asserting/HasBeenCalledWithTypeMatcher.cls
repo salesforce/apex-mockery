@@ -11,11 +11,11 @@ private class HasBeenCalledWithTypeMatcher {
     // Arrange
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
-    sut.order(new Pastry('Chocolatine'));
-    sut.order(new Pastry('Croissant'));
+    myBakery.order(new Pastry('Chocolatine'));
+    myBakery.order(new Pastry('Croissant'));
 
     // Assert
     Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(Matcher.ofType(Pastry.class)));

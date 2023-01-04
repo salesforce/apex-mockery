@@ -11,12 +11,12 @@ private class Throws {
     // Arrange
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.throwsException(new RecipeException());
 
     // Act
     try {
-      OrderConfirmation order = sut.order(new Pastry('Opera'));
+      OrderConfirmation order = myBakery.order(new Pastry('Opera'));
 
       // Assert
       Assert.fail('Expected exception was not thrown');

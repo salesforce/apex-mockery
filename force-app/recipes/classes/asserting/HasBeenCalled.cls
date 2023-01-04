@@ -11,10 +11,10 @@ private class HasBeenCalled {
     // Arrange
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
-    sut.order(new Pastry('Chocolatine'));
+    myBakery.order(new Pastry('Chocolatine'));
 
     // Assert
     Assertions.assertThat(planDeliverySpy).hasBeenCalled();

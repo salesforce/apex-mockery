@@ -11,7 +11,7 @@ private class WhenCalledWithMatchingThrowsAndReturns {
     // Arrange
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.returns(Date.today().addDays(2));
     planDeliverySpy.throwsException(new RecipeException());
     planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
@@ -19,7 +19,7 @@ private class WhenCalledWithMatchingThrowsAndReturns {
 
     // Act
     try {
-      OrderConfirmation order = sut.order(new Pastry('Pain au Chocolat'));
+      OrderConfirmation order = myBakery.order(new Pastry('Pain au Chocolat'));
 
       // Assert
       Assert.fail('Expected exception was not thrown');
