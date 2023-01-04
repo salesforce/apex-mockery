@@ -3,7 +3,7 @@
 	<h1>Lightweight mocking library in Apex</h1>
 </div>
 
-This project provide a simple, lightweight, easy to read, fully tested mocking library for apex.
+This project provide a simple, lightweight, easy to read, fully tested mocking library for apex built using the [Apex Stub API](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm).
 We want its usage to be simple, its maintainability to be easy and to provide the best developer experience possible
 
 ## Principles
