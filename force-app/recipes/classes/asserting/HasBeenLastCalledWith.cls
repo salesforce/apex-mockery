@@ -19,6 +19,5 @@ private class HasBeenLastCalledWith {
 
     // Assert
     Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(Params.of(new Pastry('Croissant')));
-    //Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(Params.of(new Pastry('Chocolatine'))); // Throws
   }
 }

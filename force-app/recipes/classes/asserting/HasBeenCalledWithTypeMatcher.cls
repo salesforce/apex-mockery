@@ -20,6 +20,5 @@ private class HasBeenCalledWithTypeMatcher {
     // Assert
     Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(Matcher.ofType(Pastry.class)));
     Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(new Pastry('Croissant')));
-    //Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(new Pastry('Pain au chocolat'))); // Throws
   }
 }

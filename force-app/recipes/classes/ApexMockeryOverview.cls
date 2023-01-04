@@ -34,10 +34,6 @@ private class ApexMockeryOverview {
     Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(Params.of(new Pastry('Croissant')));
     Assertions.assertThat(planDeliverySpy).hasBeenCalledTimes(2);
     Assert.areEqual(Date.today().addDays(4), order.deliveryDate);
-    //Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(Params.of(new Pastry('Chocolatine'))); // Throws
-    //Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(new Pastry('Pain au chocolat'))); // Throws
-    //Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(Params.of(new Pastry('Pain au chocolat'))); // Throws
-    //Assertions.assertThat(planDeliverySpy).hasBeenCalledTimes(1); // Throws
 
     try {
       order = sut.order(new Pastry('Opera'));

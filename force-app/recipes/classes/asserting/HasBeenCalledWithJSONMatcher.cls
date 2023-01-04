@@ -20,6 +20,5 @@ private class HasBeenCalledWithJSONMatcher {
     // Assert
     Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(Matcher.jsonEquals(new Pastry('Chocolatine')))); // Match not serializable types
     Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(new Pastry('Croissant')));
-    //Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(new Pastry('Pain au chocolat'))); // Throws
   }
 }
