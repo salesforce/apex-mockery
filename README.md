@@ -31,7 +31,7 @@ Deploy via the deploy button
 
 Or copy `force-app/src/classes` test classes in your sfdx project to deploy it with your favourite deployment methods
 
-Or you can deploy the library from the managed package [here](TODO: url to the managed package)
+Or you can deploy the library with an upcoming managed package
 
 ## Usage
 
