@@ -148,26 +148,25 @@ try {
 }
 ```
 
-Have a look at the [recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
+Have a look at the [mocking recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
 
 ##### Configuration order matters !
 
 **TL;DR**
-If no configuration at all, then return null (default behavior)
-Then, it check the `whenCalledWith` configurations
-Then, it check the global `returns` configurations
-Then, it check the global `throwsException` configurations
-If no configuration matches then it throws a `ConfigurationException`
 
 The order of the spy configuration drive how it will behave.
-If the spy is not configured it will return `null` (default behavior).
 
-When configured with a Param Matcher (`whenCalledWith()` API), the spy will always try to find if the parameters actually passed to the stub match the confiugration.
+1. If no configuration at all, then return null (default behavior).
+1. Then, it checks the `whenCalledWith` configurations.
+1. Then, it checks the global `returns` configurations.
+1. Then, it checks the global `throwsException` configurations.
 
-Then it will look for global configuration (`returns()` or `throwException` APIs).
+If there is a configuration and it does not match then it throws a `ConfigurationException`.
+The error message will contains the params and the configuration.
+Use it to help you understand the root cause of the issue (configuration/regression/you name it).
 
-The order of the global configuration matters
-If global returns is setup before global throw then `throwException` will apply
+The order of the global configuration matters.
+If global throw is setup after global returns then `throwException` will apply.
 
 ```java
 myMethodSpy.returns(new Account(Name='Test'));
@@ -175,7 +174,7 @@ myMethodSpy.throwsException(new MyException());
 Object result = myTypeStub.myMethod(); // throws
 ```
 
-If global throw is setup before global return then `returns` will apply
+If global returns is setup after global throw then `returns` will apply
 
 ```java
 myMethodSpy.throwsException(new MyException());
@@ -183,11 +182,8 @@ myMethodSpy.returns(new Account(Name='Test'));
 Object result = myTypeStub.myMethod(); // return configured value
 ```
 
-Last global configuration will apply.
+For global configuration, the last configured will apply.
 Same as if you would have configured the spy twice to return (or throw), the last global configuration would be the one kept.
-
-If the spy does not find a match or does not have a global return neither a global throw configured then it will throw a `ConfigurationException` with an explanation.
-Use the exception message to help you understand the root cause of the issue (configuration/regression/you name it)
 
 ### Assert on a spy
 
@@ -212,15 +208,17 @@ Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.of(Matcher.any()));
 Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.of(Matcher.any()));
 ```
 
-Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
+Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
 ### Params
 
 Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Params` matchers.
 
 `Params` offer the `of` API up to 5 parameters. Use `ofList` API to create parameters for a method exposing more than 5 parameters.
+
 It wrapes value with a `Matcher.equals` when called with any kind of parameter.
-It uses the Matcher set when called with a `Matcher.ArgumentMatcher` type.
+
+When called with a `Matcher.ArgumentMatcher` type, it considers it as a parameter, use it directly without wrapping it with a `Matcher.equals`.
 
 ```java
 Params emptyParameters = Params.empty();
