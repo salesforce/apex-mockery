@@ -6,6 +6,40 @@
 This project provide a simple, lightweight, easy to read, fully tested mocking library for apex built using the [Apex Stub API](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm).
 We want its usage to be simple, its maintainability to be easy and to provide the best developer experience possible
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+
+- [Principles](#principles)
+  - [Why you should use the library](#why-you-should-use-the-library)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Mock](#mock)
+  - [Stub](#stub)
+  - [Spy](#spy)
+    - [How to Configure a spy](#how-to-configure-a-spy)
+      - [Default behaviour](#default-behaviour)
+      - [Global returns](#global-returns)
+      - [Global throws](#global-throws)
+      - [Parameterized configuration](#parameterized-configuration)
+      - [Configuration order matters !](#configuration-order-matters-)
+  - [Assert on a spy](#assert-on-a-spy)
+  - [Params](#params)
+  - [Matchers](#matchers)
+    - [Any](#any)
+    - [Equal](#equal)
+    - [jsonEqual](#jsonequal)
+    - [ofType](#oftype)
+    - [BYOM (Build your own matcher)](#byom-build-your-own-matcher)
+  - [Recipes](#recipes)
+    - [Mocking](#mocking)
+    - [Asserting](#asserting)
+- [Library architecture](#library-architecture)
+- [Authors](#authors)
+- [Contributing](#contributing)
+- [License](#license)
+</details>
+
 ## Principles
 
 APIs design come from our experience with Mockito, chai.js, sinon.js and jest.
