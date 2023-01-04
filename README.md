@@ -292,7 +292,40 @@ Params param = Params.of(new MyMatcher(), ...otherParams);
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
 
-### Library architecture
+### Recipes
+
+They have their own [folder](force-app/recipes/).
+It contains usage example for `mocking` and `asserting`
+It contains one classe for each use cases the library covers
+
+#### Mocking
+
+- [No Configuration](force-app/recipes/classes/mocking/NoConfiguration.cls): spy not configured
+- [Returns](force-app/recipes/classes/mocking/Returns.cls): spy configured to return
+- [ReturnsThenThrows](force-app/recipes/classes/mocking/ReturnsThenThrows.cls): spy configured to throw
+- [Throws](force-app/recipes/classes/mocking/Throws.cls): spy configured to throw
+- [ThrowsThenReturns](force-app/recipes/classes/mocking/ThrowsThenReturns.cls): spy configured to return
+- [WhenCalledWithCustomMatcher_ThenReturns](force-app/recipes/classes/mocking/WhenCalledWithCustomMatcher_ThenReturns.cls): spy configured with custom matcher to return
+- [WhenCalledWithEqualMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithEqualMatching_ThenReturn.cls): spy configured with equals matcher to return
+- [WhenCalledWithJSONMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithJSONMatching_ThenReturn.cls): spy configured with JSON matcher to return
+- [WhenCalledWithMatchingThrowsAndReturns](force-app/recipes/classes/mocking/WhenCalledWithMatchingThrowsAndReturns.cls): spy configured with matcher to return and to throw
+- [WhenCalledWithNotMatchingAndReturn](force-app/recipes/classes/mocking/WhenCalledWithNotMatchingAndReturn.cls): spy configured with matcher and global return, called without matching parameters
+- [WhenCalledWithTypeMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithTypeMatching_ThenReturn.cls): spy configured with type matcher to return
+- [WhenCalledWith_ThenThrow](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrow.cls): spy configured with JSON matcher to throw
+- [WhenCalledWithoutMatchingConfiguration](force-app/recipes/classes/mocking/WhenCalledWithoutMatchingConfiguration.cls): spy configured and called without matching parameters
+
+#### Asserting
+
+- [HasBeenCalled](force-app/recipes/classes/asserting/HasBeenCalled.cls): spy called
+- [HasBeenCalledTimes](force-app/recipes/classes/asserting/HasBeenCalledTimes.cls): spy called times
+- [HasBeenCalledWith](force-app/recipes/classes/asserting/HasBeenCalledWith.cls): spy called with equal matcher
+- [HasBeenCalledWithCustomMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithCustomMatcher.cls): spy called with custom matcher
+- [HasBeenCalledWithJSONMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithJSONMatcher.cls): spy called with JSON matcher
+- [HasBeenCalledWithTypeMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithTypeMatcher.cls): spy called with type matcher
+- [HasBeenLastCalledWith](force-app/recipes/classes/asserting/HasBeenLastCalledWith.cls): spy last called with equal matcher
+- [HasNotBeenCalled](force-app/recipes/classes/asserting/HasNotBeenCalled.cls): spy not called
+
+## Library architecture
 
 The library repository has 3 parts:
 
