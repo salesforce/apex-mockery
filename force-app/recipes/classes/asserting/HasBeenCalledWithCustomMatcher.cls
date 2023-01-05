@@ -9,13 +9,13 @@ private class HasBeenCalledWithCustomMatcher {
   @isTest
   static void recipe() {
     // Arrange
-    final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
+    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
-    sut.order(new Pastry('Opera'));
-    sut.order(new Pastry('Croissant'));
+    myBakery.order(new Pastry('Opera'));
+    myBakery.order(new Pastry('Croissant'));
 
     // Assert
     Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Params.of(new OperaPastryMatcher())); // Match not serializable types
