@@ -118,17 +118,16 @@ Have a look at the [Throws recipe](force-app/recipes/classes/mocking/Throws.cls)
 
 Configure it to return a specific value, when call with specific parameters
 Configure it to throw a specific value, when call with specific parameters
-Use `Params` class to build the params matcher list and configure the spy to behave as you need
 
 ```java
 // Arrange
 myMethodSpy
-    .whenCalledWith(Params.of(Matcher.any(), 10))
+    .whenCalledWith(Matcher.any(), 10)
     .thenReturn(new Account(Name='Test'));
 
 // Arrange
 myMethodSpy
-    .whenCalledWith(Params.of(Matcher.any(), -1))
+    .whenCalledWith(Matcher.any(), -1)
     .thenThrow(new MyException);
 
 // Act
@@ -206,10 +205,12 @@ Assertions.assertThat(myMethodSpy).hasBeenCalled();
 Assertions.assertThat(myMethodSpy).hasBeenCalledTimes(2);
 
 // hasBeenCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.of(Matcher.any()));
+Assertions.assertThat(myMethodSpy).hasBeenCalledWith('stringValue', Matcher.any(), true, ...); // up to 5 params
+Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
 
 // hasBeenLastCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.of(Matcher.any()));
+Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', Matcher.any(), true, ...); // up to 5 params
+Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
 ```
 
 Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
@@ -218,9 +219,11 @@ Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a dee
 
 Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Params` matchers.
 
-`Params` offer the `of` API up to 5 parameters. Use `ofList` API to create parameters for a method exposing more than 5 parameters.
-It wrapes value with a `Matcher.equals` when called with any kind of parameter.
+You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
+It wrapes values with a `Matcher.equals` when called with any kind of parameter.
 It uses the Matcher set when called with a `Matcher.ArgumentMatcher` type.
+
+If you need more arguments in your method calls, `Params` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Params.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Params.ofList(new List<Object>{...}))))`
 
 ```java
 Params emptyParameters = Params.empty();
@@ -240,15 +243,15 @@ The library accept your own matchers for specific use cases and reusability.
 `Matcher.any()` matches anything
 
 ```java
-Params param = Params.of(Matcher.any());
+Matcher.any();
 ```
 
 #### Equal
 
-`Matcher.equal()` (the default) matches with native deep equals
+`Matcher.equals()` (the default) matches with native deep equals
 
 ```java
-Params param = Params.of(Matcher.equals(10));
+Matcher.equals(10);
 ```
 
 #### jsonEqual
@@ -256,7 +259,7 @@ Params param = Params.of(Matcher.equals(10));
 `Matcher.jsonEquals(new WithoutEqualsType())` matches with json string equals. Convenient to match without `equals` type
 
 ```java
-Params param = Params.of(Matcher.jsonEquals(new WithoutEqualsType(10, true, '...')));
+Matcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
 ```
 
 #### ofType
@@ -265,11 +268,11 @@ Params param = Params.of(Matcher.jsonEquals(new WithoutEqualsType(10, true, '...
 
 ```java
 // To match any Integer
-Params param = Params.of(Matcher.ofType('Integer'));
+Matcher.ofType('Integer');
 // To match any Account SObject
-Params param = Params.of(Matcher.ofType(Account.getSObjectType()));
+Matcher.ofType(Account.getSObjectType());
 // To match any CustomType class instance
-Params param = Params.of(Matcher.ofType(CustomType.class));
+Matcher.ofType(CustomType.class);
 ```
 
 #### BYOM (Build your own matcher)

@@ -27,10 +27,14 @@ public class Assertions {
     /**
      * Assert that a method spy has been called at least one time with matching parameters
      *
-     * @param params params that should match one call paramters
+     * @param param1 params that should match one call parameters
      * @see          Params
      */
-    void hasBeenCalledWith(final Params params);
+    void hasBeenCalledWith(final Object param1);
+    void hasBeenCalledWith(final Object param1, final Object param2);
+    void hasBeenCalledWith(final Object param1, final Object param2, final Object param3);
+    void hasBeenCalledWith(final Object param1, final Object param2, final Object param3, final Object param4);
+    void hasBeenCalledWith(final Object param1, final Object param2, final Object param3, final Object param4, final Object param5);
 
     /**
      * Assert that a method spy has been lastly called with matching parameters
@@ -38,7 +42,11 @@ public class Assertions {
      * @param params params that should match last call paramters
      * @see          Params
      */
-    void hasBeenLastCalledWith(final Params params);
+    void hasBeenLastCalledWith(final Object param1);
+    void hasBeenLastCalledWith(final Object param1, final Object param2);
+    void hasBeenLastCalledWith(final Object param1, final Object param2, final Object param3);
+    void hasBeenLastCalledWith(final Object param1, final Object param2, final Object param3, final Object param4);
+    void hasBeenLastCalledWith(final Object param1, final Object param2, final Object param3, final Object param4, final Object param5);
   }
 
   public interface ErrorMessage {
@@ -113,12 +121,52 @@ public class Assertions {
       this.asserter.isTrue(this.spy.hasBeenCalledTimes(count), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count));
     }
 
-    public void hasBeenCalledWith(final Params params) {
+    public void hasBeenCalledWith(final Object arg) {
+      this.hasBeenCalledWithParams((arg instanceof Params) ? (Params) arg : Params.of(arg));
+    }
+
+    public void hasBeenCalledWith(final Object arg1, final Object arg2) {
+      this.hasBeenCalledWithParams(Params.of(arg1, arg2));
+    }
+
+    public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
+      this.hasBeenCalledWithParams(Params.of(arg1, arg2, arg3));
+    }
+
+    public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
+      this.hasBeenCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+    }
+
+    public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
+      this.hasBeenCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+    }
+
+    private void hasBeenCalledWithParams(final Params params) {
       this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
       this.asserter.isTrue(this.spy.hasBeenCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params));
     }
 
-    public void hasBeenLastCalledWith(final Params params) {
+    public void hasBeenLastCalledWith(final Object arg) {
+      this.hasBeenLastCalledWithParams((arg instanceof Params) ? (Params) arg : Params.of(arg));
+    }
+
+    public void hasBeenLastCalledWith(final Object arg1, final Object arg2) {
+      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2));
+    }
+
+    public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3) {
+      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2, arg3));
+    }
+
+    public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
+      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+    }
+
+    public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
+      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+    }
+
+    private void hasBeenLastCalledWithParams(final Params params) {
       this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
       this.asserter.isTrue(this.spy.hasBeenLastCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, params));
     }

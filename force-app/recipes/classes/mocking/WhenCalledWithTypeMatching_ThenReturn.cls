@@ -12,9 +12,9 @@ private class WhenCalledWithTypeMatching_ThenReturn {
     final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(Params.of(Matcher.ofType(Pastry.class))).thenReturn(Date.today().addDays(4)); // Order matter
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Opera'))).thenReturn(Date.today().addDays(2));
+    planDeliverySpy.whenCalledWith(Matcher.ofType(Pastry.class)).thenReturn(Date.today().addDays(4)); // Order matter
+    planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new Pastry('Opera')).thenReturn(Date.today().addDays(2));
 
     // Act
     final OrderConfirmation order = sut.order(new Pastry('Opera'));

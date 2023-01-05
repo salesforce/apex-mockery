@@ -13,8 +13,8 @@ private class WhenCalledWithNotMatchingAndReturn {
     final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.returns(Date.today().addDays(4));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Chocolatine'))).thenThrow(new RecipeException());
+    planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenThrow(new RecipeException());
 
     // Act
     final OrderConfirmation order = sut.order(new Pastry('Opera'));

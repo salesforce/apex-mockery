@@ -102,7 +102,27 @@ public class MethodSpy {
     this.exceptionToThrow = exceptionToThrow;
   }
 
-  public MethodSpyCall whenCalledWith(final Params params) {
+  public MethodSpyCall whenCalledWith(final Object arg) {
+    return this.whenCalledWithParams((arg == null || arg instanceof Params) ? (Params) arg : Params.of(arg));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+  }
+
+  private MethodSpyCall whenCalledWithParams(final Params params) {
     if (params == null) {
       throw new Matcher.MatcherException('Params cannot be null');
     }
@@ -214,10 +234,10 @@ public class MethodSpy {
       }
       return new ConfigurationException(
         this.spy.methodName +
-          ': No stub value found for a call with params ' +
-          this.callParams +
-          '\nHere are the configured stubs:\n\t' +
-          String.join(errorMessages, '\n\t')
+        ': No stub value found for a call with params ' +
+        this.callParams +
+        '\nHere are the configured stubs:\n\t' +
+        String.join(errorMessages, '\n\t')
       );
     }
   }

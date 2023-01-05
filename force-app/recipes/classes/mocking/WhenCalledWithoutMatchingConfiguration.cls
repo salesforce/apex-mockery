@@ -12,8 +12,8 @@ private class WhenCalledWithoutMatchingConfiguration {
     final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Chocolatine'))).thenReturn(Date.today().addDays(2));
+    planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenReturn(Date.today().addDays(2));
 
     // Act
     try {

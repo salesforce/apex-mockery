@@ -18,6 +18,6 @@ private class HasBeenLastCalledWith {
     sut.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(Params.of(new Pastry('Croissant')));
+    Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Croissant'));
   }
 }
