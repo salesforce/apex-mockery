@@ -3,8 +3,42 @@
 	<h1>Lightweight mocking library in Apex</h1>
 </div>
 
-This project provide a simple, lightweight, easy to read, fully tested mocking library for apex.
+This project provide a simple, lightweight, easy to read, fully tested mocking library for apex built using the [Apex Stub API](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm).
 We want its usage to be simple, its maintainability to be easy and to provide the best developer experience possible
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+
+- [Principles](#principles)
+  - [Why you should use the library](#why-you-should-use-the-library)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Mock](#mock)
+  - [Stub](#stub)
+  - [Spy](#spy)
+    - [How to Configure a spy](#how-to-configure-a-spy)
+      - [Default behaviour](#default-behaviour)
+      - [Global returns](#global-returns)
+      - [Global throws](#global-throws)
+      - [Parameterized configuration](#parameterized-configuration)
+      - [Configuration order matters !](#configuration-order-matters-)
+  - [Assert on a spy](#assert-on-a-spy)
+  - [Params](#params)
+  - [Matchers](#matchers)
+    - [Any](#any)
+    - [Equal](#equal)
+    - [jsonEqual](#jsonequal)
+    - [ofType](#oftype)
+    - [BYOM (Build your own matcher)](#byom-build-your-own-matcher)
+  - [Recipes](#recipes)
+    - [Mocking](#mocking)
+    - [Asserting](#asserting)
+- [Library architecture](#library-architecture)
+- [Authors](#authors)
+- [Contributing](#contributing)
+- [License](#license)
+</details>
 
 ## Principles
 
@@ -41,7 +75,7 @@ To mock an instance, use the `Mock.forType` method
 It returns a Mock instance containing the stub and all the mechanism to spy/configure/assert
 
 ```java
-final Mock myMock = Mock.forType(MyType.class);
+Mock myMock = Mock.forType(MyType.class);
 ```
 
 ### Stub
@@ -49,8 +83,8 @@ final Mock myMock = Mock.forType(MyType.class);
 Use the `stub` attribut to access the stub,
 
 ```java
-final MyType myTypeStub = (MyType) myMock.stub
-final MyService myServiceInstance = new MyServiceImpl(myTypeStub);
+MyType myTypeStub = (MyType) myMock.stub
+MyService myServiceInstance = new MyServiceImpl(myTypeStub);
 ```
 
 ### Spy
@@ -59,7 +93,7 @@ Use the `spyOn` method from the mock to spy on a method,
 It returns a `MethodSpy` instance containing all the tools to drive its behaviour and spy on it
 
 ```java
-final MethodSpy myMethodSpy = myMock.spyOn('myMethod');
+MethodSpy myMethodSpy = myMock.spyOn('myMethod');
 ```
 
 #### How to Configure a spy
@@ -147,26 +181,25 @@ try {
 }
 ```
 
-Have a look at the [recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
+Have a look at the [mocking recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
 
 ##### Configuration order matters !
 
 **TL;DR**
-If no configuration at all, then return null (default behavior)
-Then, it check the `whenCalledWith` configurations
-Then, it check the global `returns` configurations
-Then, it check the global `throwsException` configurations
-If no configuration matches then it throws a `ConfigurationException`
 
 The order of the spy configuration drive how it will behave.
-If the spy is not configured it will return `null` (default behavior).
 
-When configured with a Param Matcher (`whenCalledWith()` API), the spy will always try to find if the parameters actually passed to the stub match the confiugration.
+1. If no configuration at all, then return null (default behavior).
+1. Then, it checks the `whenCalledWith` configurations.
+1. Then, it checks the global `returns` configurations.
+1. Then, it checks the global `throwsException` configurations.
 
-Then it will look for global configuration (`returns()` or `throwException` APIs).
+If there is a configuration and it does not match then it throws a `ConfigurationException`.
+The error message will contains the params and the configuration.
+Use it to help you understand the root cause of the issue (configuration/regression/you name it).
 
-The order of the global configuration matters
-If global returns is setup before global throw then `throwException` will apply
+The order of the global configuration matters.
+If global throw is setup after global returns then `throwException` will apply.
 
 ```java
 myMethodSpy.returns(new Account(Name='Test'));
@@ -174,7 +207,7 @@ myMethodSpy.throwsException(new MyException());
 Object result = myTypeStub.myMethod(); // throws
 ```
 
-If global throw is setup before global return then `returns` will apply
+If global returns is setup after global throw then `returns` will apply
 
 ```java
 myMethodSpy.throwsException(new MyException());
@@ -182,11 +215,8 @@ myMethodSpy.returns(new Account(Name='Test'));
 Object result = myTypeStub.myMethod(); // return configured value
 ```
 
-Last global configuration will apply.
+For global configuration, the last configured will apply.
 Same as if you would have configured the spy twice to return (or throw), the last global configuration would be the one kept.
-
-If the spy does not find a match or does not have a global return neither a global throw configured then it will throw a `ConfigurationException` with an explanation.
-Use the exception message to help you understand the root cause of the issue (configuration/regression/you name it)
 
 ### Assert on a spy
 
@@ -213,15 +243,17 @@ Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', Matcher.
 Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
 ```
 
-Have a look at the [recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
+Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
 ### Params
 
 Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Params` matchers.
 
 You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
-It wrapes values with a `Matcher.equals` when called with any kind of parameter.
-It uses the Matcher set when called with a `Matcher.ArgumentMatcher` type.
+
+It wrapes value with a `Matcher.equals` when called with any kind of parameter.
+
+When called with a `Matcher.ArgumentMatcher` type, it considers it as a parameter, use it directly without wrapping it with a `Matcher.equals`.
 
 If you need more arguments in your method calls, `Params` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Params.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Params.ofList(new List<Object>{...}))))`
 
@@ -282,7 +314,7 @@ Use the `Matcher.ArgumentMatcher` interface and then use it with `Params` APIs
 ```java
 @isTest
 public class MyMatcher implements Matcher.ArgumentMatcher {
-  public Boolean matches(final Object callArgument) {
+  public Boolean matches(Object callArgument) {
     boolean matches = false;
 
     // custom logic to determine if it matches here
@@ -297,7 +329,40 @@ Params param = Params.of(new MyMatcher(), ...otherParams);
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
 
-### Library architecture
+### Recipes
+
+They have their own [folder](force-app/recipes/).
+It contains usage example for `mocking` and `asserting`
+It contains one classe for each use cases the library covers
+
+#### Mocking
+
+- [No Configuration](force-app/recipes/classes/mocking/NoConfiguration.cls): spy not configured
+- [Returns](force-app/recipes/classes/mocking/Returns.cls): spy configured to return
+- [ReturnsThenThrows](force-app/recipes/classes/mocking/ReturnsThenThrows.cls): spy configured to throw
+- [Throws](force-app/recipes/classes/mocking/Throws.cls): spy configured to throw
+- [ThrowsThenReturns](force-app/recipes/classes/mocking/ThrowsThenReturns.cls): spy configured to return
+- [WhenCalledWithCustomMatcher_ThenReturns](force-app/recipes/classes/mocking/WhenCalledWithCustomMatcher_ThenReturns.cls): spy configured with custom matcher to return
+- [WhenCalledWithEqualMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithEqualMatching_ThenReturn.cls): spy configured with equals matcher to return
+- [WhenCalledWithJSONMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithJSONMatching_ThenReturn.cls): spy configured with JSON matcher to return
+- [WhenCalledWithMatchingThrowsAndReturns](force-app/recipes/classes/mocking/WhenCalledWithMatchingThrowsAndReturns.cls): spy configured with matcher to return and to throw
+- [WhenCalledWithNotMatchingAndReturn](force-app/recipes/classes/mocking/WhenCalledWithNotMatchingAndReturn.cls): spy configured with matcher and global return, called without matching parameters
+- [WhenCalledWithTypeMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithTypeMatching_ThenReturn.cls): spy configured with type matcher to return
+- [WhenCalledWith_ThenThrow](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrow.cls): spy configured with JSON matcher to throw
+- [WhenCalledWithoutMatchingConfiguration](force-app/recipes/classes/mocking/WhenCalledWithoutMatchingConfiguration.cls): spy configured and called without matching parameters
+
+#### Asserting
+
+- [HasBeenCalled](force-app/recipes/classes/asserting/HasBeenCalled.cls): spy called
+- [HasBeenCalledTimes](force-app/recipes/classes/asserting/HasBeenCalledTimes.cls): spy called times
+- [HasBeenCalledWith](force-app/recipes/classes/asserting/HasBeenCalledWith.cls): spy called with equal matcher
+- [HasBeenCalledWithCustomMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithCustomMatcher.cls): spy called with custom matcher
+- [HasBeenCalledWithJSONMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithJSONMatcher.cls): spy called with JSON matcher
+- [HasBeenCalledWithTypeMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithTypeMatcher.cls): spy called with type matcher
+- [HasBeenLastCalledWith](force-app/recipes/classes/asserting/HasBeenLastCalledWith.cls): spy last called with equal matcher
+- [HasNotBeenCalled](force-app/recipes/classes/asserting/HasNotBeenCalled.cls): spy not called
+
+## Library architecture
 
 The library repository has 3 parts:
 

@@ -44,9 +44,6 @@ When developing, use apex unit testing to provide test coverage for new function
 ```bash
 # just run test
 npm run test
-
-# run test with coverage details
-npm run test:coverage
 ```
 
 To execute a particular test, use the sfdx command directly

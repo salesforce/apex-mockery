@@ -6,7 +6,7 @@
  */
 @isTest
 public class OperaPastryMatcher implements Matcher.ArgumentMatcher {
-  public Boolean matches(final Object callArgument) {
+  public Boolean matches(Object callArgument) {
     Pastry p = (Pastry) callArgument;
     return p.name == 'Opera';
   }

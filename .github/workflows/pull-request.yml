@@ -76,13 +76,7 @@ jobs:
         run: "sfdx force:source:push"
 
       - name: "Run Apex tests"
-        run: npm run test:coverage
-
-      - name: "Upload test result"
-        uses: actions/upload-artifact@v3
-        with:
-          name: apex-code-coverage
-          path: ./tests/apex
+        run: npm run test
 
       - name: "Delete scratch org"
         if: always()

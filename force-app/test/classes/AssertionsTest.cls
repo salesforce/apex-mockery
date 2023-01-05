@@ -13,10 +13,10 @@ private class AssertionsTest {
   @isTest
   static void givenMethodSpyInstance_assertThatReturnsMethodSpyAssertInstance() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
+    MethodSpy spy = new MethodSpy('method');
 
     // Act
-    final Assertions.MethodSpyAssertions result = Assertions.assertThat(spy);
+    Assertions.MethodSpyAssertions result = Assertions.assertThat(spy);
 
     // Assert
     Assert.isNotNull(result);
@@ -25,9 +25,9 @@ private class AssertionsTest {
   @isTest
   static void hasNotBeenCalled_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasNotBeenCalled();
@@ -40,9 +40,9 @@ private class AssertionsTest {
   @isTest
   static void hasBeenCalled_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalled();
@@ -56,9 +56,9 @@ private class AssertionsTest {
   @isTest
   static void givenObject_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(new Account());
@@ -72,9 +72,9 @@ private class AssertionsTest {
   @isTest
   static void givenObjectList_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(Params.ofList(new List<Object>{ new Account(), new Opportunity() }));
@@ -88,9 +88,9 @@ private class AssertionsTest {
   @isTest
   static void givenMixList_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(new Account(), Matcher.equals('test'));
@@ -104,9 +104,9 @@ private class AssertionsTest {
   @isTest
   static void givenEmptyList_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(Params.empty());
@@ -120,10 +120,10 @@ private class AssertionsTest {
   @isTest
   static void givenArgumentMatchers_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
+    MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
     spy.call(new List<Object>{ 'param' });
 
     // Act
@@ -137,9 +137,9 @@ private class AssertionsTest {
   @isTest
   static void givenNullParam_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
     spy.call(new List<Object>());
 
     // Act
@@ -153,9 +153,9 @@ private class AssertionsTest {
   @isTest
   static void givenNullParam_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(null);
@@ -169,9 +169,9 @@ private class AssertionsTest {
   @isTest
   static void givenObjectList_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(new Account());
@@ -185,9 +185,9 @@ private class AssertionsTest {
   @isTest
   static void givenMixList_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(new Account(), Matcher.equals('test'));
@@ -201,9 +201,9 @@ private class AssertionsTest {
   @isTest
   static void givenNullList_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(null);
@@ -217,10 +217,10 @@ private class AssertionsTest {
   @isTest
   static void givenArgumentMatchers_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
+    MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
     spy.call(new List<Object>{ 'param' });
 
     // Act
@@ -234,9 +234,9 @@ private class AssertionsTest {
   @isTest
   static void givenNullArgumentMatchers_hasBeenLastCalledWithNull_callsAssertEquals() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
     spy.call(new List<Object>());
 
     // Act
@@ -250,9 +250,9 @@ private class AssertionsTest {
   @isTest
   static void givenCall_hasBeenCalledTimes_returnsCalledTimes() {
     // Arrange
-    final MethodSpy spy = new MethodSpy('method');
-    final FakeAsserter fakeAsserter = new FakeAsserter();
-    final Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
     spy.call(new List<Object>());
 
     // Act & Assert
@@ -271,7 +271,7 @@ private class AssertionsTest {
   @isTest
   static void givenExpectedEqualsAssert_MethodSpyAsserter_doNotThrow() {
     // Arrange
-    final Assertions.Asserter sut = new Assertions.MethodSpyAsserter();
+    Assertions.Asserter sut = new Assertions.MethodSpyAsserter();
 
     // Act
     sut.isTrue(true, new FakeErrorMessage('it works'));

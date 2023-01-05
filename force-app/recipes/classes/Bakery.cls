@@ -7,12 +7,12 @@
 public class Bakery {
   private DeliveryService deliveryService;
 
-  public Bakery(final DeliveryService deliveryService) {
+  public Bakery(DeliveryService deliveryService) {
     this.deliveryService = deliveryService;
   }
 
-  public OrderConfirmation order(final Pastry pastry) {
-    final OrderConfirmation order = new OrderConfirmation();
+  public OrderConfirmation order(Pastry pastry) {
+    OrderConfirmation order = new OrderConfirmation();
     order.pastry = pastry;
     order.deliveryDate = this.deliveryService.planDelivery(pastry);
     return order;

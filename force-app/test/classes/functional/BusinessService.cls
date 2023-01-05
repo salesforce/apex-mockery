@@ -6,12 +6,12 @@ public class BusinessService {
     this.dmlDelegate = dmlDelegate;
   }
 
-  public void createNewCompany(final Integer numberOfEmployees) {
+  public void createNewCompany(Integer numberOfEmployees) {
     Account anAccount = new Account(NumberOfEmployees = numberOfEmployees);
     this.dmlDelegate.insertSObject(anAccount);
   }
 
-  public void createNewCompanies(final List<Integer> numberOfEmployeesList) {
+  public void createNewCompanies(List<Integer> numberOfEmployeesList) {
     System.Savepoint sp = Database.setSavepoint();
     List<Account> accountToInsert = new List<Account>();
     for (Integer numberOfEmployees : numberOfEmployeesList) {
@@ -29,7 +29,7 @@ public class BusinessService {
     }
   }
 
-  public void createNewCompanyWithOpportunity(final Integer numberOfEmployees) {
+  public void createNewCompanyWithOpportunity(Integer numberOfEmployees) {
     Account anAccount = new Account(NumberOfEmployees = numberOfEmployees);
     Database.SaveResult accountSaveResult = this.dmlDelegate.insertSObject(anAccount);
     Opportunity anOppy = new Opportunity(AccountId = accountSaveResult.getId());

@@ -9,15 +9,15 @@ private class WhenCalledWithNotMatchingAndReturn {
   @isTest
   static void recipe() {
     // Arrange
-    final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
+    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.returns(Date.today().addDays(4));
     planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
     planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenThrow(new RecipeException());
 
     // Act
-    final OrderConfirmation order = sut.order(new Pastry('Opera'));
+    OrderConfirmation order = myBakery.order(new Pastry('Opera'));
 
     // Assert
     Assert.areEqual(Date.today().addDays(4), order.deliveryDate);

@@ -3,7 +3,7 @@ public class MatcherTest {
   @isTest
   static void givenAnyMatcher_matchesAnyKindOfArgument() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.any();
+    Matcher.ArgumentMatcher sut = Matcher.any();
 
     // Act & Assert
     Assert.isTrue(sut.matches(null));
@@ -27,7 +27,7 @@ public class MatcherTest {
   @isTest
   static void givenEqualsMatcher_matchesPrimitive() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.equals(10);
+    Matcher.ArgumentMatcher sut = Matcher.equals(10);
 
     // Act & Assert
     Assert.isTrue(sut.matches(10));
@@ -52,7 +52,7 @@ public class MatcherTest {
   @isTest
   static void givenEqualsMatcher_matchesSObject() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.equals(new Account(Name = 'test'));
+    Matcher.ArgumentMatcher sut = Matcher.equals(new Account(Name = 'test'));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Account(Name = 'test')));
@@ -77,7 +77,7 @@ public class MatcherTest {
   @isTest
   static void givenEqualsMatcher_matchesCustomType() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
+    Matcher.ArgumentMatcher sut = Matcher.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
@@ -103,7 +103,7 @@ public class MatcherTest {
   @isTest
   static void givenEqualsMatcher_matchesCollection() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
+    Matcher.ArgumentMatcher sut = Matcher.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
@@ -129,7 +129,7 @@ public class MatcherTest {
   @isTest
   static void givenTypeMatcher_matchesPrimitive() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.ofType('Integer');
+    Matcher.ArgumentMatcher sut = Matcher.ofType('Integer');
 
     // Act & Assert
     Assert.isTrue(sut.matches(10));
@@ -153,7 +153,7 @@ public class MatcherTest {
   @isTest
   static void givenTypeMatcher_matchesSObject() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.ofType(Account.getSObjectType());
+    Matcher.ArgumentMatcher sut = Matcher.ofType(Account.getSObjectType());
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Account()));
@@ -178,7 +178,7 @@ public class MatcherTest {
   @isTest
   static void givenTypeMatcher_matchesCustomType() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.ofType(CustomType.class);
+    Matcher.ArgumentMatcher sut = Matcher.ofType(CustomType.class);
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
@@ -203,7 +203,7 @@ public class MatcherTest {
   @isTest
   static void givenTypeMatcher_matchesDeriveType() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.ofType(Matcher.ArgumentMatcher.class);
+    Matcher.ArgumentMatcher sut = Matcher.ofType(Matcher.ArgumentMatcher.class);
 
     // Act & Assert
     Assert.isTrue(sut.matches(new ArgumentMatcherStub()));
@@ -228,7 +228,7 @@ public class MatcherTest {
   @isTest
   static void givenTypeMatcher_matchesCollection() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.ofType('List');
+    Matcher.ArgumentMatcher sut = Matcher.ofType('List');
 
     // Act & Assert
     Assert.isTrue(sut.matches(new List<Object>{ 10, 'String', new Account() }));
@@ -252,7 +252,7 @@ public class MatcherTest {
   @isTest
   static void givenJSONMatcher_matchesPrimitive() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(10);
+    Matcher.ArgumentMatcher sut = Matcher.jsonEquals(10);
 
     // Act & Assert
     Assert.isTrue(sut.matches(10));
@@ -276,7 +276,7 @@ public class MatcherTest {
   @isTest
   static void givenJSONMatcher_matchesSObject() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new Account(Name = 'test'));
+    Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new Account(Name = 'test'));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Account(Name = 'test')));
@@ -300,7 +300,7 @@ public class MatcherTest {
   @isTest
   static void givenJSONMatcher_matchesCustomType() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
+    Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
@@ -325,7 +325,7 @@ public class MatcherTest {
   @isTest
   static void givenJSONMatcher_matchesCollection() {
     // Arrange
-    final Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
+    Matcher.ArgumentMatcher sut = Matcher.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
@@ -353,7 +353,7 @@ public class MatcherTest {
     public SObject sob;
     public List<Object> lo = new List<Object>();
 
-    public CustomType(final String name, final Integer size, final SObject sob) {
+    public CustomType(String name, Integer size, SObject sob) {
       this.name = name;
       this.size = size;
       this.sob = sob;
@@ -361,7 +361,7 @@ public class MatcherTest {
   }
 
   class CustomTypeWithEquals extends CustomType {
-    public CustomTypeWithEquals(final String name, final Integer size, final SObject sob) {
+    public CustomTypeWithEquals(String name, Integer size, SObject sob) {
       super(name, size, sob);
     }
     public Boolean equals(Object o) {
@@ -373,7 +373,7 @@ public class MatcherTest {
         return false;
       }
 
-      final CustomType other = (CustomType) o;
+      CustomType other = (CustomType) o;
       return this.name == other.name && this.size == other.size && this.sob == other.sob;
     }
 
@@ -383,7 +383,7 @@ public class MatcherTest {
   }
 
   public class ArgumentMatcherStub implements Matcher.ArgumentMatcher {
-    public Boolean matches(final Object callArgument) {
+    public Boolean matches(Object callArgument) {
       return true;
     }
   }

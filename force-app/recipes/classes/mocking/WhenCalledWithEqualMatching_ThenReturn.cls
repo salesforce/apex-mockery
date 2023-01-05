@@ -9,15 +9,15 @@ private class WhenCalledWithEqualMatching_ThenReturn {
   @isTest
   static void recipe() {
     // Arrange
-    final Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    final MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
-    final Bakery sut = new Bakery((DeliveryService) deliveryServiceMock.stub);
+    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
+    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
     planDeliverySpy.whenCalledWith(new Pastry('Opera')).thenReturn(Date.today().addDays(2));
     planDeliverySpy.whenCalledWith(Matcher.ofType(Pastry.class)).thenReturn(Date.today().addDays(4)); // Order matter
 
     // Act
-    final OrderConfirmation order = sut.order(new Pastry('Opera'));
+    OrderConfirmation order = myBakery.order(new Pastry('Opera'));
 
     // Assert
     Assert.areEqual(Date.today().addDays(2), order.deliveryDate);

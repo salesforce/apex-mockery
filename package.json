@@ -17,9 +17,8 @@
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
-    "prepush": "npm run test:coverage && npm run lint",
-    "test": "sfdx force:apex:test:run -r human -d ./tests/apex -s ApexMockery -w 20",
-    "test:coverage": "npm run test -- -c"
+    "prepush": "npm run test && npm run lint",
+    "test": "sfdx force:apex:test:run -r human -d ./tests/apex -s ApexMockery -w 20"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
