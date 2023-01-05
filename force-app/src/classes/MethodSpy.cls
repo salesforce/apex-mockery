@@ -164,7 +164,7 @@ public class MethodSpy {
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private Params paramsMatcher;
+    private final Params paramsMatcher;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 

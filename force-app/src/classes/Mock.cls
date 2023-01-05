@@ -9,9 +9,6 @@ public class Mock implements System.StubProvider {
   public Object stub { get; private set; }
   private Map<String, MethodSpy> spies = new Map<String, MethodSpy>();
 
-  private Mock() {
-  }
-
   private Mock(final Type aType) {
     this.stub = Test.createStub(aType, this);
   }
