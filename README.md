@@ -83,7 +83,7 @@ Mock myMock = Mock.forType(MyType.class);
 Use the `stub` attribut to access the stub,
 
 ```java
-MyType myTypeStub = (MyType) myMock.stub
+MyType myTypeStub = (MyType) myMock.stub;
 MyService myServiceInstance = new MyServiceImpl(myTypeStub);
 ```
 
