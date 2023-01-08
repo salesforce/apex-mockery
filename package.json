@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "lint": "npm run lint:apex ; npm run lint:doc",
-    "lint:apex": "sfdx scanner:run -v -t 'force-app/classes/**/*.cls' -f table -c 'apex-mockery'",
+    "lint:apex": "sfdx scanner:run -v -t 'force-app/**/*.cls' -f table -c 'apex-mockery' -e pmd",
     "lint:doc": "write-good README.md --parse",
     "postinstall": "husky install ; ./postInstall.sh",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
