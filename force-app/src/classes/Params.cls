@@ -38,7 +38,7 @@ public class Params {
   }
 
   public override String toString() {
-    return listOfArgs + '';
+    return this.listOfArgs + '';
   }
 
   public static Params empty() {
