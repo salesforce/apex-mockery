@@ -90,6 +90,21 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyConfiguredWithParams_whenCalledWithMatching_spyIsCalled() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith(Params.of('param')).thenReturn('test');
+
+    // Act
+    Object result = sut.call(new List<Object>{ 'param' });
+
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('param')));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('param')));
+  }
+
+  @IsTest
   static void givenSpyConfiguredWithoutArguments_whenCalledWithoutArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
