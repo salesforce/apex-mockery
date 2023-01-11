@@ -30,6 +30,7 @@ public class Assertions {
      * @param param1 params that should match one call parameters
      * @see          Params
      */
+    void hasBeenCalledWith();
     void hasBeenCalledWith(final Object param1);
     void hasBeenCalledWith(final Object param1, final Object param2);
     void hasBeenCalledWith(final Object param1, final Object param2, final Object param3);
@@ -42,6 +43,7 @@ public class Assertions {
      * @param params params that should match last call paramters
      * @see          Params
      */
+    void hasBeenLastCalledWith();
     void hasBeenLastCalledWith(final Object param1);
     void hasBeenLastCalledWith(final Object param1, final Object param2);
     void hasBeenLastCalledWith(final Object param1, final Object param2, final Object param3);
@@ -121,6 +123,10 @@ public class Assertions {
       this.asserter.isTrue(this.spy.hasBeenCalledTimes(count), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count));
     }
 
+    public void hasBeenCalledWith() {
+      this.hasBeenCalledWithParams(Params.empty());
+    }
+
     public void hasBeenCalledWith(final Object arg) {
       this.hasBeenCalledWithParams((arg instanceof Params) ? (Params) arg : Params.of(arg));
     }
@@ -144,6 +150,10 @@ public class Assertions {
     private void hasBeenCalledWithParams(final Params params) {
       this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
       this.asserter.isTrue(this.spy.hasBeenCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params));
+    }
+
+    public void hasBeenLastCalledWith() {
+      this.hasBeenLastCalledWithParams(Params.empty());
     }
 
     public void hasBeenLastCalledWith(final Object arg) {

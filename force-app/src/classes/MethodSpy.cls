@@ -33,6 +33,10 @@ public class MethodSpy {
     return !this.callLog.isEmpty();
   }
 
+  public Boolean hasBeenCalledWith() {
+    return this.hasBeenCalledWith(Params.empty());
+  }
+
   public Boolean hasBeenCalledWith(final Params params) {
     if (params == null) {
       throw new Matcher.MatcherException('Params cannot be null');
@@ -45,6 +49,10 @@ public class MethodSpy {
     }
 
     return false;
+  }
+
+  public Boolean hasBeenLastCalledWith() {
+    return this.hasBeenLastCalledWith(Params.empty());
   }
 
   public Boolean hasBeenLastCalledWith(final Params params) {
@@ -100,6 +108,10 @@ public class MethodSpy {
     this.configuredGlobalThrow = true;
     this.configuredGlobalReturn = false;
     this.exceptionToThrow = exceptionToThrow;
+  }
+
+  public MethodSpyCall whenCalledWith() {
+    return this.whenCalledWithParams(Params.empty());
   }
 
   public MethodSpyCall whenCalledWith(final Object arg) {
@@ -234,10 +246,10 @@ public class MethodSpy {
       }
       return new ConfigurationException(
         this.spy.methodName +
-        ': No stub value found for a call with params ' +
-        this.callParams +
-        '\nHere are the configured stubs:\n\t' +
-        String.join(errorMessages, '\n\t')
+          ': No stub value found for a call with params ' +
+          this.callParams +
+          '\nHere are the configured stubs:\n\t' +
+          String.join(errorMessages, '\n\t')
       );
     }
   }
