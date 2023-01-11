@@ -102,7 +102,7 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenEmptyList_hasBeenCalledWith_callsAssertEquals() {
+  static void givenParamsEmpty_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
@@ -110,6 +110,22 @@ private class AssertionsTest {
 
     // Act
     sut.hasBeenCalledWith(Params.empty());
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isTrue(fakeAsserter.failed);
+    Assert.areEqual('Method method was not called with ()', fakeAsserter.errorMessage);
+  }
+
+  @isTest
+  static void givenNoParameter_hasBeenCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+
+    // Act
+    sut.hasBeenCalledWith();
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -199,19 +215,19 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenNullList_hasBeenLastCalledWith_callsAssertEquals() {
+  static void givenNoParameter_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
     Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
-    sut.hasBeenLastCalledWith(null);
+    sut.hasBeenLastCalledWith();
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
     Assert.isTrue(fakeAsserter.failed);
-    Assert.areEqual('Method method was not last called with (null)', fakeAsserter.errorMessage);
+    Assert.areEqual('Method method was not last called with ()', fakeAsserter.errorMessage);
   }
 
   @isTest

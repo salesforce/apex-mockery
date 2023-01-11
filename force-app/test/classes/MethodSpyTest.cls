@@ -93,6 +93,21 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithoutArguments_whenCalledWithoutArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith().thenReturn('test');
+
+    // Act
+    Object result = sut.call(new List<Object>());
+
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith());
+    Assert.areEqual(true, sut.hasBeenLastCalledWith());
+  }
+
+  @IsTest
+  static void givenSpyConfiguredWithEmptyParams_whenCalledWithoutArgument_spyIsCalled() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(Params.empty()).thenReturn('test');
 
     // Act
@@ -520,7 +535,19 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithEmptyArgs_returnsMatches() {
+  static void givenSpyCalledLastWithoutParams_hasBeenLastCalledWithoutArgs_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    MethodSpy sut = new MethodSpy('methodName');
+
+    // Act & Assert
+    Assert.isFalse(sut.hasBeenLastCalledWith());
+    sut.call(param);
+    Assert.isTrue(sut.hasBeenLastCalledWith());
+  }
+
+  @IsTest
+  static void givenSpyCalledLastWithoutParams_hasBeenLastCalledWithEmptyArgs_returnsMatches() {
     // Arrange
     List<Object> param = new List<Object>();
     MethodSpy sut = new MethodSpy('methodName');
@@ -560,7 +587,19 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledWithParams_hasBeenCalledEmptyArgs_returnsMatches() {
+  static void givenSpyCalledWithoutParams_hasBeenCalledWithoutArgs_returnsMatches() {
+    // Arrange
+    List<Object> param = new List<Object>();
+    MethodSpy sut = new MethodSpy('methodName');
+
+    // Act & Assert
+    Assert.isFalse(sut.hasBeenCalledWith());
+    sut.call(param);
+    Assert.isTrue(sut.hasBeenCalledWith());
+  }
+
+  @IsTest
+  static void givenSpyCalledWithoutParams_hasBeenCalledEmptyArgs_returnsMatches() {
     // Arrange
     List<Object> param = new List<Object>();
     MethodSpy sut = new MethodSpy('methodName');
