@@ -135,6 +135,66 @@ private class MethodSpyTest {
   }
 
   @IsTest
+  static void givenSpyConfiguredWith2Params_whenCalledWithMatchingArgument_spyIsCalled() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith('2', 'params').thenReturn('test');
+
+    // Act
+    Object result = sut.call(new List<Object>{ '2', 'params' });
+
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('2', 'params')));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('2', 'params')));
+  }
+
+  @IsTest
+  static void givenSpyConfiguredWith3Params_whenCalledWithMatchingArgument_spyIsCalled() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith('3', 'params', 'test').thenReturn('test');
+
+    // Act
+    Object result = sut.call(new List<Object>{ '3', 'params', 'test' });
+
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('3', 'params', 'test')));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('3', 'params', 'test')));
+  }
+
+  @IsTest
+  static void givenSpyConfiguredWith4Params_whenCalledWithMatchingArgument_spyIsCalled() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith('test', 'with', '4', 'params').thenReturn('test');
+
+    // Act
+    Object result = sut.call(new List<Object>{ 'test', 'with', '4', 'params' });
+
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('test', 'with', '4', 'params')));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('test', 'with', '4', 'params')));
+  }
+
+  @IsTest
+  static void givenSpyConfiguredWith5Params_whenCalledWithMatchingArgument_spyIsCalled() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith('another', 'test', 'with', '5', 'params').thenReturn('test');
+
+    // Act
+    Object result = sut.call(new List<Object>{ 'another', 'test', 'with', '5', 'params' });
+
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('another', 'test', 'with', '5', 'params')));
+    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('another', 'test', 'with', '5', 'params')));
+  }
+
+  @IsTest
   static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithAllMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');

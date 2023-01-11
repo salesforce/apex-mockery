@@ -134,7 +134,7 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenParams_hasBeenCalledWith_callsAssertEquals() {
+  static void given1Params_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
@@ -144,6 +144,74 @@ private class AssertionsTest {
 
     // Act
     sut.hasBeenCalledWith(Params.of('param'));
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given2Params_hasBeenCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '2', 'param' });
+
+    // Act
+    sut.hasBeenCalledWith('2', 'param');
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given3Params_hasBeenCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '3', 'param', 'test' });
+
+    // Act
+    sut.hasBeenCalledWith('3', 'param', 'test');
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given4Params_hasBeenCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '4', 'param', 'unit', 'test' });
+
+    // Act
+    sut.hasBeenCalledWith('4', 'param', 'unit', 'test');
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given5Params_hasBeenCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '5', 'param', 'unit', 'test', 'scenario' });
+
+    // Act
+    sut.hasBeenCalledWith('5', 'param', 'unit', 'test', 'scenario');
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -248,7 +316,7 @@ private class AssertionsTest {
   }
 
   @isTest
-  static void givenParams_hasBeenLastCalledWith_callsAssertEquals() {
+  static void given1Params_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
@@ -258,6 +326,74 @@ private class AssertionsTest {
 
     // Act
     sut.hasBeenLastCalledWith(Params.of('param'));
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given2Params_hasBeenLastCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '2', 'param' });
+
+    // Act
+    sut.hasBeenLastCalledWith('2', 'param');
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given3Params_hasBeenLastCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '3', 'param', 'test' });
+
+    // Act
+    sut.hasBeenLastCalledWith('3', 'param', 'test');
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given4Params_hasBeenLastCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '4', 'param', 'unit', 'test' });
+
+    // Act
+    sut.hasBeenLastCalledWith('4', 'param', 'unit', 'test');
+
+    // Assert
+    Assert.areEqual(2, fakeAsserter.callCount);
+    Assert.isFalse(fakeAsserter.failed);
+  }
+
+  @isTest
+  static void given5Params_hasBeenLastCalledWith_callsAssertEquals() {
+    // Arrange
+    MethodSpy spy = new MethodSpy('method');
+    spy.returns('anything');
+    FakeAsserter fakeAsserter = new FakeAsserter();
+    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    spy.call(new List<Object>{ '5', 'param', 'unit', 'test', 'scenario' });
+
+    // Act
+    sut.hasBeenLastCalledWith('5', 'param', 'unit', 'test', 'scenario');
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
