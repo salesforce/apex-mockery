@@ -107,7 +107,7 @@ public class Assertions {
     }
 
     private DefaultMethodSpyAssertions(MethodSpy spy, Asserter asserter) {
-      this.spy = spy;
+      this(spy);
       this.asserter = asserter;
     }
 
@@ -264,7 +264,7 @@ public class Assertions {
   }
 
   private static ErrorMessage buildErrorMessage(MethodSpy spy, ErrorMessageType error) {
-    return new ErrorMessageImpl(spy, error, null);
+    return new ErrorMessageImpl(spy, error);
   }
 
   private static ErrorMessage buildErrorMessage(MethodSpy spy, ErrorMessageType error, Object argument) {

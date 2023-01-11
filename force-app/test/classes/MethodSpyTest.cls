@@ -155,7 +155,8 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithPartialMatching_spyThrows() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('param', new Account(Name = 'Test'), Matcher.any()).thenReturn('Expected Result');
+    sut.whenCalledWith('param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer'))
+      .thenReturn('Expected Result');
 
     // Act
     try {
