@@ -25,10 +25,11 @@ jobs:
           echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
           echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
 
-      - name: Install SFDX CLI and Scanner
-        run: |
-          npm install sfdx-cli
-          node_modules/sfdx-cli/bin/run plugins:install @salesforce/sfdx-scanner
+      - name: Install sfdx
+        uses: sfdx-actions/setup-sfdx@v1
+
+      - name: Install Scanner plugin
+        run: sfdx plugins:install @salesforce/sfdx-scanner
 
       - name: "Install npm dependencies"
         run: npm install
@@ -42,7 +43,7 @@ jobs:
           pmdconfig: apex-ruleset.xml
           severity-threshold: 4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Check documentation writing"
         run: npm run lint:doc
@@ -56,18 +57,13 @@ jobs:
           echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
           echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
 
-      - name: Install Salesforce CLI
-        run: npm install sfdx-cli -g
+      - name: Install sfdx
+        uses: sfdx-actions/setup-sfdx@v1
+        with:
+          sfdx-auth-url: ${{ secrets.CI_URL }}
 
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: "Populate auth file with CI_URL secret"
-        shell: bash
-        run: "echo ${{ secrets.CI_URL}} > ./CI_URL.txt"
-
-      - name: "Authenticate CI Sandbox"
-        run: "sfdx force:auth:sfdxurl:store -f ./CI_URL.txt -a ci -d"
 
       - name: "Create scratch org"
         run: "sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1"
