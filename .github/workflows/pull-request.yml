@@ -74,6 +74,25 @@ jobs:
       - name: "Run Apex tests"
         run: npm run test
 
+      - name: "Create package version"
+        run:
+
       - name: "Delete scratch org"
         if: always()
         run: "sfdx force:org:delete -p -u scratch-org"
+
+  commit-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v4
+        continue-on-error: true
+
+  pr-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v1.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
