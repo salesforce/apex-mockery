@@ -12,8 +12,8 @@ private class WhenCalledWith_ThenThrow {
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Opera'))).thenThrow(new RecipeException());
+    planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new Pastry('Opera')).thenThrow(new RecipeException());
 
     // Act
     try {

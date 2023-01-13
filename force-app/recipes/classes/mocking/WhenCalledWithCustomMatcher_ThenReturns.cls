@@ -12,7 +12,7 @@ private class WhenCalledWithCustomMatcher_ThenReturns {
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(Params.of(new OperaPastryMatcher())).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new OperaPastryMatcher()).thenReturn(Date.today().addDays(3));
 
     // Act
     OrderConfirmation order = myBakery.order(new Pastry('Opera'));

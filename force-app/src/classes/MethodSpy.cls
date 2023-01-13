@@ -33,6 +33,10 @@ public class MethodSpy {
     return !this.callLog.isEmpty();
   }
 
+  public Boolean hasBeenCalledWith() {
+    return this.hasBeenCalledWith(Params.empty());
+  }
+
   public Boolean hasBeenCalledWith(final Params params) {
     if (params == null) {
       throw new Matcher.MatcherException('Params cannot be null');
@@ -45,6 +49,10 @@ public class MethodSpy {
     }
 
     return false;
+  }
+
+  public Boolean hasBeenLastCalledWith() {
+    return this.hasBeenLastCalledWith(Params.empty());
   }
 
   public Boolean hasBeenLastCalledWith(final Params params) {
@@ -102,7 +110,31 @@ public class MethodSpy {
     this.exceptionToThrow = exceptionToThrow;
   }
 
-  public MethodSpyCall whenCalledWith(final Params params) {
+  public MethodSpyCall whenCalledWith() {
+    return this.whenCalledWithParams(Params.empty());
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg) {
+    return this.whenCalledWithParams((arg == null || arg instanceof Params) ? (Params) arg : Params.of(arg));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+  }
+
+  public MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
+    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+  }
+
+  private MethodSpyCall whenCalledWithParams(final Params params) {
     if (params == null) {
       throw new Matcher.MatcherException('Params cannot be null');
     }
@@ -111,8 +143,7 @@ public class MethodSpy {
     return parameterizedMethodCall;
   }
 
-  @TestVisible
-  private List<Params> getCallLogParams() {
+  public List<Params> getCallLogParams() {
     final List<Params> reversedCallsTrace = new List<Params>();
     final List<MethodCall> calls = this.callLog.callParams;
     for (Integer i = calls.size() - 1; i >= 0; i--) {

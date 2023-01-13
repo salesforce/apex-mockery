@@ -14,8 +14,8 @@ private class WhenCalledWithMatchingThrowsAndReturns {
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.returns(Date.today().addDays(2));
     planDeliverySpy.throwsException(new RecipeException());
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Croissant'))).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(Params.of(new Pastry('Pain au Chocolat'))).thenThrow(new RecipeException());
+    planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new Pastry('Pain au Chocolat')).thenThrow(new RecipeException());
 
     // Act
     try {
