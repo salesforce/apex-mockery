@@ -2,7 +2,11 @@
   "packageDirectories": [
     {
       "path": "force-app/src",
-      "default": true
+      "default": true,
+      "package": "Apex Mockery",
+      "versionNumber": "0.1.0.NEXT",
+      "postInstallUrl": "https://github.com/salesforce/apex-mockery#installation",
+      "releaseNotesUrl": "https://github.com/salesforce/apex-mockery/releases"
     },
     {
       "path": "force-app/test",
@@ -14,7 +18,10 @@
     }
   ],
   "name": "apex-mockery",
-  "namespace": "",
+  "namespace": "mockery",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "56.0"
+  "sourceApiVersion": "56.0",
+  "packageAliases": {
+    "Apex Mockery": "0HoDn000000k9rOKAQ"
+  }
 }

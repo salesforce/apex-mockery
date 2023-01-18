@@ -1,6 +1,8 @@
+[![build](https://github.com/salesforce/apex-mockery/workflows/build/badge.svg)](https://github.com/salesforce/apex-mockery/actions?query=workflow%3Abuild) [![release](https://github.com/salesforce/apex-mockery/workflows/release/badge.svg)](https://github.com/salesforce/apex-mockery/actions?query=workflow%3Arelease)
+
 <div align="center">
 	<img src="resources/logo.png" width="256">
-	<h1>Lightweight mocking library in Apex</h1>
+	<h1>Lightweight mocking library in Apex</h1>  
 </div>
 
 This project provide a simple, lightweight, easy to read, fully tested mocking library for apex built using the [Apex Stub API](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm).
