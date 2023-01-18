@@ -1,4 +1,4 @@
-name: CI
+name: integrate
 
 on:
   pull_request:
@@ -9,6 +9,7 @@ on:
       - "CODEOWNERS"
       - "package.json"
       - "sfdx-project.json"
+      - "config/**"
 
 jobs:
   formatting-and-linting:
@@ -54,41 +55,13 @@ jobs:
       - name: Check documentation writing
         run: npm run lint:doc
 
-  ci-build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set environment variables
-        run: |
-          echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
-
-      - name: Install sfdx and connect to DevHub
-        run: |
-          npm install --global sfdx-cli
-          echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
-          sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
-          sfdx config:set defaultdevhubusername=hub --global
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Create scratch org
-        run: sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1
-
-      - name: Push source to scratch org
-        run: sfdx force:source:push
-
-      - name: Run Apex tests
-        run: npm run test
-
-      - name: Delete scratch org
-        if: always()
-        run: sfdx force:org:delete -p -u scratch-org
+  integrate:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
 
   create-package-version:
     uses: ./.github/workflows/create-package-version.yml
-    needs: [ci-build, formatting-and-linting]
+    needs: [integrate, formatting-and-linting]
     with:
       branch: pull-request
     secrets: inherit

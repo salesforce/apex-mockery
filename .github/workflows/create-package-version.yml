@@ -1,14 +1,20 @@
-name: Create package version
+name: create package version
 on:
   workflow_call:
     inputs:
       branch:
         required: true
         type: string
+    outputs:
+      packageId:
+        description: 04t package version id created
+        value: ${{ jobs.create-package-version.outputs.packageId }}
 
 jobs:
   create-package-version:
     runs-on: ubuntu-latest
+    outputs:
+      packageId: ${{ steps.create.outputs.packageId }}
     steps:
       - name: Set environment variables
         run: |
@@ -28,9 +34,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create package version
+        id: create
         run: |
           packageId=$(sfdx force:package:version:create --definitionfile config/project-scratch-def.json --package "Apex Mockery" --branch "${{ inputs.branch }}" --tag ${{ github.sha }} --wait 120 --codecoverage --skipancestorcheck --installationkeybypass --json | jq -e -r ".result.SubscriberPackageVersionId")
           echo "packageId=$packageId" >> $GITHUB_ENV
+          echo "packageId=$packageId" >> $GITHUB_OUTPUT
 
       - name: Create scratch org
         run: sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1

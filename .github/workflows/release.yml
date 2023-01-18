@@ -1,11 +1,19 @@
 name: release
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
-  release:
+  create-package-version:
+    uses: ./.github/workflows/create-package-version.yml
+    with:
+      branch: main
+    secrets: inherit
+
+  promote-package-version:
     runs-on: ubuntu-latest
+    needs: create-package-version
     steps:
       - name: Set environment variables
         run: |
@@ -14,9 +22,6 @@ jobs:
           echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
           echo "SFDX_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
 
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
       - name: Install sfdx and connect to DevHub
         run: |
           npm install --global sfdx-cli
@@ -24,20 +29,29 @@ jobs:
           sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
           sfdx config:set defaultdevhubusername=hub --global
 
-      - name: Create package version
-        run: |
-          packageId=$(sfdx force:package:version:create --definitionfile config/project-scratch-def.json --package "Apex Mockery" --branch "${{ inputs.branch }}" --tag ${{ github.sha }} --wait 120 --codecoverage --skipancestorcheck --installationkeybypass --json | jq -e -r ".result.SubscriberPackageVersionId")
-          echo "packageId=$packageId" >> $GITHUB_ENV
-
-      - name: Create scratch org
-        run: sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1
-
-      - name: Check package installation
-        run: sfdx force:package:install -p ${{ env.packageId }} -u scratch-org -w 10
-
       - name: Promote latest main package version
-        run: sfdx force:package:version:promote -n -p ${{ env.packageId }}
+        run: sfdx force:package:version:promote -n -p ${{ needs.create-package-version.outputs.packageId }}
 
-      - name: Delete scratch org
-        if: always()
-        run: sfdx force:org:delete -p -u scratch-org
+  update-release:
+    runs-on: ubuntu-latest
+    needs: create-package-version
+    steps:
+      - name: Create package links
+        run: |
+          packageId=${{ needs.create-package-version.outputs.packageId }}
+          links=$(cat << EOF
+          Unlock package installation:
+          - Production [link](https://login.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
+          - Sandbox [link](https://test.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
+          - sfdx command: `sfdx force:package:install --package $packageId`
+          EOF
+          )
+          echo "links=$links" >> $GITHUB_ENV
+
+      - name: Update release with package Id
+        uses: irongut/EditRelease@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          id: ${{ github.event.release.id }}
+          body: ${{ env.links }}
+          replacebody: false

@@ -1,4 +1,4 @@
-[![build](https://github.com/salesforce/apex-mockery/workflows/build/badge.svg)](https://github.com/salesforce/apex-mockery/actions?query=workflow%3Abuild) [![release](https://github.com/salesforce/apex-mockery/workflows/release/badge.svg)](https://github.com/salesforce/apex-mockery/actions?query=workflow%3Arelease)
+[![main](https://github.com/salesforce/apex-mockery/workflows/main/badge.svg)](https://github.com/salesforce/apex-mockery/actions?query=workflow%3Amain) [![release](https://github.com/salesforce/apex-mockery/workflows/release/badge.svg)](https://github.com/salesforce/apex-mockery/actions?query=workflow%3Arelease)
 
 <div align="center">
 	<img src="resources/logo.png" width="256">
@@ -67,7 +67,7 @@ Deploy via the deploy button
 
 Or copy `force-app/src/classes` test classes in your sfdx project to deploy it with your favourite deployment methods
 
-Or you can deploy the library with an upcoming managed package
+Or you can deploy the library using our unlocked package from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
 
 ## Usage
 

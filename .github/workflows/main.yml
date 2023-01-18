@@ -1,0 +1,28 @@
+name: main
+
+on:
+  push:
+    branches: [main]
+    tags-ignore:
+      - '**'
+
+jobs:
+  integrate:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
+  create-package-version:
+    uses: ./.github/workflows/create-package-version.yml
+    needs: integrate
+    with:
+      branch: main
+    secrets: inherit
+
+  prepare-release:
+    needs: create-package-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: node
+          package-name: apex-mockery

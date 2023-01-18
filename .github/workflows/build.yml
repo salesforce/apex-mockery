@@ -1,8 +1,6 @@
 name: build
-
 on:
-  push:
-    branches: [main]
+  workflow_call:
 
 jobs:
   build:
@@ -36,10 +34,3 @@ jobs:
       - name: Delete scratch org
         if: always()
         run: sfdx force:org:delete -p -u scratch-org
-
-  create-package-version:
-    uses: ./.github/workflows/create-package-version.yml
-    needs: build
-    with:
-      branch: main
-    secrets: inherit
