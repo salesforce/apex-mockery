@@ -29,49 +29,6 @@ public class MethodSpy {
     this.callLog = new CallLog();
   }
 
-  public Boolean hasBeenCalled() {
-    return !this.callLog.isEmpty();
-  }
-
-  public Boolean hasBeenCalledWith() {
-    return this.hasBeenCalledWith(Params.empty());
-  }
-
-  public Boolean hasBeenCalledWith(final Params params) {
-    if (params == null) {
-      throw new Matcher.MatcherException('Params cannot be null');
-    }
-    final Iterator<MethodCall> it = this.callLog.iterator();
-    while (it.hasNext()) {
-      final List<Object> objectParams = it.next().params;
-      if (params.matches(objectParams) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public Boolean hasBeenLastCalledWith() {
-    return this.hasBeenLastCalledWith(Params.empty());
-  }
-
-  public Boolean hasBeenLastCalledWith(final Params params) {
-    if (params == null) {
-      throw new Matcher.MatcherException('Params cannot be null');
-    }
-    if (this.callLog.isEmpty()) {
-      return false;
-    }
-
-    final List<Object> actualListOfArgs = this.callLog.getLast();
-    return params.matches(actualListOfArgs);
-  }
-
-  public Boolean hasBeenCalledTimes(final Integer count) {
-    return this.callLog.size() == count;
-  }
-
   public Object call(List<Object> params) {
     this.callLog.add(new MethodCall(params));
 
