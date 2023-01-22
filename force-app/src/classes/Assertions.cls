@@ -84,11 +84,17 @@ public class Assertions {
   @TestVisible
   private class MethodSpyAsserter implements Asserter {
     public void isTrue(Boolean value, ErrorMessage message) {
+      // Do not use Assert.isTrue to check value
+      // Because we want to compute ErrorMessage to string()
+      // only when the Boolean is false
       if (!value) {
         Assert.fail(message.toString());
       }
     }
     public void isFalse(Boolean value, ErrorMessage message) {
+      // Do not use Assert.isFalse to check value
+      // Because we want to compute ErrorMessage to string()
+      // only when the Boolean is true
       if (value) {
         Assert.fail(message.toString());
       }
