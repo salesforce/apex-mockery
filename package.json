@@ -1,5 +1,5 @@
 {
-  "name": "salesforce-app",
+  "name": "Apex Mockery",
   "private": true,
   "version": "1.0.0",
   "description": "Salesforce App",
@@ -18,7 +18,7 @@
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
     "prepush": "npm run test && npm run lint",
-    "test": "sfdx force:apex:test:run -r human -d ./tests/apex -s ApexMockery -w 20"
+    "test": "sfdx force:apex:test:run -r human -d ./tests/apex -l RunLocalTests -w 20"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
