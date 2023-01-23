@@ -34,6 +34,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -47,6 +48,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>(), sut.callLog.getLast());
   }
 
   @IsTest
@@ -60,6 +62,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>(), sut.callLog.getLast());
   }
 
   @IsTest
@@ -73,6 +76,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>{ '2', 'params' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -86,6 +90,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>{ '3', 'params', 'test' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -99,6 +104,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>{ 'test', 'with', '4', 'params' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -112,6 +118,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>{ 'another', 'test', 'with', '5', 'params' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -125,7 +132,7 @@ private class MethodSpyTest {
 
     // Assert
     Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
-    Assert.areEqual('Expected Result', result);
+    Assert.areEqual(new List<Object>{ 'param', new Account(Name = 'Test'), true }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -143,6 +150,11 @@ private class MethodSpyTest {
       Assert.fail('it shoud not reach this line');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
+      Assert.areNotEqual(
+        new List<Object>{ 'param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer') },
+        sut.callLog.getLast()
+      );
+      Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
     }
   }
 
@@ -160,6 +172,8 @@ private class MethodSpyTest {
       Assert.fail('it shoud not reach this line');
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
+      Assert.areNotEqual(new List<Object>{ 'param', new Account(Name = 'Test') }, sut.callLog.getLast());
+      Assert.areEqual(new List<Object>{ new Opportunity() }, sut.callLog.getLast());
     }
   }
 
@@ -175,6 +189,7 @@ private class MethodSpyTest {
     // Assert
     Params expectedArgs = Params.of(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any());
     Assert.areEqual('Expected Result', result);
+    Assert.areEqual(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -187,7 +202,10 @@ private class MethodSpyTest {
     // Act && Assert
     Object firstCallResult = sut.call(new List<Object>{ new Account() });
     Assert.areEqual('Account result', firstCallResult);
+    Assert.areEqual(new List<Object>{ new Account() }, sut.callLog.getLast());
     Object secondCallResult = sut.call(new List<Object>{ new Opportunity() });
+    Assert.areEqual(new List<Object>{ new Account() }, sut.callLog.get(0));
+    Assert.areEqual(new List<Object>{ new Opportunity() }, sut.callLog.getLast());
     Assert.areEqual('Opportunity result', secondCallResult);
   }
 
