@@ -40,7 +40,7 @@ public class Assertions {
     /**
      * Assert that a method spy has been lastly called with matching parameters
      *
-     * @param params params that should match last call paramters
+     * @param params params that should match last call parameters
      * @see          Params
      */
     void hasBeenLastCalledWith();
@@ -84,11 +84,17 @@ public class Assertions {
   @TestVisible
   private class MethodSpyAsserter implements Asserter {
     public void isTrue(Boolean value, ErrorMessage message) {
+      // Do not use Assert.isTrue to check value
+      // Because we want to compute ErrorMessage to string()
+      // only when the Boolean is false
       if (!value) {
         Assert.fail(message.toString());
       }
     }
     public void isFalse(Boolean value, ErrorMessage message) {
+      // Do not use Assert.isFalse to check value
+      // Because we want to compute ErrorMessage to string()
+      // only when the Boolean is true
       if (value) {
         Assert.fail(message.toString());
       }
@@ -112,15 +118,15 @@ public class Assertions {
     }
 
     public void hasNotBeenCalled() {
-      this.asserter.isFalse(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.CALLED));
+      this.asserter.isTrue(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.CALLED));
     }
 
     public void hasBeenCalled() {
-      this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
+      this.asserter.isFalse(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
     }
 
     public void hasBeenCalledTimes(final Integer count) {
-      this.asserter.isTrue(this.spy.hasBeenCalledTimes(count), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count));
+      this.asserter.isTrue(this.spy.callLog.size() == count, buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count));
     }
 
     public void hasBeenCalledWith() {
@@ -148,8 +154,15 @@ public class Assertions {
     }
 
     private void hasBeenCalledWithParams(final Params params) {
-      this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
-      this.asserter.isTrue(this.spy.hasBeenCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params));
+      Boolean hasBeenCalledWithParams = false;
+      for (Integer i = 0; i < this.spy.callLog.size(); ++i) {
+        if (params?.matches(this.spy.callLog.get(i))) {
+          hasBeenCalledWithParams = true;
+          break;
+        }
+      }
+      this.asserter.isFalse(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
+      this.asserter.isTrue(hasBeenCalledWithParams, buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params));
     }
 
     public void hasBeenLastCalledWith() {
@@ -177,8 +190,8 @@ public class Assertions {
     }
 
     private void hasBeenLastCalledWithParams(final Params params) {
-      this.asserter.isTrue(this.spy.hasBeenCalled(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
-      this.asserter.isTrue(this.spy.hasBeenLastCalledWith(params), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, params));
+      this.asserter.isFalse(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
+      this.asserter.isTrue(params?.matches(this.spy.callLog.getLast()), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, params));
     }
   }
 
@@ -229,17 +242,21 @@ public class Assertions {
     }
 
     private List<ErrorMessageRow> buildCallTraces(MethodSpy spy) {
-      final List<Params> callLogParams = spy.getCallLogParams();
-      if (callLogParams.isEmpty()) {
+      final List<Params> reversedCallLogParams = new List<Params>();
+      for (Integer i = this.spy.callLog.size() - 1; i >= 0; i--) {
+        reversedCallLogParams.add(Params.ofList(this.spy.callLog.get(i)));
+      }
+
+      if (reversedCallLogParams.isEmpty()) {
         return new List<ErrorMessageRow>();
       }
 
       final List<ErrorMessageRow> rows = new List<ErrorMessageRow>();
       rows.add(new ErrorMessageRow('method call history:'));
       final String template = '#{0} {1}({2})';
-      for (Integer i = 0; i < callLogParams.size(); i++) {
-        final Params params = callLogParams[i];
-        final Integer count = callLogParams.size() - i;
+      for (Integer i = 0; i < reversedCallLogParams.size(); i++) {
+        final Params params = reversedCallLogParams[i];
+        final Integer count = reversedCallLogParams.size() - i;
         rows.add(new ErrorMessageRow(String.format(template, new List<Object>{ count, spy.methodName, params }), true));
       }
       return rows;

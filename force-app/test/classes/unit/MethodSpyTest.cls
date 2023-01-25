@@ -24,72 +24,6 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyNotCalled_hasBeenCalledWithNull_itThrowsMatcherException() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-
-    try {
-      // Act
-      sut.hasBeenCalledWith(null);
-
-      // Assert
-      Assert.fail('Expected exception was not thrown');
-    } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
-    }
-  }
-
-  @IsTest
-  static void givenSpyCalled_hasBeenCalledWithNull_itThrowsMatcherException() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.call(new List<Object>());
-
-    try {
-      // Act
-      sut.hasBeenCalledWith(null);
-
-      // Assert
-      Assert.fail('Expected exception was not thrown');
-    } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
-    }
-  }
-
-  @IsTest
-  static void givenSpyNotCalled_hasBeenLastCalledWithNull_itThrowsMatcherException() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-
-    try {
-      // Act
-      sut.hasBeenLastCalledWith(null);
-
-      // Assert
-      Assert.fail('Expected exception was not thrown');
-    } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
-    }
-  }
-
-  @IsTest
-  static void givenSpyCalled_hasBeenLastCalledWithNull_itThrowsMatcherException() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.call(new List<Object>());
-
-    try {
-      // Act
-      sut.hasBeenLastCalledWith(null);
-
-      // Assert
-      Assert.fail('Expected exception was not thrown');
-    } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
-    }
-  }
-
-  @IsTest
   static void givenSpyConfiguredWithParams_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -100,8 +34,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('param')));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('param')));
+    Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -115,8 +48,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith());
-    Assert.areEqual(true, sut.hasBeenLastCalledWith());
+    Assert.areEqual(new List<Object>(), sut.callLog.getLast());
   }
 
   @IsTest
@@ -130,8 +62,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(Params.empty()));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.empty()));
+    Assert.areEqual(new List<Object>(), sut.callLog.getLast());
   }
 
   @IsTest
@@ -145,8 +76,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('2', 'params')));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('2', 'params')));
+    Assert.areEqual(new List<Object>{ '2', 'params' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -160,8 +90,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('3', 'params', 'test')));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('3', 'params', 'test')));
+    Assert.areEqual(new List<Object>{ '3', 'params', 'test' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -175,8 +104,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('test', 'with', '4', 'params')));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('test', 'with', '4', 'params')));
+    Assert.areEqual(new List<Object>{ 'test', 'with', '4', 'params' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -190,8 +118,7 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(Params.of('another', 'test', 'with', '5', 'params')));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(Params.of('another', 'test', 'with', '5', 'params')));
+    Assert.areEqual(new List<Object>{ 'another', 'test', 'with', '5', 'params' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -205,10 +132,7 @@ private class MethodSpyTest {
 
     // Assert
     Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
-    Assert.areEqual('Expected Result', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(expectedArgs));
-    Assert.areEqual(false, sut.hasBeenLastCalledWith(Params.empty()));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(expectedArgs));
+    Assert.areEqual(new List<Object>{ 'param', new Account(Name = 'Test'), true }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -224,9 +148,13 @@ private class MethodSpyTest {
 
       // Assert
       Assert.fail('it shoud not reach this line');
-    } catch (MethodSpy.ConfigurationException cex) {
-      Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
-      Assert.areEqual(false, sut.hasBeenCalledWith(expectedArgs));
+    } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
+      Assert.areNotEqual(
+        new List<Object>{ 'param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer') },
+        sut.callLog.getLast()
+      );
+      Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
     }
   }
 
@@ -242,9 +170,10 @@ private class MethodSpyTest {
 
       // Assert
       Assert.fail('it shoud not reach this line');
-    } catch (MethodSpy.ConfigurationException cex) {
-      Params expectedArgs = Params.of('param', new Account(Name = 'Test'));
-      Assert.areEqual(false, sut.hasBeenCalledWith(expectedArgs));
+    } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
+      Assert.areNotEqual(new List<Object>{ 'param', new Account(Name = 'Test') }, sut.callLog.getLast());
+      Assert.areEqual(new List<Object>{ new Opportunity() }, sut.callLog.getLast());
     }
   }
 
@@ -260,9 +189,7 @@ private class MethodSpyTest {
     // Assert
     Params expectedArgs = Params.of(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any());
     Assert.areEqual('Expected Result', result);
-    Assert.areEqual(true, sut.hasBeenCalledWith(expectedArgs));
-    Assert.areEqual(false, sut.hasBeenLastCalledWith(Params.empty()));
-    Assert.areEqual(true, sut.hasBeenLastCalledWith(expectedArgs));
+    Assert.areEqual(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -275,7 +202,10 @@ private class MethodSpyTest {
     // Act && Assert
     Object firstCallResult = sut.call(new List<Object>{ new Account() });
     Assert.areEqual('Account result', firstCallResult);
+    Assert.areEqual(new List<Object>{ new Account() }, sut.callLog.getLast());
     Object secondCallResult = sut.call(new List<Object>{ new Opportunity() });
+    Assert.areEqual(new List<Object>{ new Account() }, sut.callLog.get(0));
+    Assert.areEqual(new List<Object>{ new Opportunity() }, sut.callLog.getLast());
     Assert.areEqual('Opportunity result', secondCallResult);
   }
 
@@ -524,194 +454,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyNotCalled_hasBeenCalled_itReturnsFalse() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-
-    // Act
-    Boolean hasBeenCalled = sut.hasBeenCalled();
-
-    // Assert
-    Assert.isFalse(hasBeenCalled);
-  }
-
-  @IsTest
-  static void givenSpyCalled_hasBeenCalled_itReturnsTrue() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(new List<Object>{});
-
-    // Act
-    Boolean hasBeenCalled = sut.hasBeenCalled();
-
-    // Assert
-    Assert.isTrue(hasBeenCalled);
-  }
-
-  @IsTest
-  static void givenSpyNotCalled_hasBeenCalledTimes_itReturnsTrueForZero() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-
-    // Act && Assert
-    Assert.isFalse(sut.hasBeenCalledTimes(-1));
-    Assert.isTrue(sut.hasBeenCalledTimes(0));
-    Assert.isFalse(sut.hasBeenCalledTimes(1));
-    Assert.isFalse(sut.hasBeenCalledTimes(5));
-  }
-
-  @IsTest
-  static void givenSpyCalledOnce_hasBeenCalledTimes_itReturnsTrueForOne() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(new List<Object>{});
-
-    // Act && Assert
-    Assert.isFalse(sut.hasBeenCalledTimes(-1));
-    Assert.isFalse(sut.hasBeenCalledTimes(0));
-    Assert.isTrue(sut.hasBeenCalledTimes(1));
-    Assert.isFalse(sut.hasBeenCalledTimes(5));
-  }
-
-  @IsTest
-  static void givenSpyCalledFiveTimes_hasBeenCalledTimes_itReturnsTrueForFive() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.returns('any result');
-    sut.call(new List<Object>{});
-    sut.call(new List<Object>{});
-    sut.call(new List<Object>{});
-    sut.call(new List<Object>{});
-    sut.call(new List<Object>{});
-
-    // Act && Assert
-    Assert.isFalse(sut.hasBeenCalledTimes(-1));
-    Assert.isFalse(sut.hasBeenCalledTimes(0));
-    Assert.isFalse(sut.hasBeenCalledTimes(1));
-    Assert.isTrue(sut.hasBeenCalledTimes(5));
-    Assert.isFalse(sut.hasBeenCalledTimes(6));
-  }
-
-  @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithParams_returnsTrueForLastAndFalseElse() {
-    // Arrange
-    List<Object> first = new List<Object>{ new Opportunity() };
-    List<Object> last = new List<Object>{ new Account() };
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.call(first);
-    sut.call(last);
-
-    // Act && Assert
-    Assert.isFalse(sut.hasBeenLastCalledWith(Params.of(new Opportunity())));
-    Assert.isTrue(sut.hasBeenLastCalledWith(Params.of(new Account())));
-  }
-
-  @IsTest
-  static void givenSpyCalledLastWithoutParams_hasBeenLastCalledWithoutArgs_returnsMatches() {
-    // Arrange
-    List<Object> param = new List<Object>();
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenLastCalledWith());
-    sut.call(param);
-    Assert.isTrue(sut.hasBeenLastCalledWith());
-  }
-
-  @IsTest
-  static void givenSpyCalledLastWithoutParams_hasBeenLastCalledWithEmptyArgs_returnsMatches() {
-    // Arrange
-    List<Object> param = new List<Object>();
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenLastCalledWith(Params.empty()));
-    sut.call(param);
-    Assert.isTrue(sut.hasBeenLastCalledWith(Params.empty()));
-  }
-
-  @IsTest
-  static void givenSpyCalledLastWithParams_hasBeenLastCalledWithMatchers_returnsMatches() {
-    // Arrange
-    Object param = new Account();
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenLastCalledWith(Params.of(Matcher.any())));
-    sut.call(new List<Object>{ param });
-    Assert.isTrue(sut.hasBeenLastCalledWith(Params.of(Matcher.any())));
-  }
-
-  @IsTest
-  static void givenSpyCalledMultipleTimes_hasBeenCalledWith_returnsTrueForCalledParamsElseFalse() {
-    // Arrange
-    List<Object> first = new List<Object>{ new Opportunity() };
-    List<Object> last = new List<Object>{ new Account() };
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.call(first);
-    sut.call(last);
-
-    // Act && Assert
-
-    Assert.isTrue(sut.hasBeenCalledWith(Params.of(new Opportunity())));
-    Assert.isTrue(sut.hasBeenCalledWith(Params.of(new Account())));
-    Assert.isFalse(sut.hasBeenCalledWith(Params.of(new Case())));
-  }
-
-  @IsTest
-  static void givenSpyCalledWithoutParams_hasBeenCalledWithoutArgs_returnsMatches() {
-    // Arrange
-    List<Object> param = new List<Object>();
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenCalledWith());
-    sut.call(param);
-    Assert.isTrue(sut.hasBeenCalledWith());
-  }
-
-  @IsTest
-  static void givenSpyCalledWithoutParams_hasBeenCalledEmptyArgs_returnsMatches() {
-    // Arrange
-    List<Object> param = new List<Object>();
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenCalledWith(Params.empty()));
-    sut.call(param);
-    Assert.isTrue(sut.hasBeenCalledWith(Params.empty()));
-  }
-
-  @IsTest
-  static void givenSpyCalledWithParams_hasBeenCalledWithMatcher_returnsMatches() {
-    // Arrange
-    Object param = new Account(Name = 'test');
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenCalledWith(Params.of(Matcher.any())));
-    sut.call(new List<Object>{ param });
-    Assert.isTrue(sut.hasBeenCalledWith(Params.of(Matcher.any())));
-  }
-
-  @IsTest
-  static void givenSpyCalledWithParam_hasBeenCalledWithJSONMatcher() {
-    // Arrange
-    Object param = new Account(Name = 'test');
-    MethodSpy sut = new MethodSpy('methodName');
-
-    // Act & Assert
-    Assert.isFalse(sut.hasBeenCalledWith(Params.of(Matcher.jsonEquals(param))));
-    sut.call(new List<Object>{ param });
-    Assert.isTrue(sut.hasBeenCalledWith(Params.of(Matcher.jsonEquals(param))));
-  }
-
-  @IsTest
-  static void givenSpyCalledWithCustomApex_hasBeenCalledWithReturnsTrue() {
+  static void givenSpyConfiguredWithCustomApex_whenCalledWith_returnsConfiguredValue() {
     // Arrange
     CustomApex param = new CustomApex('test');
     MethodSpy sut = new MethodSpy('methodName');
@@ -726,7 +469,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledWithListOf2_hasBeenCalledWithListOf1ReturnsFalse() {
+  static void givenSpyConfiguredWithListOf2_whenCalledWithSomethingElses_throwsConfigurationException() {
     // Arrange
     List<Object> objects = new List<Object>{ new Account(), new Account() };
     MethodSpy sut = new MethodSpy('methodName');
@@ -744,7 +487,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyCalledWithCustomApexWithEquals_hasBeenCalledWithReturnsTrue() {
+  static void givenSpyConfiguredWithCustomApexWithEquals_whenCalledWith_returnsConfiguredValue() {
     // Arrange
     CustomApexWithEquals param = new CustomApexWithEquals('test');
     MethodSpy sut = new MethodSpy('methodName');
