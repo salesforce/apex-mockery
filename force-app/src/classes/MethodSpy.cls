@@ -17,7 +17,7 @@
 @IsTest
 public class MethodSpy {
   public String methodName { get; private set; }
-  private CallLog callLog;
+  public CallLog callLog { get; private set; }
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
   private Boolean configuredGlobalReturn = false;
@@ -27,48 +27,6 @@ public class MethodSpy {
   public MethodSpy(String methodName) {
     this.methodName = methodName;
     this.callLog = new CallLog();
-  }
-
-  public Boolean hasBeenCalled() {
-    return !this.callLog.isEmpty();
-  }
-
-  public Boolean hasBeenCalledWith() {
-    return this.hasBeenCalledWith(Params.empty());
-  }
-
-  public Boolean hasBeenCalledWith(final Params params) {
-    if (params == null) {
-      throw new Matcher.MatcherException('Params cannot be null');
-    }
-    final Iterator<MethodCall> it = this.callLog.iterator();
-    while (it.hasNext()) {
-      if (params.matches(it.next().params)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public Boolean hasBeenLastCalledWith() {
-    return this.hasBeenLastCalledWith(Params.empty());
-  }
-
-  public Boolean hasBeenLastCalledWith(final Params params) {
-    if (params == null) {
-      throw new Matcher.MatcherException('Params cannot be null');
-    }
-    if (this.callLog.isEmpty()) {
-      return false;
-    }
-
-    final List<Object> actualListOfArgs = this.callLog.getLast();
-    return params.matches(actualListOfArgs);
-  }
-
-  public Boolean hasBeenCalledTimes(final Integer count) {
-    return this.callLog.size() == count;
   }
 
   public Object call(List<Object> params) {
@@ -143,20 +101,10 @@ public class MethodSpy {
     return parameterizedMethodCall;
   }
 
-  public List<Params> getCallLogParams() {
-    final List<Params> reversedCallsTrace = new List<Params>();
-    final List<MethodCall> calls = this.callLog.callParams;
-    for (Integer i = calls.size() - 1; i >= 0; i--) {
-      final MethodCall call = calls[i];
-      reversedCallsTrace.add(Params.ofList(call.params));
-    }
-    return reversedCallsTrace;
-  }
-
-  private class CallLog implements Iterable<MethodCall> {
+  public class CallLog {
     private List<MethodCall> callParams = new List<MethodCall>();
 
-    public void add(MethodCall callParam) {
+    private void add(MethodCall callParam) {
       this.callParams.add(callParam);
     }
 
@@ -173,11 +121,7 @@ public class MethodSpy {
     }
 
     public List<Object> getLast() {
-      return this.get(this.size() - 1);
-    }
-
-    public Iterator<MethodCall> iterator() {
-      return this.callParams.iterator();
+      return this.size() > 0 ? this.get(this.size() - 1) : null;
     }
   }
 
