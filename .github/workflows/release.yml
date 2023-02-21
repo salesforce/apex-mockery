@@ -24,7 +24,7 @@ jobs:
 
       - name: Install sfdx and connect to DevHub
         run: |
-          npm install --global sfdx-cli
+          npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
           sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
           sfdx config:set defaultdevhubusername=hub --global
