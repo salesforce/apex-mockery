@@ -51,7 +51,15 @@ jobs:
       - name: Update release with package Id
         uses: irongut/EditRelease@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           id: ${{ github.event.release.id }}
           body: ${{ env.links }}
           replacebody: false
+
+      - name: Communicate release information
+        uses: apexskier/github-release-commenter@v1
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          comment-template: |
+            Shipped in [release `{release_tag}`]({release_link}).
+            ${{ env.links }}
