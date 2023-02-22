@@ -24,7 +24,7 @@ jobs:
 
       - name: Install sfdx and connect to DevHub
         run: |
-          npm install --global sfdx-cli
+          npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
           sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
           sfdx config:set defaultdevhubusername=hub --global
@@ -54,7 +54,15 @@ jobs:
       - name: Update release with package Id
         uses: irongut/EditRelease@v1.2.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           id: ${{ github.event.release.id }}
           body: ${{ env.links }}
           replacebody: false
+
+      - name: Communicate release information
+        uses: apexskier/github-release-commenter@v1
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          comment-template: |
+            Shipped in [release `{release_tag}`]({release_link}).
+            ${{ env.links }}
