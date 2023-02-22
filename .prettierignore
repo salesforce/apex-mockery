@@ -4,7 +4,10 @@
 
 **/staticresources/**
 .localdevserver
+.sf
 .sfdx
 .vscode
 .github
-coverage/
+coverage
+tests
+CHANGELOG.md

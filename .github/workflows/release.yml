@@ -43,10 +43,10 @@ jobs:
         run: |
           packageId=${{ needs.create-package-version.outputs.packageId }}
           links=$(cat << EOF
-          Unlock package installation:
+          ### Unlocked Package installation
           - Production [link](https://login.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
           - Sandbox [link](https://test.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
-          - sfdx command: `sfdx force:package:install --package $packageId`
+          - sfdx command: \`sfdx force:package:install --package $packageId\`
           EOF
           )
           echo "links=$links" >> $GITHUB_ENV
