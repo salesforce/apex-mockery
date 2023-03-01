@@ -5,8 +5,8 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @IsTest
-public class Assertions {
-  public interface MethodSpyAssertions {
+global class Assertions {
+  global interface MethodSpyAssertions {
     /**
      * Assert that a method spy has never been called
      */
@@ -51,11 +51,11 @@ public class Assertions {
     void hasBeenLastCalledWith(final Object param1, final Object param2, final Object param3, final Object param4, final Object param5);
   }
 
-  public interface ErrorMessage {
+  global interface ErrorMessage {
     String toString();
   }
 
-  public interface Asserter {
+  global interface Asserter {
     void isTrue(Boolean value, ErrorMessage message);
     void isFalse(Boolean value, ErrorMessage message);
   }
@@ -66,7 +66,7 @@ public class Assertions {
    * @param spy the MethodSpy to assert
    * @see       MethodSpy
    */
-  public static MethodSpyAssertions assertThat(MethodSpy spy) {
+  global static MethodSpyAssertions assertThat(MethodSpy spy) {
     return assertThat(spy, METHOD_SPY_ASSERTER);
   }
 
@@ -262,7 +262,7 @@ public class Assertions {
       return rows;
     }
 
-    override public String toString() {
+    override global String toString() {
       final String headline = this.buildHeadline(spy, error, argument);
       final List<ErrorMessageRow> callTraces = this.buildCallTraces(spy);
 
