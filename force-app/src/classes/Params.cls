@@ -23,7 +23,7 @@ global class Params {
     }
   }
 
-  global boolean matches(final List<Object> callArguments) {
+  public boolean matches(final List<Object> callArguments) {
     if (this.listOfArgs.size() != callArguments?.size()) {
       return false;
     }

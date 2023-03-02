@@ -262,7 +262,7 @@ global class Assertions {
       return rows;
     }
 
-    override global String toString() {
+    override public String toString() {
       final String headline = this.buildHeadline(spy, error, argument);
       final List<ErrorMessageRow> callTraces = this.buildCallTraces(spy);
 
