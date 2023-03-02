@@ -29,7 +29,7 @@ global class MethodSpy {
     this.callLog = new CallLog();
   }
 
-  global Object call(List<Object> params) {
+  public Object call(List<Object> params) {
     this.callLog.add(new MethodCall(params));
 
     if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
@@ -101,26 +101,26 @@ global class MethodSpy {
     return parameterizedMethodCall;
   }
 
-  global class CallLog {
+  public class CallLog {
     private List<MethodCall> callParams = new List<MethodCall>();
 
     private void add(MethodCall callParam) {
       this.callParams.add(callParam);
     }
 
-    global Boolean isEmpty() {
+    public Boolean isEmpty() {
       return this.callParams.isEmpty();
     }
 
-    global Integer size() {
+    public Integer size() {
       return this.callParams.size();
     }
 
-    global List<Object> get(final Integer index) {
+    public List<Object> get(final Integer index) {
       return this.callParams[index].params;
     }
 
-    global List<Object> getLast() {
+    public List<Object> getLast() {
       return this.size() > 0 ? this.get(this.size() - 1) : null;
     }
   }
