@@ -11,9 +11,16 @@ jobs:
       branch: main
     secrets: inherit
 
+  validate-package-version:
+    uses: ./.github/workflows/validate-package-version.yml
+    needs: create-package-version
+    with:
+      packageId: ${{ needs.create-package-version.outputs.packageId }}
+    secrets: inherit
+
   promote-package-version:
     runs-on: ubuntu-latest
-    needs: create-package-version
+    needs: [create-package-version, validate-package-version]
     steps:
       - name: Set environment variables
         run: |
