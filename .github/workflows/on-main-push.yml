@@ -18,8 +18,15 @@ jobs:
       branch: main
     secrets: inherit
 
-  prepare-release:
+  validate-package-version:
+    uses: ./.github/workflows/validate-package-version.yml
     needs: create-package-version
+    with:
+      packageId: ${{ needs.create-package-version.outputs.packageId }}
+    secrets: inherit
+
+  prepare-release:
+    needs: validate-package-version
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v3

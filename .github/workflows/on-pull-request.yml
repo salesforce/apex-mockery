@@ -66,6 +66,13 @@ jobs:
       branch: pull-request
     secrets: inherit
 
+  validate-package-version:
+    uses: ./.github/workflows/validate-package-version.yml
+    needs: create-package-version
+    with:
+      packageId: ${{ needs.create-package-version.outputs.packageId }}
+    secrets: inherit
+
   commit-lint:
     runs-on: ubuntu-latest
     steps:
