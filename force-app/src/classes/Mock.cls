@@ -13,6 +13,7 @@ global class Mock implements System.StubProvider {
     this.stub = Test.createStub(aType, this);
   }
 
+  @SuppressWarnings('PMD.EmptyStatementBlock')
   global Mock() {
   }
 
