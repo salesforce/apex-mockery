@@ -5,6 +5,7 @@
       "default": true,
       "package": "Apex Mockery",
       "versionNumber": "1.0.0.NEXT",
+      "versionName": "v1.0.0",
       "postInstallUrl": "https://github.com/salesforce/apex-mockery#installation",
       "releaseNotesUrl": "https://github.com/salesforce/apex-mockery/releases"
     },
