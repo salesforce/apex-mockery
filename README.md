@@ -65,9 +65,9 @@ Deploy via the deploy button
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
-Or copy `force-app/src/classes` test classes in your sfdx project to deploy it with your favourite deployment methods
+Or copy `force-app/src/classes` apex classes in your sfdx project to deploy it with your favourite deployment methods
 
-Or you can deploy the library using our unlocked package from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
+Or you can install the library using our unlocked package from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest) and then deploy `force-app/recipes/classes/utils/MockFactory.cls` class or copy the `forType` method inside your own test utils class.
 
 ## Usage
 
@@ -78,6 +78,13 @@ It returns a Mock instance containing the stub and all the mechanism to spy/conf
 
 ```java
 Mock myMock = Mock.forType(MyType.class);
+```
+
+Use the `MockFactory.forType` and `mockery` namespace when using the unlocked package package.
+Types to stub must call `Test.createStubs` from the [same namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace>)
+
+```java
+mockery.Mock myMock = MockFactory.forType(MyType.class);
 ```
 
 ### Stub
@@ -295,6 +302,8 @@ Matcher.equals(10);
 ```java
 Matcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
 ```
+
+Custom types must add the `@JsonAccess` [annotation](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_JsonAccess.htm) with `serializable='always' to the class when using the unlocked package version.
 
 #### ofType
 
