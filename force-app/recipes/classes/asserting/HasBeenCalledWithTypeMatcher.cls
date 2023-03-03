@@ -9,7 +9,7 @@ private class HasBeenCalledWithTypeMatcher {
   @isTest
   static void recipe() {
     // Arrange
-    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.Mock deliveryServiceMock = MockFactory.forType(DeliveryService.class);
     mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 

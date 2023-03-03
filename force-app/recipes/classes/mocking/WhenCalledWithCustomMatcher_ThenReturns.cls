@@ -9,7 +9,7 @@ private class WhenCalledWithCustomMatcher_ThenReturns {
   @isTest
   static void recipe() {
     // Arrange
-    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.Mock deliveryServiceMock = MockFactory.forType(DeliveryService.class);
     mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(new OperaPastryMatcher()).thenReturn(Date.today().addDays(3));
