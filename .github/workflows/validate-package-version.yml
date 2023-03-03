@@ -1,9 +1,14 @@
-name: build
+name: validate package version
 on:
   workflow_call:
+    inputs:
+      packageId:
+        required: true
+        description: 04t package version id to validate
+        type: string
 
 jobs:
-  build:
+  validate-package-version:
     runs-on: ubuntu-latest
     steps:
       - name: Set environment variables
@@ -11,6 +16,7 @@ jobs:
           echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
           echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
           echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
+          echo "SFDX_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
 
       - name: Install sfdx and connect to DevHub
         run: |
@@ -25,11 +31,14 @@ jobs:
       - name: Create scratch org
         run: sfdx force:org:create --nonamespace --definitionfile config/project-scratch-def.json --setalias scratch-org --setdefaultusername --durationdays 1
 
-      - name: Push source to scratch org
-        run: sfdx force:source:push
+      - name: Check package installation
+        run: sfdx force:package:install --package ${{ inputs.packageId }} --wait 10
 
-      - name: Run Apex tests
-        run: npm run test
+      - name: Deploy namespaced recipes
+        run: sfdx force:source:deploy --sourcepath force-app/recipes
+
+      - name: Execute tests
+        run: sfdx force:apex:test:run --resultformat human --outputdir ./tests/apex --testlevel RunLocalTests --wait 20
 
       - name: Delete scratch org
         if: always()

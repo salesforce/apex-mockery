@@ -39,13 +39,3 @@ jobs:
           packageId=$(sfdx force:package:version:create --definitionfile config/project-scratch-def.json --package "Apex Mockery" --branch "${{ inputs.branch }}" --tag ${{ github.sha }} --wait 120 --codecoverage --skipancestorcheck --installationkeybypass --json | jq -e -r ".result.SubscriberPackageVersionId")
           echo "packageId=$packageId" >> $GITHUB_ENV
           echo "packageId=$packageId" >> $GITHUB_OUTPUT
-
-      - name: Create scratch org
-        run: sfdx force:org:create --nonamespace --definitionfile config/project-scratch-def.json --setalias scratch-org --setdefaultusername --durationdays 1
-
-      - name: Check package installation
-        run: sfdx force:package:install --package ${{ env.packageId }} --wait 10
-
-      - name: Delete scratch org
-        if: always()
-        run: sfdx force:org:delete --noprompt
