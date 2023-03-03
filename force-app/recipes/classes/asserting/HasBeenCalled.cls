@@ -9,14 +9,14 @@ private class HasBeenCalled {
   @isTest
   static void recipe() {
     // Arrange
-    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
     myBakery.order(new Pastry('Chocolatine'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenCalled();
+    mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalled();
   }
 }

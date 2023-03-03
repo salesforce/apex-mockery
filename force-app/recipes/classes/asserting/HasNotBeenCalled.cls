@@ -9,12 +9,12 @@ private class HasNotBeenCalled {
   @isTest
   static void recipe() {
     // Arrange
-    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
 
     // Act
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasNotBeenCalled();
+    mockery.Assertions.assertThat(planDeliverySpy).hasNotBeenCalled();
   }
 }
