@@ -26,14 +26,14 @@ jobs:
         run: |
           npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
-          sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
+          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth --setdefaultdevhubusername --setalias
           sfdx config:set defaultdevhubusername=hub --global
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Promote latest main package version
-        run: sfdx force:package:version:promote -n -p ${{ needs.create-package-version.outputs.packageId }}
+        run: sfdx force:package:version:promote --noprompt --package ${{ needs.create-package-version.outputs.packageId }}
 
   update-release:
     runs-on: ubuntu-latest

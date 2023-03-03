@@ -27,7 +27,7 @@ jobs:
         run: |
           npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
-          sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
+          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth --setdefaultdevhubusername --setalias hub
           sfdx config:set defaultdevhubusername=hub --global
 
       - name: Checkout
@@ -41,11 +41,11 @@ jobs:
           echo "packageId=$packageId" >> $GITHUB_OUTPUT
 
       - name: Create scratch org
-        run: sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1
+        run: sfdx force:org:create --nonamespace --definitionfile config/project-scratch-def.json --setalias scratch-org --setdefaultusername --durationdays 1
 
       - name: Check package installation
-        run: sfdx force:package:install -p ${{ env.packageId }} -u scratch-org -w 10
+        run: sfdx force:package:install --package ${{ env.packageId }} --wait 10
 
       - name: Delete scratch org
         if: always()
-        run: sfdx force:org:delete -p -u scratch-org
+        run: sfdx force:org:delete --noprompt
