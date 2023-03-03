@@ -9,11 +9,11 @@ private class WhenCalledWith_ThenThrow {
   @isTest
   static void recipe() {
     // Arrange
-    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(new Pastry('Opera')).thenThrow(new RecipeException());
+    planDeliverySpy.whenCalledWith(mockery.Params.of(new Pastry('Opera'))).thenThrow(new RecipeException());
 
     // Act
     try {

@@ -9,10 +9,10 @@ private class WhenCalledWithTypeMatching_ThenReturn {
   @isTest
   static void recipe() {
     // Arrange
-    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(Matcher.ofType(Pastry.class)).thenReturn(Date.today().addDays(4)); // Order matter
+    planDeliverySpy.whenCalledWith(mockery.Matcher.ofType(Pastry.class)).thenReturn(Date.today().addDays(4)); // Order matter
     planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
     planDeliverySpy.whenCalledWith(new Pastry('Opera')).thenReturn(Date.today().addDays(2));
 

@@ -9,8 +9,8 @@ private class WhenCalledWithoutMatchingConfiguration {
   @isTest
   static void recipe() {
     // Arrange
-    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
     planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenReturn(Date.today().addDays(2));
@@ -22,7 +22,7 @@ private class WhenCalledWithoutMatchingConfiguration {
       // Assert
       Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
+      Assert.isInstanceOfType(ex, mockery.MethodSpy.ConfigurationException.class);
     }
   }
 }

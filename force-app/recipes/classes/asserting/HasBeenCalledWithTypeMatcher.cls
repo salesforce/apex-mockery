@@ -9,8 +9,8 @@ private class HasBeenCalledWithTypeMatcher {
   @isTest
   static void recipe() {
     // Arrange
-    Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
-    MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
+    mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class);
+    mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
@@ -18,7 +18,7 @@ private class HasBeenCalledWithTypeMatcher {
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Matcher.ofType(Pastry.class));
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
+    mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(mockery.Matcher.ofType(Pastry.class));
+    mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
   }
 }
