@@ -12,10 +12,6 @@
     {
       "path": "force-app/test",
       "default": false
-    },
-    {
-      "path": "force-app/recipes",
-      "default": false
     }
   ],
   "name": "apex-mockery",
