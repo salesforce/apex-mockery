@@ -6,11 +6,14 @@
  */
 @isTest
 global class Mock implements System.StubProvider {
-  global Object stub { get; private set; }
+  global Object stub { get; set; }
   private Map<String, MethodSpy> spies = new Map<String, MethodSpy>();
 
   private Mock(final Type aType) {
     this.stub = Test.createStub(aType, this);
+  }
+
+  global Mock() {
   }
 
   global Object handleMethodCall(
