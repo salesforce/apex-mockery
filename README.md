@@ -15,6 +15,7 @@ We want its usage to be simple, its maintainability to be easy and to provide th
 - [Principles](#principles)
   - [Why you should use the library](#why-you-should-use-the-library)
 - [Installation](#installation)
+  - [Org with namespace /!\\](#org-with-namespace-)
 - [Usage](#usage)
   - [Mock](#mock)
   - [Stub](#stub)
@@ -65,9 +66,19 @@ Deploy via the deploy button
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
-Or copy `force-app/src/classes` test classes in your sfdx project to deploy it with your favourite deployment methods
+Or copy `force-app/src/classes` apex classes in your sfdx project to deploy it with your favourite deployment methods
 
-Or you can deploy the library using our unlocked package from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
+Or you can install the library using our unlocked package without namespace from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
+
+### Org with namespace /!\
+
+We cannot ship the lib via "unlocked package with namespace" because `Test.createStub()` call [cannot cross namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace.>).
+And unlocked package without namespace are not installable inside a namespaced org ([doc](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_unlocked_pkg_namespace_collisions.htm#:~:text=Fail.,with%20a%20namespace.)).
+
+In this case you have two choices:
+
+- Install from sources (with or without manually prefixing classes)
+- Create your own unlocked package with your namespace containing the sources
 
 ## Usage
 
