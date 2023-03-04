@@ -80,8 +80,10 @@ It returns a Mock instance containing the stub and all the mechanism to spy/conf
 Mock myMock = Mock.forType(MyType.class);
 ```
 
-Use the `MockFactory.forType` and `mockery` namespace when using the unlocked package package.
-Types to stub must call `Test.createStubs` from the [same namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace>)
+Use the `MockFactory.forType` when using the lib from the unlocked package with namespaced code.
+To create `Mock`, put the `MockFactory` in the same namespace of the type you want to stub.
+If the code to stub is not namespaced then put the `MockFactory` code outside a namespace. Then use the lib.
+_Custom types to stub must call `Test.createStubs` from the [same namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace>)_
 
 ```java
 mockery.Mock myMock = MockFactory.forType(MyType.class);
