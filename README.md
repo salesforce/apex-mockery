@@ -91,6 +91,14 @@ It returns a Mock instance containing the stub and all the mechanism to spy/conf
 Mock myMock = Mock.forType(MyType.class);
 ```
 
+Use the `MockFactory.forType` when using the lib from the unlocked package with namespaced code.
+Put the MockFactory inside the namespace where you need to stub types and then call the MockFactory from that namespace to create `Mock`. Then use the lib.
+_Custom types to stub must call `Test.createStubs` from the [same namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace>)_
+
+```java
+Mock myMock = myNamespace.MockFactory.forType(myNamespace.MyType.class);
+```
+
 ### Stub
 
 Use the `stub` attribut to access the stub,
@@ -306,6 +314,8 @@ Matcher.equals(10);
 ```java
 Matcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
 ```
+
+Namespaced custom types must add the `@JsonAccess` [annotation](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_JsonAccess.htm) with `serializable='always' to the class when using the unlocked package version.
 
 #### ofType
 

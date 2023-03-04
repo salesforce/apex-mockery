@@ -6,11 +6,15 @@
  */
 @isTest
 public class Mock implements System.StubProvider {
-  public Object stub { get; private set; }
+  public Object stub { get; set; }
   private Map<String, MethodSpy> spies = new Map<String, MethodSpy>();
 
   private Mock(final Type aType) {
     this.stub = Test.createStub(aType, this);
+  }
+
+  @SuppressWarnings('PMD.EmptyStatementBlock')
+  public Mock() {
   }
 
   public Object handleMethodCall(
