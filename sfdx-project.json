@@ -10,14 +10,22 @@
       "releaseNotesUrl": "https://github.com/salesforce/apex-mockery/releases"
     },
     {
-      "path": "force-app/test",
+      "path": "force-app/test/package",
+      "default": false
+    },
+    {
+      "path": "force-app/src",
+      "package": "Apex Mockery NS Test",
+      "versionNumber": "1.0.0.NEXT",
       "default": false
     }
   ],
   "name": "apex-mockery",
+  "namespace": "mockery",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "56.0",
   "packageAliases": {
-    "Apex Mockery": "0HoDn000000kA5aKAE"
+    "Apex Mockery": "0HoDn000000kA5aKAE",
+    "Apex Mockery NS Test": "0HoDn000000kA6JKAU"
   }
 }

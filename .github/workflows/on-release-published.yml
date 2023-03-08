@@ -5,10 +5,25 @@ on:
     types: [published]
 
 jobs:
+  create-namespaced-package-version:
+    uses: ./.github/workflows/create-package-version.yml
+    with:
+      branch: release
+      packageAlias: Apex Mockery NS Test
+    secrets: inherit
+
+  validate-namespace-compatibility:
+    uses: ./.github/workflows/validate-namespace-compatibility.yml
+    needs: create-namespaced-package-version
+    with:
+      packageId: ${{ needs.create-namespaced-package-version.outputs.packageId }}
+    secrets: inherit
+
   create-package-version:
     uses: ./.github/workflows/create-package-version.yml
     with:
-      branch: main
+      branch: release
+      packageAlias: Apex Mockery
     secrets: inherit
 
   validate-package-version:
@@ -20,7 +35,7 @@ jobs:
 
   promote-package-version:
     runs-on: ubuntu-latest
-    needs: [create-package-version, validate-package-version]
+    needs: [create-package-version, validate-package-version, validate-namespace-compatibility]
     steps:
       - name: Set environment variables
         run: |
