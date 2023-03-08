@@ -34,7 +34,7 @@ jobs:
       - name: Check package installation
         run: sfdx force:package:install --package ${{ inputs.packageId }} --wait 10
 
-      - name: Deploy namespaced recipes
+      - name: Deploy recipes
         run: sfdx force:source:deploy --sourcepath force-app/recipes
 
       - name: Execute tests
