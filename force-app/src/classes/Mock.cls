@@ -9,12 +9,8 @@ public class Mock implements System.StubProvider {
   public Object stub { get; set; }
   private Map<String, MethodSpy> spies = new Map<String, MethodSpy>();
 
-  private Mock(final Type aType) {
-    this.stub = Test.createStub(aType, this);
-  }
-
-  @SuppressWarnings('PMD.EmptyStatementBlock')
-  public Mock() {
+  private Mock(final Type aType, final StubBuilder stubBuilder) {
+    this.stub = stubBuilder.build(aType, this);
   }
 
   public Object handleMethodCall(
@@ -46,6 +42,20 @@ public class Mock implements System.StubProvider {
   }
 
   public static Mock forType(final Type aType) {
-    return new Mock(aType);
+    return Mock.forType(aType, new DefaultStubBuilder());
+  }
+
+  public static Mock forType(final Type aType, final StubBuilder stubBuilder) {
+    return new Mock(aType, stubBuilder);
+  }
+
+  public interface StubBuilder {
+    Object build(final Type aType, System.StubProvider stubProvider);
+  }
+
+  private class DefaultStubBuilder implements StubBuilder {
+    public Object build(final Type aType, System.StubProvider stubProvider) {
+      return Test.createStub(aType, stubProvider);
+    }
   }
 }
