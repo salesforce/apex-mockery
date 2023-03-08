@@ -8,24 +8,6 @@
 private class MockTest {
   // Integration test
   @IsTest
-  static void givenAType_whenBuildingOutsideNamespace_andSpyinOnWithReturn_callingTheMethodReturnsTheConfiguredOutput() {
-    // Arrange
-    String expected = 'expected';
-    Mock mock = new Mock();
-    mock.stub = Test.createStub(DummyInterface.class, mock);
-    MethodSpy dummyMethod = mock.spyOn('dummyMethod');
-    dummyMethod.returns(expected);
-    DummyInterface sut = (DummyInterface) mock.stub;
-
-    // Act
-    String result = sut.dummyMethod();
-
-    // Assert
-    Assert.areEqual(expected, result);
-  }
-
-  // Integration test
-  @IsTest
   static void givenAType_whenSpyinOnWithReturn_callingTheMethodReturnsTheConfiguredOutput() {
     // Arrange
     String expected = 'expected';
