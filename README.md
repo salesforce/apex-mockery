@@ -15,9 +15,10 @@ We want its usage to be simple, its maintainability to be easy and to provide th
 - [Principles](#principles)
   - [Why you should use the library](#why-you-should-use-the-library)
 - [Installation](#installation)
-  - [Org with namespace /!\\](#org-with-namespace-)
+  - [Namespaced Org /!\\](#namespaced-org-)
 - [Usage](#usage)
   - [Mock](#mock)
+    - [How to stub namespaced type?](#how-to-stub-namespaced-type)
   - [Stub](#stub)
   - [Spy](#spy)
     - [How to Configure a spy](#how-to-configure-a-spy)
@@ -70,15 +71,16 @@ Or copy `force-app/src/classes` apex classes in your sfdx project to deploy it w
 
 Or you can install the library using our unlocked package without namespace from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
 
-### Org with namespace /!\
+### Namespaced Org /!\
 
-We cannot ship the lib via "unlocked package with namespace" because `Test.createStub()` call [cannot cross namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace.>).
-And unlocked package without namespace are not installable inside a namespaced org ([doc](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_unlocked_pkg_namespace_collisions.htm#:~:text=Fail.,with%20a%20namespace.)).
+It's not possible to install a non namespaced unlocked package into a namespaced org. ([doc](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_unlocked_pkg_namespace_collisions.htm#:~:text=You%20can%E2%80%99t%20install%20a%20no%2Dnamespace%20unlocked%20package%20in%20an%20org%20with%20a%20namespace.))
 
-In this case you have two choices:
+In this case you have those choices:
 
 - Install from sources (with or without manually prefixing classes)
-- Create your own unlocked package with your namespace containing the sources
+- Create your own unlocked/2GP package with your namespace containing the sources
+
+It's not recommended for a 2GP package to depends on an unlocked package, namespaced or not (ISV scenario). ([doc](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_dependency_overview.htm#:~:text=Can%20a%20managed%202GP%20package%20depend%20on%20an,on%20a%20managed%201GP%20or%20managed%202GP%20package.))
 
 ## Usage
 
@@ -91,12 +93,13 @@ It returns a Mock instance containing the stub and all the mechanism to spy/conf
 Mock myMock = Mock.forType(MyType.class);
 ```
 
-Use the `MockFactory.forType` when using the lib from the unlocked package with namespaced code.
-Put the MockFactory inside the namespace where you need to stub types and then call the MockFactory from that namespace to create `Mock`. Then use the lib.
-_Custom types to stub must call `Test.createStubs` from the [same namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace>)_
+#### How to stub namespaced type?
+
+Because `Test.createStub()` call [cannot cross namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace.>), we provide a `StubBuilder` interface to stub type from your namespace.
+Create a `StubBuilder` implementation in your namespace (it must be the same implementation as the `Mock.DefaultStubBuilder` implementation but has to be in your namespace to build type from your namespace).
 
 ```java
-Mock myMock = myNamespace.MockFactory.forType(myNamespace.MyType.class);
+Mock myMock = Mock.forType(MyType.class, new MyNamespace.MyStubBuilder());
 ```
 
 ### Stub
