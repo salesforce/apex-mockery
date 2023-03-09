@@ -15,8 +15,10 @@ We want its usage to be simple, its maintainability to be easy and to provide th
 - [Principles](#principles)
   - [Why you should use the library](#why-you-should-use-the-library)
 - [Installation](#installation)
+  - [Namespaced Org /!\\](#namespaced-org-)
 - [Usage](#usage)
   - [Mock](#mock)
+    - [How to stub namespaced type?](#how-to-stub-namespaced-type)
   - [Stub](#stub)
   - [Spy](#spy)
     - [How to Configure a spy](#how-to-configure-a-spy)
@@ -65,9 +67,20 @@ Deploy via the deploy button
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
-Or copy `force-app/src/classes` test classes in your sfdx project to deploy it with your favourite deployment methods
+Or copy `force-app/src/classes` apex classes in your sfdx project to deploy it with your favourite deployment methods
 
-Or you can deploy the library using our unlocked package from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
+Or you can install the library using our unlocked package without namespace from the [latest release](https://github.com/salesforce/apex-mockery/releases/latest)
+
+### Namespaced Org /!\
+
+It's [not possible](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_unlocked_pkg_namespace_collisions.htm#:~:text=You%20can%E2%80%99t%20install%20a%20no%2Dnamespace%20unlocked%20package%20in%20an%20org%20with%20a%20namespace.) to install a non namespaced unlocked package into a namespaced org.
+
+In this case you have those choices:
+
+- Install from sources (with or without manually prefixing classes)
+- Create your own unlocked/2GP package with your namespace containing the sources
+
+It's [not recommended](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_dependency_overview.htm#:~:text=Can%20a%20managed%202GP%20package%20depend%20on%20an,on%20a%20managed%201GP%20or%20managed%202GP%20package.) for a 2GP package to depends on an unlocked package, namespaced or not (ISV scenario).
 
 ## Usage
 
@@ -78,6 +91,15 @@ It returns a Mock instance containing the stub and all the mechanism to spy/conf
 
 ```java
 Mock myMock = Mock.forType(MyType.class);
+```
+
+#### How to stub namespaced type?
+
+Because `Test.createStub()` call [cannot cross namespace](<https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm#:~:text=The%20object%20being%20mocked%20must%20be%20in%20the%20same%20namespace%20as%20the%20call%20to%20the%20Test.createStub()%20method.%20However%2C%20the%20implementation%20of%20the%20StubProvider%20interface%20can%20be%20in%20another%20namespace.>), we provide a `StubBuilder` interface to stub type from your namespace.
+Create a `StubBuilder` implementation in your namespace (it must be the same implementation as the `Mock.DefaultStubBuilder` implementation but has to be in your namespace to build type from your namespace).
+
+```java
+Mock myMock = Mock.forType(MyType.class, new MyNamespace.MyStubBuilder());
 ```
 
 ### Stub
@@ -295,6 +317,8 @@ Matcher.equals(10);
 ```java
 Matcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
 ```
+
+Namespaced custom types must add the `@JsonAccess` [annotation](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_JsonAccess.htm) with `serializable='always' to the class when using the unlocked package version.
 
 #### ofType
 

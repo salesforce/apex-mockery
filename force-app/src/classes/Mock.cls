@@ -5,15 +5,15 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @isTest
-public class Mock implements System.StubProvider {
-  public Object stub { get; private set; }
+global class Mock implements System.StubProvider {
+  global Object stub { get; set; }
   private Map<String, MethodSpy> spies = new Map<String, MethodSpy>();
 
-  private Mock(final Type aType) {
-    this.stub = Test.createStub(aType, this);
+  private Mock(final Type aType, final StubBuilder stubBuilder) {
+    this.stub = stubBuilder.build(aType, this);
   }
 
-  public Object handleMethodCall(
+  global Object handleMethodCall(
     Object stubbedObject,
     String stubbedMethodName,
     Type returnType,
@@ -30,18 +30,32 @@ public class Mock implements System.StubProvider {
     return result;
   }
 
-  public MethodSpy spyOn(final String methodName) {
+  global MethodSpy spyOn(final String methodName) {
     if (!this.spies.containsKey(methodName)) {
       this.spies.put(methodName, new MethodSpy(methodName));
     }
     return this.getSpy(methodName);
   }
 
-  public MethodSpy getSpy(final String methodName) {
+  global MethodSpy getSpy(final String methodName) {
     return this.spies.get(methodName);
   }
 
-  public static Mock forType(final Type aType) {
-    return new Mock(aType);
+  global static Mock forType(final Type aType) {
+    return Mock.forType(aType, new DefaultStubBuilder());
+  }
+
+  global static Mock forType(final Type aType, final StubBuilder stubBuilder) {
+    return new Mock(aType, stubBuilder);
+  }
+
+  global interface StubBuilder {
+    Object build(final Type aType, System.StubProvider stubProvider);
+  }
+
+  private class DefaultStubBuilder implements StubBuilder {
+    public Object build(final Type aType, System.StubProvider stubProvider) {
+      return Test.createStub(aType, stubProvider);
+    }
   }
 }

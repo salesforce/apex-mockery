@@ -15,38 +15,38 @@
  *    - Matcher.ofType(Schema.SObjectType sobjectType)
  */
 @IsTest
-public class Matcher {
-  public interface ArgumentMatcher {
+global class Matcher {
+  global interface ArgumentMatcher {
     Boolean matches(Object callArgument);
   }
 
-  public class MatcherException extends Exception {
+  global class MatcherException extends Exception {
   }
 
   private Matcher() {
   }
 
-  public static ArgumentMatcher any() {
+  global static ArgumentMatcher any() {
     return new AnyMatcher();
   }
 
-  public static ArgumentMatcher equals(final Object callArgument) {
+  global static ArgumentMatcher equals(final Object callArgument) {
     return new EqualsMatcher(callArgument);
   }
 
-  public static ArgumentMatcher jsonEquals(final Object callArgument) {
+  global static ArgumentMatcher jsonEquals(final Object callArgument) {
     return new JSONMatcher(callArgument);
   }
 
-  public static ArgumentMatcher ofType(final String matchingType) {
+  global static ArgumentMatcher ofType(final String matchingType) {
     return new TypeMatcher(matchingType);
   }
 
-  public static ArgumentMatcher ofType(final Schema.SObjectType callArgument) {
+  global static ArgumentMatcher ofType(final Schema.SObjectType callArgument) {
     return new TypeMatcher(callArgument);
   }
 
-  public static ArgumentMatcher ofType(final Type callArgument) {
+  global static ArgumentMatcher ofType(final Type callArgument) {
     return new TypeMatcher(callArgument);
   }
 

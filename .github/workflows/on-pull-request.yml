@@ -59,11 +59,32 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
+  create-namespaced-package-version:
+    uses: ./.github/workflows/create-package-version.yml
+    needs: [integrate, formatting-and-linting]
+    with:
+      packageAlias: Apex Mockery NS Test
+    secrets: inherit
+
+  validate-namespace-compatibility:
+    uses: ./.github/workflows/validate-namespace-compatibility.yml
+    needs: create-namespaced-package-version
+    with:
+      packageId: ${{ needs.create-namespaced-package-version.outputs.packageId }}
+    secrets: inherit
+
   create-package-version:
     uses: ./.github/workflows/create-package-version.yml
     needs: [integrate, formatting-and-linting]
     with:
-      branch: pull-request
+      packageAlias: Apex Mockery
+    secrets: inherit
+
+  validate-package-version:
+    uses: ./.github/workflows/validate-package-version.yml
+    needs: create-package-version
+    with:
+      packageId: ${{ needs.create-package-version.outputs.packageId }}
     secrets: inherit
 
   commit-lint:

@@ -5,15 +5,18 @@
       "default": true,
       "package": "Apex Mockery",
       "versionNumber": "1.0.0.NEXT",
+      "versionName": "v1.0.0",
       "postInstallUrl": "https://github.com/salesforce/apex-mockery#installation",
       "releaseNotesUrl": "https://github.com/salesforce/apex-mockery/releases"
     },
     {
-      "path": "force-app/test",
+      "path": "force-app/test/package",
       "default": false
     },
     {
-      "path": "force-app/recipes",
+      "path": "force-app/src",
+      "package": "Apex Mockery NS Test",
+      "versionNumber": "1.0.0.NEXT",
       "default": false
     }
   ],
@@ -22,6 +25,7 @@
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "56.0",
   "packageAliases": {
-    "Apex Mockery": "0HoDn000000k9rOKAQ"
+    "Apex Mockery": "0HoDn000000kA5aKAE",
+    "Apex Mockery NS Test": "0HoDn000000kA6JKAU"
   }
 }

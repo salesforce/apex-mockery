@@ -1,23 +1,15 @@
-name: create package version
+name: validate package version
 on:
   workflow_call:
     inputs:
-      branch:
-        type: string
-        default: ${{ github.head_ref }}
-      packageAlias:
-        required: true
-        type: string
-    outputs:
       packageId:
-        description: 04t package version id created
-        value: ${{ jobs.create-package-version.outputs.packageId }}
+        required: true
+        description: 04t package version id to validate
+        type: string
 
 jobs:
-  create-package-version:
+  validate-package-version:
     runs-on: ubuntu-latest
-    outputs:
-      packageId: ${{ steps.create.outputs.packageId }}
     steps:
       - name: Set environment variables
         run: |
@@ -36,9 +28,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Create package version
-        id: create
-        run: |
-          packageId=$(sfdx force:package:version:create --definitionfile config/project-scratch-def.json --package "${{ inputs.packageAlias }}" --branch "${{ inputs.branch }}" --tag ${{ github.sha }} --wait 120 --codecoverage --skipancestorcheck --installationkeybypass --json | jq -e -r ".result.SubscriberPackageVersionId")
-          echo "packageId=$packageId" >> $GITHUB_ENV
-          echo "packageId=$packageId" >> $GITHUB_OUTPUT
+      - name: Create scratch org
+        run: sfdx force:org:create --nonamespace --definitionfile config/project-scratch-def.json --setalias scratch-org --setdefaultusername --durationdays 1
+
+      - name: Check package installation
+        run: sfdx force:package:install --package ${{ inputs.packageId }} --wait 10
+
+      - name: Deploy recipes
+        run: sfdx force:source:deploy --sourcepath force-app/recipes
+
+      - name: Execute tests
+        run: sfdx force:apex:test:run --resultformat human --outputdir ./tests/apex --testlevel RunLocalTests --wait 20
+
+      - name: Delete scratch org
+        if: always()
+        run: sfdx force:org:delete --noprompt

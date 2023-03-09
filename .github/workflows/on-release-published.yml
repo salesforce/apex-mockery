@@ -5,15 +5,37 @@ on:
     types: [published]
 
 jobs:
+  create-namespaced-package-version:
+    uses: ./.github/workflows/create-package-version.yml
+    with:
+      branch: release
+      packageAlias: Apex Mockery NS Test
+    secrets: inherit
+
+  validate-namespace-compatibility:
+    uses: ./.github/workflows/validate-namespace-compatibility.yml
+    needs: create-namespaced-package-version
+    with:
+      packageId: ${{ needs.create-namespaced-package-version.outputs.packageId }}
+    secrets: inherit
+
   create-package-version:
     uses: ./.github/workflows/create-package-version.yml
     with:
-      branch: main
+      branch: release
+      packageAlias: Apex Mockery
+    secrets: inherit
+
+  validate-package-version:
+    uses: ./.github/workflows/validate-package-version.yml
+    needs: create-package-version
+    with:
+      packageId: ${{ needs.create-package-version.outputs.packageId }}
     secrets: inherit
 
   promote-package-version:
     runs-on: ubuntu-latest
-    needs: create-package-version
+    needs: [create-package-version, validate-package-version, validate-namespace-compatibility]
     steps:
       - name: Set environment variables
         run: |
@@ -26,14 +48,14 @@ jobs:
         run: |
           npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
-          sfdx force:auth:sfdxurl:store -f sfdx_auth -d -a hub
+          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth --setdefaultdevhubusername --setalias hub
           sfdx config:set defaultdevhubusername=hub --global
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Promote latest main package version
-        run: sfdx force:package:version:promote -n -p ${{ needs.create-package-version.outputs.packageId }}
+        run: sfdx force:package:version:promote --noprompt --package ${{ needs.create-package-version.outputs.packageId }}
 
   update-release:
     runs-on: ubuntu-latest
