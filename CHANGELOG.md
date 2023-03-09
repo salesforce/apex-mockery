@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/salesforce/apex-mockery/compare/v1.0.0...v1.0.1) (2023-03-09)
+
+
+### Bug Fixes
+
+* not usable unlocked package without namespace ([#39](https://github.com/salesforce/apex-mockery/issues/39)) ([41c71df](https://github.com/salesforce/apex-mockery/commit/41c71dffbb61e4fa0a83c04fa740ff1590be890c))
+
 ## 1.0.0 (2023-02-22)
 
 
