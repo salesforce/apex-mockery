@@ -59,7 +59,7 @@ jobs:
 
   update-release:
     runs-on: ubuntu-latest
-    needs: create-package-version
+    needs: [create-package-version, promote-package-version]
     steps:
       - name: Create package links
         run: |
@@ -71,7 +71,9 @@ jobs:
           - sfdx command: \`sfdx force:package:install --package $packageId\`
           EOF
           )
-          echo "links=$links" >> $GITHUB_ENV
+          echo "links<<EOF" >> $GITHUB_ENV
+          echo "$links" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Update release with package Id
         uses: irongut/EditRelease@v1.2.0
