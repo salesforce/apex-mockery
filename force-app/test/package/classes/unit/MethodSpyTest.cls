@@ -19,15 +19,15 @@ private class MethodSpyTest {
       // Assert
       Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
+      Assert.isInstanceOfType(ex, Argument.ConfigurationException.class);
     }
   }
 
   @IsTest
-  static void givenSpyConfiguredWithParams_whenCalledWithMatching_spyIsCalled() {
+  static void givenSpyConfiguredWithArguments_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Params.of('param')).thenReturn('test');
+    sut.whenCalledWith(Arguments.of('param')).thenReturn('test');
 
     // Act
     Object result = sut.call(new List<Object>{ 'param' });
@@ -52,10 +52,10 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredWithEmptyParams_whenCalledWithoutArgument_spyIsCalled() {
+  static void givenSpyConfiguredWithEmptyArguments_whenCalledWithoutArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Params.empty()).thenReturn('test');
+    sut.whenCalledWith(Arguments.empty()).thenReturn('test');
 
     // Act
     Object result = sut.call(new List<Object>());
@@ -66,80 +66,80 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredWith2Params_whenCalledWithMatchingArgument_spyIsCalled() {
+  static void givenSpyConfiguredWith2Arguments_whenCalledWithMatchingArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('2', 'params').thenReturn('test');
+    sut.whenCalledWith('2', 'args').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ '2', 'params' });
+    Object result = sut.call(new List<Object>{ '2', 'args' });
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(new List<Object>{ '2', 'params' }, sut.callLog.getLast());
+    Assert.areEqual(new List<Object>{ '2', 'args' }, sut.callLog.getLast());
   }
 
   @IsTest
-  static void givenSpyConfiguredWith3Params_whenCalledWithMatchingArgument_spyIsCalled() {
+  static void givenSpyConfiguredWith3Arguments_whenCalledWithMatchingArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('3', 'params', 'test').thenReturn('test');
+    sut.whenCalledWith('3', 'args', 'test').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ '3', 'params', 'test' });
+    Object result = sut.call(new List<Object>{ '3', 'args', 'test' });
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(new List<Object>{ '3', 'params', 'test' }, sut.callLog.getLast());
+    Assert.areEqual(new List<Object>{ '3', 'args', 'test' }, sut.callLog.getLast());
   }
 
   @IsTest
-  static void givenSpyConfiguredWith4Params_whenCalledWithMatchingArgument_spyIsCalled() {
+  static void givenSpyConfiguredWith4Arguments_whenCalledWithMatchingArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('test', 'with', '4', 'params').thenReturn('test');
+    sut.whenCalledWith('test', 'with', '4', 'args').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'test', 'with', '4', 'params' });
+    Object result = sut.call(new List<Object>{ 'test', 'with', '4', 'args' });
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(new List<Object>{ 'test', 'with', '4', 'params' }, sut.callLog.getLast());
+    Assert.areEqual(new List<Object>{ 'test', 'with', '4', 'args' }, sut.callLog.getLast());
   }
 
   @IsTest
-  static void givenSpyConfiguredWith5Params_whenCalledWithMatchingArgument_spyIsCalled() {
+  static void givenSpyConfiguredWith5Arguments_whenCalledWithMatchingArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('another', 'test', 'with', '5', 'params').thenReturn('test');
+    sut.whenCalledWith('another', 'test', 'with', '5', 'args').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'another', 'test', 'with', '5', 'params' });
+    Object result = sut.call(new List<Object>{ 'another', 'test', 'with', '5', 'args' });
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(new List<Object>{ 'another', 'test', 'with', '5', 'params' }, sut.callLog.getLast());
+    Assert.areEqual(new List<Object>{ 'another', 'test', 'with', '5', 'args' }, sut.callLog.getLast());
   }
 
   @IsTest
-  static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithAllMatching_spyIsCalled() {
+  static void givenSpyConfiguredWithAMixOfObjectAndArgument_whenCalledWithAllMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('param', new Account(Name = 'Test'), Matcher.any()).thenReturn('Expected Result');
+    sut.whenCalledWith('param', new Account(Name = 'Test'), Argument.any()).thenReturn('Expected Result');
 
     // Act
     Object result = sut.call(new List<Object>{ 'param', new Account(Name = 'Test'), true });
 
     // Assert
-    Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
+    Arguments expectedArgs = Arguments.of('param', new Account(Name = 'Test'), Argument.any());
     Assert.areEqual(new List<Object>{ 'param', new Account(Name = 'Test'), true }, sut.callLog.getLast());
   }
 
   @IsTest
-  static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithPartialMatching_spyThrows() {
+  static void givenSpyConfiguredWithAMixOfObjectAndArgument_whenCalledWithPartialMatching_spyThrows() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer'))
+    sut.whenCalledWith('param', Argument.equals('otherParam'), Argument.jsonEquals(new Account(Name = 'Test')), Argument.any(), Argument.ofType('Integer'))
       .thenReturn('Expected Result');
 
     // Act
@@ -151,7 +151,7 @@ private class MethodSpyTest {
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
       Assert.areNotEqual(
-        new List<Object>{ 'param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer') },
+        new List<Object>{ 'param', Argument.equals('otherParam'), Argument.jsonEquals(new Account(Name = 'Test')), Argument.any(), Argument.ofType('Integer') },
         sut.callLog.getLast()
       );
       Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
@@ -159,7 +159,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithNonMatching_spyThrows() {
+  static void givenSpyConfiguredWithAMixOfObjectAndArgument_whenCalledWithNonMatching_spyThrows() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('param', new Account(Name = 'Test')).thenReturn('Expected Result');
@@ -178,16 +178,17 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredWithListOfParamMatcher_whenCalledWithAllMatching_spyIsCalled() {
+  static void givenSpyConfiguredWithListOfArgument_whenCalledWithAllMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any()).thenReturn('Expected Result');
+    sut.whenCalledWith(Argument.jsonEquals(new List<String>{ 'test' }), Argument.ofType(Account.getSObjectType()), Argument.any())
+      .thenReturn('Expected Result');
 
     // Act
     Object result = sut.call(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true });
 
     // Assert
-    Params expectedArgs = Params.of(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any());
+    Arguments expectedArgs = Arguments.of(Argument.jsonEquals(new List<String>{ 'test' }), Argument.ofType(Account.getSObjectType()), Argument.any());
     Assert.areEqual('Expected Result', result);
     Assert.areEqual(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true }, sut.callLog.getLast());
   }
@@ -287,7 +288,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredToThenThrowException_whenCallingTheSpyWithMatchingParams_itThrowsTheException() {
+  static void givenSpyConfiguredToThenThrowException_whenCallingTheSpyWithMatchingArguments_itThrowsTheException() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('Expected Param').thenThrow(new IllegalArgumentException('test exception'));
@@ -332,7 +333,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpy_itReturnsTheConfiguredValue() {
+  static void givenSpyConfiguredOnceToReturnOnMatchingArguments_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('Expected First Param', true).thenReturn('Expected Result');
@@ -348,7 +349,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcherAndBooleanTrue_whenCallingTheSpyWithRightType_itReturnsTheConfiguredValue() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Matcher.ofType(Account.getSObjectType()), true).thenReturn('Expected Result');
+    sut.whenCalledWith(Argument.ofType(Account.getSObjectType()), true).thenReturn('Expected Result');
 
     // Act
     Object result = sut.call(new List<Object>{ new Account(), true });
@@ -361,7 +362,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithWWrong_itShouldThrowMethodSpyConfigurationException() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Matcher.ofType(Account.getSObjectType())).thenReturn('Expected Result');
+    sut.whenCalledWith(Argument.ofType(Account.getSObjectType())).thenReturn('Expected Result');
 
     // Act
     try {
@@ -374,7 +375,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredMultipleTimesToReturnOnMatchingParams_whenCallingTheSpy_itReturnsTheConfiguredValue() {
+  static void givenSpyConfiguredMultipleTimesToReturnOnMatchingArguments_whenCallingTheSpy_itReturnsTheConfiguredValue() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('Expected First Param 1', true).thenReturn('Expected Result 1');
@@ -402,7 +403,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingParams_whenCallingTheSpyWithOtherParams_itThrowsMethodSpyConfigurationException() {
+  static void givenSpyConfiguredOnceToReturnOnMatchingArguments_whenCallingTheSpyWithOtherArguments_itThrowsMethodSpyConfigurationException() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('Another Param', true).thenReturn('Expected Result');
@@ -415,14 +416,14 @@ private class MethodSpyTest {
     } catch (MethodSpy.ConfigurationException cex) {
       // Assert
       Assert.areEqual(
-        'methodName: No stub value found for a call with params (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
+        'methodName: No stub value found for a call with args (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
         cex.getMessage()
       );
     }
   }
 
   @IsTest
-  static void givenSpyConfiguredToReturnOnMatchingParamsAndThenToReturns_whenCallingTheSpyWithParams_itReturnExpectedValueAndFallbackToDefault() {
+  static void givenSpyConfiguredToReturnOnMatchingArgumentsAndThenToReturns_whenCallingTheSpyWithArguments_itReturnExpectedValueAndFallbackToDefault() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('Expected First Param', true).thenReturn('Expected Result');
@@ -438,7 +439,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredToReturnsAndThenToReturnOnMatchingParams_whenCallingTheSpyWithParams_itReturnExpectedValueAndFallbackToDefault() {
+  static void givenSpyConfiguredToReturnsAndThenToReturnOnMatchingArguments_whenCallingTheSpyWithArguments_itReturnExpectedValueAndFallbackToDefault() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.returns('Default Result');

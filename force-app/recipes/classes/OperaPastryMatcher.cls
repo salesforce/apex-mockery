@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @isTest
-public class OperaPastryMatcher implements ParamMatcher.ArgumentMatcher {
+public class OperaPastryMatcher implements Argument.Matcher {
   public Boolean matches(Object callArgument) {
     Pastry p = (Pastry) callArgument;
     return p.name == 'Opera';
