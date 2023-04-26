@@ -93,7 +93,7 @@ private class AssertionsTest {
     Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
-    sut.hasBeenCalledWith(new Account(), Matcher.equals('test'));
+    sut.hasBeenCalledWith(new Account(), AMatcher.equals('test'));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -228,7 +228,7 @@ private class AssertionsTest {
     spy.call(new List<Object>{ 'param' });
 
     // Act
-    sut.hasBeenCalledWith(Matcher.equals('param'));
+    sut.hasBeenCalledWith(AMatcher.equals('param'));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -291,7 +291,7 @@ private class AssertionsTest {
     Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
 
     // Act
-    sut.hasBeenLastCalledWith(new Account(), Matcher.equals('test'));
+    sut.hasBeenLastCalledWith(new Account(), AMatcher.equals('test'));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -410,7 +410,7 @@ private class AssertionsTest {
     spy.call(new List<Object>{ 'param' });
 
     // Act
-    sut.hasBeenLastCalledWith(Matcher.equals('param'));
+    sut.hasBeenLastCalledWith(AMatcher.equals('param'));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);

@@ -26,9 +26,9 @@ private class FunctionalTest {
     Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
     MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
 
-    insertSObjectSpy.whenCalledWith(Params.of(Matcher.ofType(Account.getSObjectType()))).thenReturn(succeed('001000000000000AAA'));
+    insertSObjectSpy.whenCalledWith(Params.of(AMatcher.ofType(Account.getSObjectType()))).thenReturn(succeed('001000000000000AAA'));
 
-    insertSObjectSpy.whenCalledWith(Params.of(Matcher.ofType(Opportunity.getSObjectType()))).thenReturn(succeed('006000000000000AAA'));
+    insertSObjectSpy.whenCalledWith(Params.of(AMatcher.ofType(Opportunity.getSObjectType()))).thenReturn(succeed('006000000000000AAA'));
 
     BusinessService sut = new BusinessService((DMLDelegate) dmlDelegateMock.stub);
 
@@ -83,7 +83,7 @@ private class FunctionalTest {
     dmlOptions.optAllOrNone = false;
     Account expectedAccount = new Account(NumberOfEmployees = 10);
     Assertions.assertThat(insertSObjectsSpy)
-      .hasBeenCalledWith(Params.of(Matcher.jsonEquals(new List<Account>{ expectedAccount, expectedAccount }), Matcher.jsonEquals(dmlOptions)));
+      .hasBeenCalledWith(Params.of(AMatcher.jsonEquals(new List<Account>{ expectedAccount, expectedAccount }), AMatcher.jsonEquals(dmlOptions)));
     Assertions.assertThat(rollbackSpy).hasBeenCalled();
   }
 

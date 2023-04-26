@@ -6,16 +6,16 @@
  */
 
 /**
- * Matcher offers publis static methods to build out-of-the-box matchers to be used with Assertions
- *    - Matcher.any()
- *    - Matcher.equals(Object object)
- *    - Matcher.jsonEquals(Object object)
- *    - Matcher.ofType(String typeName)
- *    - Matcher.ofType(Type type)
- *    - Matcher.ofType(Schema.SObjectType sobjectType)
+ * AMatcher offers publis static methods to build out-of-the-box matchers to be used with Assertions
+ *    - AMatcher.any()
+ *    - AMatcher.equals(Object object)
+ *    - AMatcher.jsonEquals(Object object)
+ *    - AMatcher.ofType(String typeName)
+ *    - AMatcher.ofType(Type type)
+ *    - AMatcher.ofType(Schema.SObjectType sobjectType)
  */
 @IsTest
-global class Matcher {
+global class AMatcher {
   global interface ArgumentMatcher {
     Boolean matches(Object callArgument);
   }
@@ -23,7 +23,7 @@ global class Matcher {
   global class MatcherException extends Exception {
   }
 
-  private Matcher() {
+  private AMatcher() {
   }
 
   global static ArgumentMatcher any() {

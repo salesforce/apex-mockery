@@ -180,12 +180,12 @@ Configure it to throw a specific value, when call with specific parameters
 ```java
 // Arrange
 myMethodSpy
-    .whenCalledWith(Matcher.any(), 10)
+    .whenCalledWith(AMatcher.any(), 10)
     .thenReturn(new Account(Name='Test'));
 
 // Arrange
 myMethodSpy
-    .whenCalledWith(Matcher.any(), -1)
+    .whenCalledWith(AMatcher.any(), -1)
     .thenThrow(new MyException);
 
 // Act
@@ -259,12 +259,12 @@ Assertions.assertThat(myMethodSpy).hasBeenCalled();
 Assertions.assertThat(myMethodSpy).hasBeenCalledTimes(2);
 
 // hasBeenCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith('stringValue', Matcher.any(), true, ...); // up to 5 params
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
+Assertions.assertThat(myMethodSpy).hasBeenCalledWith('stringValue', AMatcher.any(), true, ...); // up to 5 params
+Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.ofList(new List<Object>{AMatcher.any(), AMatcher.any(), ... })); // for more than 5 params
 
 // hasBeenLastCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', Matcher.any(), true, ...); // up to 5 params
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
+Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', AMatcher.any(), true, ...); // up to 5 params
+Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.ofList(new List<Object>{AMatcher.any(), AMatcher.any(), ... })); // for more than 5 params
 ```
 
 Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
@@ -275,9 +275,9 @@ Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assert
 
 You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
 
-It wrapes value with a `Matcher.equals` when called with any kind of parameter.
+It wrapes value with a `AMatcher.equals` when called with any kind of parameter.
 
-When called with a `Matcher.ArgumentMatcher` type, it considers it as a parameter, use it directly without wrapping it with a `Matcher.equals`.
+When called with a `AMatcher.ArgumentMatcher` type, it considers it as a parameter, use it directly without wrapping it with a `AMatcher.equals`.
 
 If you need more arguments in your method calls, `Params` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Params.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Params.ofList(new List<Object>{...}))))`
 
@@ -296,50 +296,50 @@ The library accept your own matchers for specific use cases and reusability.
 
 #### Any
 
-`Matcher.any()` matches anything
+`AMatcher.any()` matches anything
 
 ```java
-Matcher.any();
+AMatcher.any();
 ```
 
 #### Equal
 
-`Matcher.equals()` (the default) matches with native deep equals
+`AMatcher.equals()` (the default) matches with native deep equals
 
 ```java
-Matcher.equals(10);
+AMatcher.equals(10);
 ```
 
 #### jsonEqual
 
-`Matcher.jsonEquals(new WithoutEqualsType())` matches with json string equals. Convenient to match without `equals` type
+`AMatcher.jsonEquals(new WithoutEqualsType())` matches with json string equals. Convenient to match without `equals` type
 
 ```java
-Matcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
+AMatcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
 ```
 
 Namespaced custom types must add the `@JsonAccess` [annotation](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_JsonAccess.htm) with `serializable='always' to the class when using the unlocked package version.
 
 #### ofType
 
-`Matcher.ofType()` matches on the parameter type
+`AMatcher.ofType()` matches on the parameter type
 
 ```java
 // To match any Integer
-Matcher.ofType('Integer');
+AMatcher.ofType('Integer');
 // To match any Account SObject
-Matcher.ofType(Account.getSObjectType());
+AMatcher.ofType(Account.getSObjectType());
 // To match any CustomType class instance
-Matcher.ofType(CustomType.class);
+AMatcher.ofType(CustomType.class);
 ```
 
 #### BYOM (Build your own matcher)
 
-Use the `Matcher.ArgumentMatcher` interface and then use it with `Params` APIs
+Use the `AMatcher.ArgumentMatcher` interface and then use it with `Params` APIs
 
 ```java
 @isTest
-public class MyMatcher implements Matcher.ArgumentMatcher {
+public class MyMatcher implements AMatcher.ArgumentMatcher {
   public Boolean matches(Object callArgument) {
     boolean matches = false;
 
@@ -384,7 +384,7 @@ It contains one classe for each use cases the library covers
 - [HasBeenCalledWith](force-app/recipes/classes/asserting/HasBeenCalledWith.cls): spy called with equal matcher
 - [HasBeenCalledWithCustomMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithCustomMatcher.cls): spy called with custom matcher
 - [HasBeenCalledWithJSONMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithJSONMatcher.cls): spy called with JSON matcher
-- [HasBeenCalledWithTypeMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithTypeMatcher.cls): spy called with type matcher
+- [HasBeenCalledWithTypeMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithAMatcher.cls): spy called with type matcher
 - [HasBeenLastCalledWith](force-app/recipes/classes/asserting/HasBeenLastCalledWith.cls): spy last called with equal matcher
 - [HasNotBeenCalled](force-app/recipes/classes/asserting/HasNotBeenCalled.cls): spy not called
 

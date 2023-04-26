@@ -29,7 +29,7 @@ private class ApexMockeryOverview {
 
     order = myBakery.order(new Pastry('Croissant'));
     mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalled();
-    mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(mockery.Matcher.jsonEquals(new Pastry('Chocolatine')));
+    mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(mockery.AMatcher.jsonEquals(new Pastry('Chocolatine')));
     mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
     mockery.Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Croissant'));
     mockery.Assertions.assertThat(planDeliverySpy).hasBeenCalledTimes(2);
@@ -43,7 +43,7 @@ private class ApexMockeryOverview {
     }
   }
 
-  private class OperaPastryMatcher implements mockery.Matcher.ArgumentMatcher {
+  private class OperaPastryMatcher implements mockery.AMatcher.ArgumentMatcher {
     public Boolean matches(Object callArgument) {
       Pastry p = (Pastry) callArgument;
       return p.name == 'Opera';

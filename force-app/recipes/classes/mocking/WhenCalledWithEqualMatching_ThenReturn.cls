@@ -14,7 +14,7 @@ private class WhenCalledWithEqualMatching_ThenReturn {
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenReturn(Date.today().addDays(3));
     planDeliverySpy.whenCalledWith(new Pastry('Opera')).thenReturn(Date.today().addDays(2));
-    planDeliverySpy.whenCalledWith(Matcher.ofType(Pastry.class)).thenReturn(Date.today().addDays(4)); // Order matter
+    planDeliverySpy.whenCalledWith(AMatcher.ofType(Pastry.class)).thenReturn(Date.today().addDays(4)); // Order matter
 
     // Act
     OrderConfirmation order = myBakery.order(new Pastry('Opera'));

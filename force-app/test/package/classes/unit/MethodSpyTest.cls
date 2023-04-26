@@ -19,7 +19,7 @@ private class MethodSpyTest {
       // Assert
       Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Matcher.MatcherException.class);
+      Assert.isInstanceOfType(ex, AMatcher.MatcherException.class);
     }
   }
 
@@ -125,13 +125,13 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithAllMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('param', new Account(Name = 'Test'), Matcher.any()).thenReturn('Expected Result');
+    sut.whenCalledWith('param', new Account(Name = 'Test'), AMatcher.any()).thenReturn('Expected Result');
 
     // Act
     Object result = sut.call(new List<Object>{ 'param', new Account(Name = 'Test'), true });
 
     // Assert
-    Params expectedArgs = Params.of('param', new Account(Name = 'Test'), Matcher.any());
+    Params expectedArgs = Params.of('param', new Account(Name = 'Test'), AMatcher.any());
     Assert.areEqual(new List<Object>{ 'param', new Account(Name = 'Test'), true }, sut.callLog.getLast());
   }
 
@@ -139,7 +139,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithAMixOfObjectAndParamMatcher_whenCalledWithPartialMatching_spyThrows() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer'))
+    sut.whenCalledWith('param', AMatcher.equals('otherParam'), AMatcher.jsonEquals(new Account(Name = 'Test')), AMatcher.any(), AMatcher.ofType('Integer'))
       .thenReturn('Expected Result');
 
     // Act
@@ -151,7 +151,7 @@ private class MethodSpyTest {
     } catch (Exception ex) {
       Assert.isInstanceOfType(ex, MethodSpy.ConfigurationException.class);
       Assert.areNotEqual(
-        new List<Object>{ 'param', Matcher.equals('otherParam'), Matcher.jsonEquals(new Account(Name = 'Test')), Matcher.any(), Matcher.ofType('Integer') },
+        new List<Object>{ 'param', AMatcher.equals('otherParam'), AMatcher.jsonEquals(new Account(Name = 'Test')), AMatcher.any(), AMatcher.ofType('Integer') },
         sut.callLog.getLast()
       );
       Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
@@ -181,13 +181,14 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithListOfParamMatcher_whenCalledWithAllMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any()).thenReturn('Expected Result');
+    sut.whenCalledWith(AMatcher.jsonEquals(new List<String>{ 'test' }), AMatcher.ofType(Account.getSObjectType()), AMatcher.any())
+      .thenReturn('Expected Result');
 
     // Act
     Object result = sut.call(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true });
 
     // Assert
-    Params expectedArgs = Params.of(Matcher.jsonEquals(new List<String>{ 'test' }), Matcher.ofType(Account.getSObjectType()), Matcher.any());
+    Params expectedArgs = Params.of(AMatcher.jsonEquals(new List<String>{ 'test' }), AMatcher.ofType(Account.getSObjectType()), AMatcher.any());
     Assert.areEqual('Expected Result', result);
     Assert.areEqual(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true }, sut.callLog.getLast());
   }
@@ -348,7 +349,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcherAndBooleanTrue_whenCallingTheSpyWithRightType_itReturnsTheConfiguredValue() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Matcher.ofType(Account.getSObjectType()), true).thenReturn('Expected Result');
+    sut.whenCalledWith(AMatcher.ofType(Account.getSObjectType()), true).thenReturn('Expected Result');
 
     // Act
     Object result = sut.call(new List<Object>{ new Account(), true });
@@ -361,7 +362,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithWWrong_itShouldThrowMethodSpyConfigurationException() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Matcher.ofType(Account.getSObjectType())).thenReturn('Expected Result');
+    sut.whenCalledWith(AMatcher.ofType(Account.getSObjectType())).thenReturn('Expected Result');
 
     // Act
     try {

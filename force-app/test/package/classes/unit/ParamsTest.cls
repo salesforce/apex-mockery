@@ -91,16 +91,16 @@ private class ParamsTest {
     // Arrange
     Params sut = Params.ofList(
       new List<Object>{
-        Matcher.equals('test'),
-        Matcher.equals(10),
-        Matcher.jsonEquals(new Account()),
-        Matcher.ofType('List'),
+        AMatcher.equals('test'),
+        AMatcher.equals(10),
+        AMatcher.jsonEquals(new Account()),
+        AMatcher.ofType('List'),
         new Map<Id, Set<String>>(),
         new Set<Date>(),
         new List<Account>(),
         Blob.valueOf('test'),
         new CustomMatcher(),
-        Matcher.ofType(CustomType.class)
+        AMatcher.ofType(CustomType.class)
       }
     );
 
@@ -138,7 +138,7 @@ private class ParamsTest {
     Assert.isTrue(result);
   }
 
-  class CustomMatcher implements Matcher.ArgumentMatcher {
+  class CustomMatcher implements AMatcher.ArgumentMatcher {
     public Boolean matches(Object callArgument) {
       return true;
     }

@@ -94,7 +94,7 @@ global class MethodSpy {
 
   private MethodSpyCall whenCalledWithParams(final Params params) {
     if (params == null) {
-      throw new Matcher.MatcherException('Params cannot be null');
+      throw new AMatcher.MatcherException('Params cannot be null');
     }
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(params);
     this.parameterizedMethodCalls.add(parameterizedMethodCall);

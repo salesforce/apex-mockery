@@ -6,19 +6,19 @@
  */
 @IsTest
 global class Params {
-  private List<Matcher.ArgumentMatcher> listOfArgs;
+  private List<AMatcher.ArgumentMatcher> listOfArgs;
 
   private Params() {
-    this.listOfArgs = new List<Matcher.ArgumentMatcher>();
+    this.listOfArgs = new List<AMatcher.ArgumentMatcher>();
   }
 
   private Params(final List<Object> callArguments) {
     this();
     for (Object callArgument : callArguments) {
-      if (callArgument instanceof Matcher.ArgumentMatcher) {
-        this.listOfArgs.add((Matcher.ArgumentMatcher) callArgument);
+      if (callArgument instanceof AMatcher.ArgumentMatcher) {
+        this.listOfArgs.add((AMatcher.ArgumentMatcher) callArgument);
       } else {
-        this.listOfArgs.add(Matcher.equals(callArgument));
+        this.listOfArgs.add(AMatcher.equals(callArgument));
       }
     }
   }
