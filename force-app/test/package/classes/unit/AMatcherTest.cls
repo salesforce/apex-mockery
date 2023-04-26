@@ -203,7 +203,7 @@ public class AMatcherTest {
   @isTest
   static void givenTypeMatcher_matchesDeriveType() {
     // Arrange
-    AMatcher.ArgumentMatcher sut = AMatcher.ofType(AMatcher.ArgumentAMatcher.class);
+    AMatcher.ArgumentMatcher sut = AMatcher.ofType(AMatcher.ArgumentMatcher.class);
 
     // Act & Assert
     Assert.isTrue(sut.matches(new ArgumentMatcherStub()));
