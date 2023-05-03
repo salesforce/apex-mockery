@@ -17,9 +17,6 @@
   >
         <priority>3</priority>
     </rule>
-    <rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier" message="Avoid using global modifier">
-        <priority>3</priority>
-    </rule>
     <rule ref="category/apex/bestpractices.xml/DebugsShouldUseLoggingLevel" message="Debug statements should include a LoggingLevel">
         <priority>3</priority>
     </rule>

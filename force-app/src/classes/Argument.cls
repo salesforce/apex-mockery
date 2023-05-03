@@ -15,6 +15,7 @@
  *    - Argument.ofType(Schema.SObjectType sobjectType)
  */
 @IsTest
+@SuppressWarnings('PMD.EmptyStatementBlock')
 global class Argument {
   global interface Matcher {
     Boolean matches(Object callArgument);
