@@ -28,8 +28,8 @@ We want its usage to be simple, its maintainability to be easy and to provide th
       - [Parameterized configuration](#parameterized-configuration)
       - [Configuration order matters !](#configuration-order-matters-)
   - [Assert on a spy](#assert-on-a-spy)
-  - [Params](#params)
-  - [Matchers](#matchers)
+  - [Arguments](#arguments)
+  - [Argument matcher](#argument-matcher)
     - [Any](#any)
     - [Equal](#equal)
     - [jsonEqual](#jsonequal)
@@ -180,12 +180,12 @@ Configure it to throw a specific value, when call with specific parameters
 ```java
 // Arrange
 myMethodSpy
-    .whenCalledWith(Matcher.any(), 10)
+    .whenCalledWith(Argument.any(), 10)
     .thenReturn(new Account(Name='Test'));
 
 // Arrange
 myMethodSpy
-    .whenCalledWith(Matcher.any(), -1)
+    .whenCalledWith(Argument.any(), -1)
     .thenThrow(new MyException);
 
 // Act
@@ -219,7 +219,7 @@ The order of the spy configuration drive how it will behave.
 1. Then, it checks the global `throwsException` configurations.
 
 If there is a configuration and it does not match then it throws a `ConfigurationException`.
-The error message will contains the params and the configuration.
+The error message will contains the arguments and the configuration.
 Use it to help you understand the root cause of the issue (configuration/regression/you name it).
 
 The order of the global configuration matters.
@@ -259,87 +259,87 @@ Assertions.assertThat(myMethodSpy).hasBeenCalled();
 Assertions.assertThat(myMethodSpy).hasBeenCalledTimes(2);
 
 // hasBeenCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith('stringValue', Matcher.any(), true, ...); // up to 5 params
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
+Assertions.assertThat(myMethodSpy).hasBeenCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
+Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 
 // hasBeenLastCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', Matcher.any(), true, ...); // up to 5 params
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Params.ofList(new List<Object>{Matcher.any(), Matcher.any(), ... })); // for more than 5 params
+Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
+Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 ```
 
 Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
-### Params
+### Arguments
 
-Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Params` matchers.
+Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Arguments` matchers.
 
 You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
 
-It wrapes value with a `Matcher.equals` when called with any kind of parameter.
+It wrapes value with a `Argument.equals` when called with any kind of parameter.
 
-When called with a `Matcher.ArgumentMatcher` type, it considers it as a parameter, use it directly without wrapping it with a `Matcher.equals`.
+When called with a `Argument.Matcher` type, it considers it as a parameter, use it directly without wrapping it with a `Argument.equals`.
 
-If you need more arguments in your method calls, `Params` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Params.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Params.ofList(new List<Object>{...}))))`
+If you need more arguments in your method calls, `Arguments` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Arguments.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Arguments.ofList(new List<Object>{...}))))`
 
 ```java
-Params emptyParameters = Params.empty();
+Arguments emptyParameters = Arguments.empty();
 
-Params myMethodParameters = Params.of(10, 'string'); // Up to five
+Arguments myMethodParameters = Arguments.of(10, 'string'); // Up to five
 
-Params myMethodWithLongParameters = Params.ofList(new List<Object>{10, 'string', true, 20, false, 'Sure'});
+Arguments myMethodWithLongParameters = Arguments.ofList(new List<Object>{10, 'string', true, 20, false, 'Sure'});
 ```
 
-### Matchers
+### Argument matcher
 
 The library provide OOTB (out of the box) Matchers ready for use and fully tested.
 The library accept your own matchers for specific use cases and reusability.
 
 #### Any
 
-`Matcher.any()` matches anything
+`Argument.any()` matches anything
 
 ```java
-Matcher.any();
+Argument.any();
 ```
 
 #### Equal
 
-`Matcher.equals()` (the default) matches with native deep equals
+`Argument.equals()` (the default) matches with native deep equals
 
 ```java
-Matcher.equals(10);
+Argument.equals(10);
 ```
 
 #### jsonEqual
 
-`Matcher.jsonEquals(new WithoutEqualsType())` matches with json string equals. Convenient to match without `equals` type
+`Argument.jsonEquals(new WithoutEqualsType())` matches with json string equals. Convenient to match without `equals` type
 
 ```java
-Matcher.jsonEquals(new WithoutEqualsType(10, true, '...'));
+Argument.jsonEquals(new WithoutEqualsType(10, true, '...'));
 ```
 
 Namespaced custom types must add the `@JsonAccess` [annotation](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_JsonAccess.htm) with `serializable='always' to the class when using the unlocked package version.
 
 #### ofType
 
-`Matcher.ofType()` matches on the parameter type
+`Argument.ofType()` matches on the parameter type
 
 ```java
 // To match any Integer
-Matcher.ofType('Integer');
+Argument.ofType('Integer');
 // To match any Account SObject
-Matcher.ofType(Account.getSObjectType());
+Argument.ofType(Account.getSObjectType());
 // To match any CustomType class instance
-Matcher.ofType(CustomType.class);
+Argument.ofType(CustomType.class);
 ```
 
 #### BYOM (Build your own matcher)
 
-Use the `Matcher.ArgumentMatcher` interface and then use it with `Params` APIs
+Use the `Argument.Matcher` interface and then use it with `Arguments` APIs
 
 ```java
 @isTest
-public class MyMatcher implements Matcher.ArgumentMatcher {
+public class MyMatcher implements Argument.Matcher {
   public Boolean matches(Object callArgument) {
     boolean matches = false;
 
@@ -350,7 +350,7 @@ public class MyMatcher implements Matcher.ArgumentMatcher {
   }
 }
 
-Params param = Params.of(new MyMatcher(), ...otherParams);
+Arguments param = Arguments.of(new MyMatcher(), ...otherArguments);
 ```
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library

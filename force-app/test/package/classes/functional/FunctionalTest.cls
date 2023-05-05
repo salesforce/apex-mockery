@@ -17,7 +17,7 @@ private class FunctionalTest {
     sut.createNewCompany(10);
 
     // Assert
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Params.of(new Account(NumberOfEmployees = 10)));
+    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Account(NumberOfEmployees = 10)));
   }
 
   @isTest
@@ -26,9 +26,9 @@ private class FunctionalTest {
     Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
     MethodSpy insertSObjectSpy = dmlDelegateMock.spyOn('insertSObject');
 
-    insertSObjectSpy.whenCalledWith(Params.of(Matcher.ofType(Account.getSObjectType()))).thenReturn(succeed('001000000000000AAA'));
+    insertSObjectSpy.whenCalledWith(Arguments.of(Argument.ofType(Account.getSObjectType()))).thenReturn(succeed('001000000000000AAA'));
 
-    insertSObjectSpy.whenCalledWith(Params.of(Matcher.ofType(Opportunity.getSObjectType()))).thenReturn(succeed('006000000000000AAA'));
+    insertSObjectSpy.whenCalledWith(Arguments.of(Argument.ofType(Opportunity.getSObjectType()))).thenReturn(succeed('006000000000000AAA'));
 
     BusinessService sut = new BusinessService((DMLDelegate) dmlDelegateMock.stub);
 
@@ -37,8 +37,8 @@ private class FunctionalTest {
 
     // Assert
     Account expectedAccount = new Account(NumberOfEmployees = 10);
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Params.of(expectedAccount));
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Params.of(new Opportunity(AccountId = '001000000000000AAA')));
+    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(expectedAccount));
+    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Opportunity(AccountId = '001000000000000AAA')));
     Assertions.assertThat(insertSObjectSpy).hasBeenCalledTimes(2);
   }
 
@@ -58,7 +58,7 @@ private class FunctionalTest {
       // Assert
       Assert.fail('it shoud not reach this line');
     } catch (DmlException dex) {
-      Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Params.of(new Account(NumberOfEmployees = 1000000000)));
+      Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Account(NumberOfEmployees = 1000000000)));
     }
   }
 
@@ -83,7 +83,7 @@ private class FunctionalTest {
     dmlOptions.optAllOrNone = false;
     Account expectedAccount = new Account(NumberOfEmployees = 10);
     Assertions.assertThat(insertSObjectsSpy)
-      .hasBeenCalledWith(Params.of(Matcher.jsonEquals(new List<Account>{ expectedAccount, expectedAccount }), Matcher.jsonEquals(dmlOptions)));
+      .hasBeenCalledWith(Arguments.of(Argument.jsonEquals(new List<Account>{ expectedAccount, expectedAccount }), Argument.jsonEquals(dmlOptions)));
     Assertions.assertThat(rollbackSpy).hasBeenCalled();
   }
 

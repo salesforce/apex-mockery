@@ -8,10 +8,10 @@
 /**
  * MethodSpy represents an apex method spy on which you can register some value to be returned
  *  - spy.returns(value): always return the same value using spy.returns(value)
- *  - spy.whenCalledWith(Params params).thenReturn(value)
- *  - spy.whenCalledWith(Params params).thenThrow(error)
- *  note: the matching algorithm is based on Matcher specified in the Params instanciation (defaulting to equals)
- *  @see Params
+ *  - spy.whenCalledWith(Arguments args).thenReturn(value)
+ *  - spy.whenCalledWith(Arguments args).thenThrow(error)
+ *  note: the matching algorithm is based on Matcher specified in the Arguments instanciation (defaulting to equals)
+ *  @see Arguments
  *  @see Matcher
  */
 @IsTest
@@ -29,15 +29,15 @@ global class MethodSpy {
     this.callLog = new CallLog();
   }
 
-  public Object call(List<Object> params) {
-    this.callLog.add(new MethodCall(params));
+  public Object call(List<Object> args) {
+    this.callLog.add(new MethodCall(args));
 
     if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
       return null;
     }
 
     for (ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls) {
-      if (parameterizedCall.matches(params)) {
+      if (parameterizedCall.matches(args)) {
         if (parameterizedCall.shouldThrow()) {
           throw parameterizedCall.error;
         }
@@ -53,7 +53,7 @@ global class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallParams(params).build();
+    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallArguments(args).build();
   }
 
   global void returns(Object value) {
@@ -69,55 +69,55 @@ global class MethodSpy {
   }
 
   global MethodSpyCall whenCalledWith() {
-    return this.whenCalledWithParams(Params.empty());
+    return this.whenCalledWithArguments(Arguments.empty());
   }
 
   global MethodSpyCall whenCalledWith(final Object arg) {
-    return this.whenCalledWithParams((arg == null || arg instanceof Params) ? (Params) arg : Params.of(arg));
+    return this.whenCalledWithArguments((arg == null || arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2) {
-    return this.whenCalledWithParams(Params.of(arg1, arg2));
+    return this.whenCalledWithArguments(Arguments.of(arg1, arg2));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3));
+    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-    return this.whenCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
   }
 
-  private MethodSpyCall whenCalledWithParams(final Params params) {
-    if (params == null) {
-      throw new Matcher.MatcherException('Params cannot be null');
+  private MethodSpyCall whenCalledWithArguments(final Arguments args) {
+    if (args == null) {
+      throw new Argument.ConfigurationException('Arguments cannot be null');
     }
-    final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(params);
+    final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(args);
     this.parameterizedMethodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
   }
 
   public class CallLog {
-    private List<MethodCall> callParams = new List<MethodCall>();
+    private List<MethodCall> callArguments = new List<MethodCall>();
 
     private void add(MethodCall callParam) {
-      this.callParams.add(callParam);
+      this.callArguments.add(callParam);
     }
 
     public Boolean isEmpty() {
-      return this.callParams.isEmpty();
+      return this.callArguments.isEmpty();
     }
 
     public Integer size() {
-      return this.callParams.size();
+      return this.callArguments.size();
     }
 
     public List<Object> get(final Integer index) {
-      return this.callParams[index].params;
+      return this.callArguments[index].args;
     }
 
     public List<Object> getLast() {
@@ -126,10 +126,10 @@ global class MethodSpy {
   }
 
   private class MethodCall {
-    public List<Object> params { get; private set; }
+    public List<Object> args { get; private set; }
 
-    public MethodCall(final List<Object> params) {
-      this.params = params;
+    public MethodCall(final List<Object> args) {
+      this.args = args;
     }
   }
 
@@ -139,12 +139,12 @@ global class MethodSpy {
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private final Params paramsMatcher;
+    private final Arguments argsMatcher;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
-    public ParameterizedMethodSpyCall(final Params paramsMatcher) {
-      this.paramsMatcher = paramsMatcher;
+    public ParameterizedMethodSpyCall(final Arguments argsMatcher) {
+      this.argsMatcher = argsMatcher;
     }
 
     public void thenReturn(Object value) {
@@ -160,25 +160,25 @@ global class MethodSpy {
     }
 
     public boolean matches(final List<Object> callArguments) {
-      return this.paramsMatcher.matches(callArguments);
+      return this.argsMatcher.matches(callArguments);
     }
 
     public override String toString() {
-      return 'whenCalledWith' + this.paramsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
+      return 'whenCalledWith' + this.argsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
     }
   }
 
   private class ConfigurationExceptionBuilder {
     private MethodSpy spy;
-    private List<Object> callParams;
+    private List<Object> callArguments;
 
     public ConfigurationExceptionBuilder withMethodSpy(final MethodSpy spy) {
       this.spy = spy;
       return this;
     }
 
-    public ConfigurationExceptionBuilder withCallParams(final List<Object> callParams) {
-      this.callParams = callParams;
+    public ConfigurationExceptionBuilder withCallArguments(final List<Object> callArguments) {
+      this.callArguments = callArguments;
       return this;
     }
 
@@ -189,8 +189,8 @@ global class MethodSpy {
       }
       return new ConfigurationException(
         this.spy.methodName +
-          ': No stub value found for a call with params ' +
-          this.callParams +
+          ': No stub value found for a call with args ' +
+          this.callArguments +
           '\nHere are the configured stubs:\n\t' +
           String.join(errorMessages, '\n\t')
       );

@@ -27,8 +27,8 @@ global class Assertions {
     /**
      * Assert that a method spy has been called at least one time with matching parameters
      *
-     * @param param1 params that should match one call parameters
-     * @see          Params
+     * @param param1 args that should match one call parameters
+     * @see          Arguments
      */
     void hasBeenCalledWith();
     void hasBeenCalledWith(final Object param1);
@@ -40,8 +40,8 @@ global class Assertions {
     /**
      * Assert that a method spy has been lastly called with matching parameters
      *
-     * @param params params that should match last call parameters
-     * @see          Params
+     * @param args args that should match last call parameters
+     * @see          Arguments
      */
     void hasBeenLastCalledWith();
     void hasBeenLastCalledWith(final Object param1);
@@ -130,68 +130,68 @@ global class Assertions {
     }
 
     public void hasBeenCalledWith() {
-      this.hasBeenCalledWithParams(Params.empty());
+      this.hasBeenCalledWithArguments(Arguments.empty());
     }
 
     public void hasBeenCalledWith(final Object arg) {
-      this.hasBeenCalledWithParams((arg instanceof Params) ? (Params) arg : Params.of(arg));
+      this.hasBeenCalledWithArguments((arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2) {
-      this.hasBeenCalledWithParams(Params.of(arg1, arg2));
+      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-      this.hasBeenCalledWithParams(Params.of(arg1, arg2, arg3));
+      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2, arg3));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-      this.hasBeenCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-      this.hasBeenCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
     }
 
-    private void hasBeenCalledWithParams(final Params params) {
-      Boolean hasBeenCalledWithParams = false;
+    private void hasBeenCalledWithArguments(final Arguments args) {
+      Boolean hasBeenCalledWithArguments = false;
       for (Integer i = 0; i < this.spy.callLog.size(); ++i) {
-        if (params?.matches(this.spy.callLog.get(i))) {
-          hasBeenCalledWithParams = true;
+        if (args?.matches(this.spy.callLog.get(i))) {
+          hasBeenCalledWithArguments = true;
           break;
         }
       }
       this.asserter.isFalse(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
-      this.asserter.isTrue(hasBeenCalledWithParams, buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, params));
+      this.asserter.isTrue(hasBeenCalledWithArguments, buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_WITH, args));
     }
 
     public void hasBeenLastCalledWith() {
-      this.hasBeenLastCalledWithParams(Params.empty());
+      this.hasBeenLastCalledWithArguments(Arguments.empty());
     }
 
     public void hasBeenLastCalledWith(final Object arg) {
-      this.hasBeenLastCalledWithParams((arg instanceof Params) ? (Params) arg : Params.of(arg));
+      this.hasBeenLastCalledWithArguments((arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2) {
-      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2));
+      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2, arg3));
+      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2, arg3));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2, arg3, arg4));
+      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-      this.hasBeenLastCalledWithParams(Params.of(arg1, arg2, arg3, arg4, arg5));
+      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
     }
 
-    private void hasBeenLastCalledWithParams(final Params params) {
+    private void hasBeenLastCalledWithArguments(final Arguments args) {
       this.asserter.isFalse(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
-      this.asserter.isTrue(params?.matches(this.spy.callLog.getLast()), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, params));
+      this.asserter.isTrue(args?.matches(this.spy.callLog.getLast()), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, args));
     }
   }
 
@@ -242,22 +242,22 @@ global class Assertions {
     }
 
     private List<ErrorMessageRow> buildCallTraces(MethodSpy spy) {
-      final List<Params> reversedCallLogParams = new List<Params>();
+      final List<Arguments> reversedCallLogArguments = new List<Arguments>();
       for (Integer i = this.spy.callLog.size() - 1; i >= 0; i--) {
-        reversedCallLogParams.add(Params.ofList(this.spy.callLog.get(i)));
+        reversedCallLogArguments.add(Arguments.ofList(this.spy.callLog.get(i)));
       }
 
-      if (reversedCallLogParams.isEmpty()) {
+      if (reversedCallLogArguments.isEmpty()) {
         return new List<ErrorMessageRow>();
       }
 
       final List<ErrorMessageRow> rows = new List<ErrorMessageRow>();
       rows.add(new ErrorMessageRow('method call history:'));
       final String template = '#{0} {1}({2})';
-      for (Integer i = 0; i < reversedCallLogParams.size(); i++) {
-        final Params params = reversedCallLogParams[i];
-        final Integer count = reversedCallLogParams.size() - i;
-        rows.add(new ErrorMessageRow(String.format(template, new List<Object>{ count, spy.methodName, params }), true));
+      for (Integer i = 0; i < reversedCallLogArguments.size(); i++) {
+        final Arguments args = reversedCallLogArguments[i];
+        final Integer count = reversedCallLogArguments.size() - i;
+        rows.add(new ErrorMessageRow(String.format(template, new List<Object>{ count, spy.methodName, args }), true));
       }
       return rows;
     }

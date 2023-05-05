@@ -7,50 +7,51 @@
 
 /**
  * Matcher offers publis static methods to build out-of-the-box matchers to be used with Assertions
- *    - Matcher.any()
- *    - Matcher.equals(Object object)
- *    - Matcher.jsonEquals(Object object)
- *    - Matcher.ofType(String typeName)
- *    - Matcher.ofType(Type type)
- *    - Matcher.ofType(Schema.SObjectType sobjectType)
+ *    - Argument.any()
+ *    - Argument.equals(Object object)
+ *    - Argument.jsonEquals(Object object)
+ *    - Argument.ofType(String typeName)
+ *    - Argument.ofType(Type type)
+ *    - Argument.ofType(Schema.SObjectType sobjectType)
  */
 @IsTest
-global class Matcher {
-  global interface ArgumentMatcher {
+@SuppressWarnings('PMD.EmptyStatementBlock')
+global class Argument {
+  global interface Matcher {
     Boolean matches(Object callArgument);
   }
 
-  global class MatcherException extends Exception {
+  global class ConfigurationException extends Exception {
   }
 
-  private Matcher() {
+  private Argument() {
   }
 
-  global static ArgumentMatcher any() {
+  global static Argument.Matcher any() {
     return new AnyMatcher();
   }
 
-  global static ArgumentMatcher equals(final Object callArgument) {
+  global static Argument.Matcher equals(final Object callArgument) {
     return new EqualsMatcher(callArgument);
   }
 
-  global static ArgumentMatcher jsonEquals(final Object callArgument) {
+  global static Argument.Matcher jsonEquals(final Object callArgument) {
     return new JSONMatcher(callArgument);
   }
 
-  global static ArgumentMatcher ofType(final String matchingType) {
+  global static Argument.Matcher ofType(final String matchingType) {
     return new TypeMatcher(matchingType);
   }
 
-  global static ArgumentMatcher ofType(final Schema.SObjectType callArgument) {
+  global static Argument.Matcher ofType(final Schema.SObjectType callArgument) {
     return new TypeMatcher(callArgument);
   }
 
-  global static ArgumentMatcher ofType(final Type callArgument) {
+  global static Argument.Matcher ofType(final Type callArgument) {
     return new TypeMatcher(callArgument);
   }
 
-  private class AnyMatcher implements ArgumentMatcher {
+  private class AnyMatcher implements Argument.Matcher {
     public Boolean matches(final Object callArgument) {
       return true;
     }
@@ -60,7 +61,7 @@ global class Matcher {
     }
   }
 
-  private class EqualsMatcher implements ArgumentMatcher {
+  private class EqualsMatcher implements Argument.Matcher {
     private Object callArgumentToMatch;
 
     public EqualsMatcher(final Object callArgumentToMatch) {
@@ -76,7 +77,7 @@ global class Matcher {
     }
   }
 
-  private class JSONMatcher implements ArgumentMatcher {
+  private class JSONMatcher implements Argument.Matcher {
     private Object callArgumentToMatch;
     private String jsonValue;
 
@@ -94,7 +95,7 @@ global class Matcher {
     }
   }
 
-  private class TypeMatcher implements ArgumentMatcher {
+  private class TypeMatcher implements Argument.Matcher {
     private String callArgumentToMatch;
 
     public TypeMatcher(final Schema.SObjectType callArgumentToMatch) {

@@ -5,11 +5,11 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @IsTest
-private class ParamsTest {
+private class ArgumentsTest {
   @isTest
   static void givenNothing_whenOfIsCalled_matchesEmptyList() {
     // Arrange
-    Params sut = Params.empty();
+    Arguments sut = Arguments.empty();
 
     // Act
     Boolean result = sut.matches(new List<Object>());
@@ -21,7 +21,7 @@ private class ParamsTest {
   @isTest
   static void given1Object_whenOfIsCalled_matchesTheElement() {
     // Arrange
-    Params sut = Params.of('test');
+    Arguments sut = Arguments.of('test');
 
     // Act
     Boolean result = sut.matches(new List<Object>{ 'test' });
@@ -33,7 +33,7 @@ private class ParamsTest {
   @isTest
   static void given2Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut = Params.of('test', 10);
+    Arguments sut = Arguments.of('test', 10);
 
     // Act
     Boolean positive = sut.matches(new List<Object>{ 'test', 10 });
@@ -47,7 +47,7 @@ private class ParamsTest {
   @isTest
   static void given3Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut = Params.of('test', 10, new Account());
+    Arguments sut = Arguments.of('test', 10, new Account());
 
     // Act
     Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account() });
@@ -61,7 +61,7 @@ private class ParamsTest {
   @isTest
   static void given4Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut = Params.of('test', 10, new Account(), new List<Date>());
+    Arguments sut = Arguments.of('test', 10, new Account(), new List<Date>());
 
     // Act
     Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>() });
@@ -75,7 +75,7 @@ private class ParamsTest {
   @isTest
   static void given5Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
-    Params sut = Params.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
+    Arguments sut = Arguments.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
 
     // Act
     Boolean positive = sut.matches(new List<Object>{ 'test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>() });
@@ -89,18 +89,18 @@ private class ParamsTest {
   @isTest
   static void givenListOf10MixType_whenOfListIsCalledWithList_matchesElementsInOrder() {
     // Arrange
-    Params sut = Params.ofList(
+    Arguments sut = Arguments.ofList(
       new List<Object>{
-        Matcher.equals('test'),
-        Matcher.equals(10),
-        Matcher.jsonEquals(new Account()),
-        Matcher.ofType('List'),
+        Argument.equals('test'),
+        Argument.equals(10),
+        Argument.jsonEquals(new Account()),
+        Argument.ofType('List'),
         new Map<Id, Set<String>>(),
         new Set<Date>(),
         new List<Account>(),
         Blob.valueOf('test'),
         new CustomMatcher(),
-        Matcher.ofType(CustomType.class)
+        Argument.ofType(CustomType.class)
       }
     );
 
@@ -129,7 +129,7 @@ private class ParamsTest {
   @isTest
   static void whenOfListIsCalledWithNull_matchesEmptyList() {
     // Act
-    Params sut = Params.ofList(null);
+    Arguments sut = Arguments.ofList(null);
 
     // Act
     Boolean result = sut.matches(new List<Object>());
@@ -138,7 +138,7 @@ private class ParamsTest {
     Assert.isTrue(result);
   }
 
-  class CustomMatcher implements Matcher.ArgumentMatcher {
+  class CustomMatcher implements Argument.Matcher {
     public Boolean matches(Object callArgument) {
       return true;
     }
