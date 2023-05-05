@@ -18,7 +18,7 @@ private class HasBeenCalledWithTypeMatcher {
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(Argument.ofType(Pastry.class));
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
+    Expect.that(planDeliverySpy).hasBeenCalledWith(Argument.ofType(Pastry.class));
+    Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
   }
 }

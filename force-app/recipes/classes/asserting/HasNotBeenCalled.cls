@@ -15,6 +15,6 @@ private class HasNotBeenCalled {
     // Act
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasNotBeenCalled();
+    Expect.that(planDeliverySpy).hasNotBeenCalled();
   }
 }

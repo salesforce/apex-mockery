@@ -18,6 +18,6 @@ private class HasBeenCalledTimes {
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledTimes(2);
+    Expect.that(planDeliverySpy).hasBeenCalledTimes(2);
   }
 }
