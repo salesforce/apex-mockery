@@ -5,8 +5,8 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @IsTest
-global class Assertions {
-  global interface MethodSpyAssertions {
+global class Expect {
+  global interface MethodSpyExpect {
     /**
      * Assert that a method spy has never been called
      */
@@ -66,8 +66,8 @@ global class Assertions {
    * @param spy the MethodSpy to assert
    * @see       MethodSpy
    */
-  global static MethodSpyAssertions assertThat(MethodSpy spy) {
-    return assertThat(spy, METHOD_SPY_ASSERTER);
+  global static MethodSpyExpect that(MethodSpy spy) {
+    return that(spy, METHOD_SPY_ASSERTER);
   }
 
   /**
@@ -77,8 +77,8 @@ global class Assertions {
    * @param asserter the Assert to use during assertions
    */
   @TestVisible
-  private static MethodSpyAssertions assertThat(MethodSpy spy, Asserter asserter) {
-    return new DefaultMethodSpyAssertions(spy, asserter);
+  private static MethodSpyExpect that(MethodSpy spy, Asserter asserter) {
+    return new DefaultMethodSpyExpect(spy, asserter);
   }
 
   @TestVisible
@@ -103,16 +103,16 @@ global class Assertions {
 
   private static final Asserter METHOD_SPY_ASSERTER = new MethodSpyAsserter();
 
-  private class DefaultMethodSpyAssertions implements MethodSpyAssertions {
+  private class DefaultMethodSpyExpect implements MethodSpyExpect {
     private MethodSpy spy;
     private Asserter asserter;
 
-    private DefaultMethodSpyAssertions(MethodSpy spy) {
+    private DefaultMethodSpyExpect(MethodSpy spy) {
       this.spy = spy;
       this.asserter = METHOD_SPY_ASSERTER;
     }
 
-    private DefaultMethodSpyAssertions(MethodSpy spy, Asserter asserter) {
+    private DefaultMethodSpyExpect(MethodSpy spy, Asserter asserter) {
       this(spy);
       this.asserter = asserter;
     }

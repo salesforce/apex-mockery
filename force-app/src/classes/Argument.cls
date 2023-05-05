@@ -6,7 +6,7 @@
  */
 
 /**
- * Matcher offers publis static methods to build out-of-the-box matchers to be used with Assertions
+ * Matcher offers publis static methods to build out-of-the-box matchers to be used with Expect
  *    - Argument.any()
  *    - Argument.equals(Object object)
  *    - Argument.jsonEquals(Object object)

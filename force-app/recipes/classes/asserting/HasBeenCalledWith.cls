@@ -18,7 +18,7 @@ private class HasBeenCalledWith {
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Chocolatine'));
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
+    Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Chocolatine'));
+    Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
   }
 }

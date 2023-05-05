@@ -18,6 +18,6 @@ private class HasBeenLastCalledWith {
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Croissant'));
+    Expect.that(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Croissant'));
   }
 }

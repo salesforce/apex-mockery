@@ -18,7 +18,7 @@ private class HasBeenCalledWithCustomMatcher {
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new OperaPastryMatcher()); // Match not serializable types
-    Assertions.assertThat(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
+    Expect.that(planDeliverySpy).hasBeenCalledWith(new OperaPastryMatcher()); // Match not serializable types
+    Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
   }
 }
