@@ -245,33 +245,33 @@ Same as if you would have configured the spy twice to return (or throw), the las
 ### Assert on a spy
 
 Use the `Assertion` class to assert on a spy
-It exposes the method `assertThat` and returns a `MethodSpyAssertions` type.
+It exposes the method `that` and returns a `MethodSpyExpect` type.
 Use the convenient assertion methods the following way:
 
 ```java
 // hasNotBeenCalled
-Assertions.assertThat(myMethodSpy).hasNotBeenCalled();
+Expect.that(myMethodSpy).hasNotBeenCalled();
 
 // hasBeenCalled
-Assertions.assertThat(myMethodSpy).hasBeenCalled();
+Expect.that(myMethodSpy).hasBeenCalled();
 
 // hasBeenCalledTimes
-Assertions.assertThat(myMethodSpy).hasBeenCalledTimes(2);
+Expect.that(myMethodSpy).hasBeenCalledTimes(2);
 
 // hasBeenCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
-Assertions.assertThat(myMethodSpy).hasBeenCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
+Expect.that(myMethodSpy).hasBeenCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
+Expect.that(myMethodSpy).hasBeenCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 
 // hasBeenLastCalledWith
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
-Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
+Expect.that(myMethodSpy).hasBeenLastCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
+Expect.that(myMethodSpy).hasBeenLastCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 ```
 
 Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
 ### Arguments
 
-Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Assertions.assertThat(myMethodSpy).hasBeenCalledWith` and `Assertions.assertThat(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Arguments` matchers.
+Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Expect.that(myMethodSpy).hasBeenCalledWith` and `Expect.that(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Arguments` matchers.
 
 You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
 
