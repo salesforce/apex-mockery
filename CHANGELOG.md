@@ -1,11 +1,15 @@
 # Changelog
 
-## [1.2.0](https://github.com/salesforce/apex-mockery/compare/v1.1.0...v1.2.0) (2023-05-05)
+## [2.0.0](https://github.com/salesforce/apex-mockery/compare/v1.1.0...v2.0.0) (2023-05-05)
 
 
 ### Features
 
 * migrate from `parameter` concept to `argument` ([#45](https://github.com/salesforce/apex-mockery/issues/45)) ([ec16b56](https://github.com/salesforce/apex-mockery/commit/ec16b567cbfffc6391f7ad3d8936b3902f075774))
+
+### Refactorings
+
+* rename `Assertions.assertThat` in `Expect.that` ([#47](https://github.com/salesforce/apex-mockery/issues/47)) ([7d74eb8](https://github.com/salesforce/apex-mockery/commit/7d74eb8a7644ef181dcb83eeb1811397cf3d0ac4))
 
 ## [1.1.0](https://github.com/salesforce/apex-mockery/compare/v1.0.0...v1.1.0) (2023-03-09)
 
