@@ -11,6 +11,11 @@ on:
       - "sfdx-project.json"
       - "config/**"
 
+# Manage concurrency to stop running jobs and start new ones in case of new commit pushed
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   formatting-and-linting:
     runs-on: ubuntu-latest
