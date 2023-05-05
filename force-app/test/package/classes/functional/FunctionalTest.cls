@@ -17,7 +17,7 @@ private class FunctionalTest {
     sut.createNewCompany(10);
 
     // Assert
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Account(NumberOfEmployees = 10)));
+    Expect.that(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Account(NumberOfEmployees = 10)));
   }
 
   @isTest
@@ -37,9 +37,9 @@ private class FunctionalTest {
 
     // Assert
     Account expectedAccount = new Account(NumberOfEmployees = 10);
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(expectedAccount));
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Opportunity(AccountId = '001000000000000AAA')));
-    Assertions.assertThat(insertSObjectSpy).hasBeenCalledTimes(2);
+    Expect.that(insertSObjectSpy).hasBeenCalledWith(Arguments.of(expectedAccount));
+    Expect.that(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Opportunity(AccountId = '001000000000000AAA')));
+    Expect.that(insertSObjectSpy).hasBeenCalledTimes(2);
   }
 
   @isTest
@@ -58,7 +58,7 @@ private class FunctionalTest {
       // Assert
       Assert.fail('it shoud not reach this line');
     } catch (DmlException dex) {
-      Assertions.assertThat(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Account(NumberOfEmployees = 1000000000)));
+      Expect.that(insertSObjectSpy).hasBeenCalledWith(Arguments.of(new Account(NumberOfEmployees = 1000000000)));
     }
   }
 
@@ -82,9 +82,9 @@ private class FunctionalTest {
     Database.DMLOptions dmlOptions = new Database.DMLOptions();
     dmlOptions.optAllOrNone = false;
     Account expectedAccount = new Account(NumberOfEmployees = 10);
-    Assertions.assertThat(insertSObjectsSpy)
+    Expect.that(insertSObjectsSpy)
       .hasBeenCalledWith(Arguments.of(Argument.jsonEquals(new List<Account>{ expectedAccount, expectedAccount }), Argument.jsonEquals(dmlOptions)));
-    Assertions.assertThat(rollbackSpy).hasBeenCalled();
+    Expect.that(rollbackSpy).hasBeenCalled();
   }
 
   static Database.SaveResult succeed(Id recordId) {

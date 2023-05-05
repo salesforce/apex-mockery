@@ -5,18 +5,18 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @IsTest
-private class AssertionsTest {
+private class ExpectTest {
   // As Assert.* methods throws are not catchable
   // Test are white box (implementation test instead of behavioural test)
   // We implemented a FakeAsserter class for the occasion
 
   @isTest
-  static void givenMethodSpyInstance_assertThatReturnsMethodSpyAssertInstance() {
+  static void givenMethodSpyInstance_thatReturnsMethodSpyAssertInstance() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
 
     // Act
-    Assertions.MethodSpyAssertions result = Assertions.assertThat(spy);
+    Expect.MethodSpyExpect result = Expect.that(spy);
 
     // Assert
     Assert.isNotNull(result);
@@ -27,7 +27,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasNotBeenCalled();
@@ -42,7 +42,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalled();
@@ -58,7 +58,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(new Account());
@@ -74,7 +74,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(Arguments.ofList(new List<Object>{ new Account(), new Opportunity() }));
@@ -90,7 +90,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(new Account(), Argument.equals('test'));
@@ -106,7 +106,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith(Arguments.empty());
@@ -122,7 +122,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenCalledWith();
@@ -139,7 +139,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ 'param' });
 
     // Act
@@ -156,7 +156,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '2', 'param' });
 
     // Act
@@ -173,7 +173,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '3', 'param', 'test' });
 
     // Act
@@ -190,7 +190,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '4', 'param', 'unit', 'test' });
 
     // Act
@@ -207,7 +207,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '5', 'param', 'unit', 'test', 'scenario' });
 
     // Act
@@ -224,7 +224,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ 'param' });
 
     // Act
@@ -240,7 +240,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>());
 
     // Act
@@ -256,7 +256,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(null);
@@ -272,7 +272,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(new Account());
@@ -288,7 +288,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith(new Account(), Argument.equals('test'));
@@ -304,7 +304,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
 
     // Act
     sut.hasBeenLastCalledWith();
@@ -321,7 +321,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ 'param' });
 
     // Act
@@ -338,7 +338,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '2', 'param' });
 
     // Act
@@ -355,7 +355,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '3', 'param', 'test' });
 
     // Act
@@ -372,7 +372,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '4', 'param', 'unit', 'test' });
 
     // Act
@@ -389,7 +389,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ '5', 'param', 'unit', 'test', 'scenario' });
 
     // Act
@@ -406,7 +406,7 @@ private class AssertionsTest {
     MethodSpy spy = new MethodSpy('method');
     spy.returns('anything');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>{ 'param' });
 
     // Act
@@ -422,7 +422,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>());
 
     // Act
@@ -438,7 +438,7 @@ private class AssertionsTest {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
     FakeAsserter fakeAsserter = new FakeAsserter();
-    Assertions.MethodSpyAssertions sut = Assertions.assertThat(spy, fakeAsserter);
+    Expect.MethodSpyExpect sut = Expect.that(spy, fakeAsserter);
     spy.call(new List<Object>());
 
     // Act & Assert
@@ -457,7 +457,7 @@ private class AssertionsTest {
   @isTest
   static void givenExpectedEqualsAssert_MethodSpyAsserter_doNotThrow() {
     // Arrange
-    Assertions.Asserter sut = new Assertions.MethodSpyAsserter();
+    Expect.Asserter sut = new Expect.MethodSpyAsserter();
 
     // Act
     sut.isTrue(true, new FakeErrorMessage('it works'));
@@ -467,7 +467,7 @@ private class AssertionsTest {
     Assert.isTrue(true, 'This assertions should be reached');
   }
 
-  class FakeErrorMessage implements Assertions.ErrorMessage {
+  class FakeErrorMessage implements Expect.ErrorMessage {
     private String message;
     FakeErrorMessage(String message) {
       this.message = message;
@@ -477,12 +477,12 @@ private class AssertionsTest {
     }
   }
 
-  class FakeAsserter implements Assertions.Asserter {
+  class FakeAsserter implements Expect.Asserter {
     public Integer callCount = 0;
     public Boolean failed = false;
     public String errorMessage;
 
-    public void isTrue(Boolean value, Assertions.ErrorMessage message) {
+    public void isTrue(Boolean value, Expect.ErrorMessage message) {
       this.callCount++;
       if (!value) {
         this.failed = true;
@@ -490,7 +490,7 @@ private class AssertionsTest {
       }
     }
 
-    public void isFalse(Boolean value, Assertions.ErrorMessage message) {
+    public void isFalse(Boolean value, Expect.ErrorMessage message) {
       this.callCount++;
       if (value) {
         this.failed = true;
