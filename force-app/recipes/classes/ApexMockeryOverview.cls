@@ -13,7 +13,7 @@ private class ApexMockeryOverview {
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
     planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenReturn(Date.today().addDays(3));
-    planDeliverySpy.whenCalledWith(new OperaPastryMatcher()).thenThrow(new RecipeException());
+    planDeliverySpy.whenCalledWith(new OperaPastryMatchable()).thenThrow(new RecipeException());
     planDeliverySpy.returns(Date.today().addDays(4));
 
     Expect.that(planDeliverySpy).hasNotBeenCalled();

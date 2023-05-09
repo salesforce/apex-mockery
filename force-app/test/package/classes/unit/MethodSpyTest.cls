@@ -8,7 +8,7 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
-  static void givenSpy_whenCalledWithConfiguredWithNull_itThrowsMatcherException() {
+  static void givenSpy_whenCalledWithConfiguredWithNull_itThrowsMatchableException() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
 
@@ -346,7 +346,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcherAndBooleanTrue_whenCallingTheSpyWithRightType_itReturnsTheConfiguredValue() {
+  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatchableAndBooleanTrue_whenCallingTheSpyWithRightType_itReturnsTheConfiguredValue() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(Argument.ofType(Account.getSObjectType()), true).thenReturn('Expected Result');
@@ -359,7 +359,7 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatcher_whenCallingTheSpyWithWWrong_itShouldThrowMethodSpyConfigurationException() {
+  static void givenSpyConfiguredOnceToReturnOnMatchingTypeMatchable_whenCallingTheSpyWithWWrong_itShouldThrowMethodSpyConfigurationException() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith(Argument.ofType(Account.getSObjectType())).thenReturn('Expected Result');

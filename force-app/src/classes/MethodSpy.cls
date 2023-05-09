@@ -10,9 +10,9 @@
  *  - spy.returns(value): always return the same value using spy.returns(value)
  *  - spy.whenCalledWith(Arguments args).thenReturn(value)
  *  - spy.whenCalledWith(Arguments args).thenThrow(error)
- *  note: the matching algorithm is based on Matcher specified in the Arguments instanciation (defaulting to equals)
+ *  note: the matching algorithm is based on Matchable specified in the Arguments instanciation (defaulting to equals)
  *  @see Arguments
- *  @see Matcher
+ *  @see Matchable
  */
 @IsTest
 global class MethodSpy {
@@ -139,12 +139,12 @@ global class MethodSpy {
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private final Arguments argsMatcher;
+    private final Arguments argsMatchable;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
-    public ParameterizedMethodSpyCall(final Arguments argsMatcher) {
-      this.argsMatcher = argsMatcher;
+    public ParameterizedMethodSpyCall(final Arguments argsMatchable) {
+      this.argsMatchable = argsMatchable;
     }
 
     public void thenReturn(Object value) {
@@ -160,11 +160,11 @@ global class MethodSpy {
     }
 
     public boolean matches(final List<Object> callArguments) {
-      return this.argsMatcher.matches(callArguments);
+      return this.argsMatchable.matches(callArguments);
     }
 
     public override String toString() {
-      return 'whenCalledWith' + this.argsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
+      return 'whenCalledWith' + this.argsMatchable + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
     }
   }
 

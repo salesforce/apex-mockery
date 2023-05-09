@@ -99,7 +99,7 @@ private class ArgumentsTest {
         new Set<Date>(),
         new List<Account>(),
         Blob.valueOf('test'),
-        new CustomMatcher(),
+        new CustomMatchable(),
         Argument.ofType(CustomType.class)
       }
     );
@@ -138,7 +138,7 @@ private class ArgumentsTest {
     Assert.isTrue(result);
   }
 
-  class CustomMatcher implements Argument.Matcher {
+  class CustomMatchable implements Argument.Matchable {
     public Boolean matches(Object callArgument) {
       return true;
     }

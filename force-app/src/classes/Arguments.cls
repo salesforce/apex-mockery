@@ -6,17 +6,17 @@
  */
 @IsTest
 global class Arguments {
-  private List<Argument.Matcher> listOfArgs;
+  private List<Argument.Matchable> listOfArgs;
 
   private Arguments() {
-    this.listOfArgs = new List<Argument.Matcher>();
+    this.listOfArgs = new List<Argument.Matchable>();
   }
 
   private Arguments(final List<Object> callArguments) {
     this();
     for (Object callArgument : callArguments) {
-      if (callArgument instanceof Argument.Matcher) {
-        this.listOfArgs.add((Argument.Matcher) callArgument);
+      if (callArgument instanceof Argument.Matchable) {
+        this.listOfArgs.add((Argument.Matchable) callArgument);
       } else {
         this.listOfArgs.add(Argument.equals(callArgument));
       }

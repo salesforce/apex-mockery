@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @isTest
-private class HasBeenCalledWithTypeMatcher {
+private class HasBeenCalledWithCustomMatchable {
   @isTest
   static void recipe() {
     // Arrange
@@ -14,11 +14,11 @@ private class HasBeenCalledWithTypeMatcher {
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
 
     // Act
-    myBakery.order(new Pastry('Chocolatine'));
+    myBakery.order(new Pastry('Opera'));
     myBakery.order(new Pastry('Croissant'));
 
     // Assert
-    Expect.that(planDeliverySpy).hasBeenCalledWith(Argument.ofType(Pastry.class));
+    Expect.that(planDeliverySpy).hasBeenCalledWith(new OperaPastryMatchable()); // Match not serializable types
     Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
   }
 }
