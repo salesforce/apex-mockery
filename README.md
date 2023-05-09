@@ -245,7 +245,7 @@ Same as if you would have configured the spy twice to return (or throw), the las
 ### Assert on a spy
 
 Use the `Expect` class to assert on a spy
-It exposes the method `that` and returns a `MethodSpyExpect` type.
+It exposes the method `that` and returns a `MethodSpyExpectable` type.
 Use the convenient assertion methods the following way:
 
 ```java

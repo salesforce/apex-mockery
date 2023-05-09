@@ -6,7 +6,7 @@
  */
 @IsTest
 global class Expect {
-  global interface MethodSpyExpect {
+  global interface MethodSpyExpectable {
     /**
      * Assert that a method spy has never been called
      */
@@ -66,7 +66,7 @@ global class Expect {
    * @param spy the MethodSpy to assert
    * @see       MethodSpy
    */
-  global static MethodSpyExpect that(MethodSpy spy) {
+  global static MethodSpyExpectable that(MethodSpy spy) {
     return that(spy, METHOD_SPY_ASSERTER);
   }
 
@@ -77,8 +77,8 @@ global class Expect {
    * @param asserter the Assert to use during assertions
    */
   @TestVisible
-  private static MethodSpyExpect that(MethodSpy spy, Asserter asserter) {
-    return new DefaultMethodSpyExpect(spy, asserter);
+  private static MethodSpyExpectable that(MethodSpy spy, Asserter asserter) {
+    return new DefaultMethodSpyExpectable(spy, asserter);
   }
 
   @TestVisible
@@ -103,16 +103,16 @@ global class Expect {
 
   private static final Asserter METHOD_SPY_ASSERTER = new MethodSpyAsserter();
 
-  private class DefaultMethodSpyExpect implements MethodSpyExpect {
+  private class DefaultMethodSpyExpectable implements MethodSpyExpectable {
     private MethodSpy spy;
     private Asserter asserter;
 
-    private DefaultMethodSpyExpect(MethodSpy spy) {
+    private DefaultMethodSpyExpectable(MethodSpy spy) {
       this.spy = spy;
       this.asserter = METHOD_SPY_ASSERTER;
     }
 
-    private DefaultMethodSpyExpect(MethodSpy spy, Asserter asserter) {
+    private DefaultMethodSpyExpectable(MethodSpy spy, Asserter asserter) {
       this(spy);
       this.asserter = asserter;
     }
