@@ -8,19 +8,17 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
-  static void givenSpy_whenCalledWithConfiguredWithNull_itThrowsMatchableException() {
+  static void givenSpyConfiguredWithNullArguments_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith(null).thenReturn('test');
 
-    try {
-      // Act
-      sut.whenCalledWith(null);
+    // Act
+    Object result = sut.call(new List<Object>{ null });
 
-      // Assert
-      Assert.fail('Expected exception was not thrown');
-    } catch (Exception ex) {
-      Assert.isInstanceOfType(ex, Argument.ConfigurationException.class);
-    }
+    // Assert
+    Assert.areEqual('test', result);
+    Assert.areEqual(new List<Object>{ null }, sut.callLog.getLast());
   }
 
   @IsTest

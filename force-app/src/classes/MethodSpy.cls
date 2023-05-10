@@ -73,7 +73,7 @@ global class MethodSpy {
   }
 
   global MethodSpyCall whenCalledWith(final Object arg) {
-    return this.whenCalledWithArguments((arg == null || arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
+    return this.whenCalledWithArguments((arg instanceof List<Argument.Matchable>) ? (List<Argument.Matchable>) arg : Argument.of(arg));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2) {
@@ -93,9 +93,6 @@ global class MethodSpy {
   }
 
   private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
-    if (args == null) {
-      throw new Argument.ConfigurationException('Arguments cannot be null');
-    }
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(args);
     this.parameterizedMethodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
