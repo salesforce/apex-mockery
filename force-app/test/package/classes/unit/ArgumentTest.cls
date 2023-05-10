@@ -392,6 +392,42 @@ public class ArgumentTest {
   }
 
   @isTest
+  static void givenNull_whenOfIsCalled_doesNotmatche() {
+    // Arrange
+    List<Argument.Matchable> sut = null;
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>());
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @isTest
+  static void givenNothing_whenNullIsCalled_doesNotmatche() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.empty();
+
+    // Act
+    Boolean result = Argument.matches(sut, null);
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @isTest
+  static void givenNull_whenNullIsCalled_matches() {
+    // Arrange
+    List<Argument.Matchable> sut = null;
+
+    // Act
+    Boolean result = Argument.matches(sut, null);
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
   static void givenNothing_whenOfIsCalled_matchesEmptyList() {
     // Arrange
     List<Argument.Matchable> sut = Argument.empty();

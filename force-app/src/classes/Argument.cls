@@ -27,13 +27,18 @@ global class Argument {
   private Argument() {
   }
 
-  public static boolean matches(final List<Argument.Matchable> listOfArgs, final List<Object> callArguments) {
-    if (listOfArgs.size() != callArguments?.size()) {
+  public static boolean matches(final List<Argument.Matchable> matchableArguments, final List<Object> callArguments) {
+    if (matchableArguments == null || callArguments == null) {
+      // If both equals null then return true
+      return matchableArguments == callArguments;
+    }
+
+    if (matchableArguments.size() != callArguments.size()) {
       return false;
     }
 
-    for (Integer i = 0; i < listOfArgs.size(); ++i) {
-      if (!listOfArgs[i].matches(callArguments[i])) {
+    for (Integer i = 0; i < matchableArguments.size(); ++i) {
+      if (!matchableArguments[i].matches(callArguments[i])) {
         return false;
       }
     }
