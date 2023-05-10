@@ -27,6 +27,59 @@ global class Argument {
   private Argument() {
   }
 
+  public static boolean matches(final List<Argument.Matchable> listOfArgs, final List<Object> callArguments) {
+    if (listOfArgs.size() != callArguments?.size()) {
+      return false;
+    }
+
+    for (Integer i = 0; i < listOfArgs.size(); ++i) {
+      if (!listOfArgs[i].matches(callArguments[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  global static List<Argument.Matchable> empty() {
+    return new List<Argument.Matchable>();
+  }
+
+  global static List<Argument.Matchable> of(final Object arg) {
+    return Argument.ofList(new List<Object>{ arg });
+  }
+
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2) {
+    return Argument.ofList(new List<Object>{ arg1, arg2 });
+  }
+
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2, final Object arg3) {
+    return Argument.ofList(new List<Object>{ arg1, arg2, arg3 });
+  }
+
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
+    return Argument.ofList(new List<Object>{ arg1, arg2, arg3, arg4 });
+  }
+
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
+    return Argument.ofList(new List<Object>{ arg1, arg2, arg3, arg4, arg5 });
+  }
+
+  global static List<Argument.Matchable> ofList(final List<Object> listOfArgs) {
+    final List<Argument.Matchable> listOfMatchableArgs = Argument.empty();
+    if (listOfArgs == null) {
+      return listOfMatchableArgs;
+    }
+    for (Object callArgument : listOfArgs) {
+      if (callArgument instanceof Argument.Matchable) {
+        listOfMatchableArgs.add((Argument.Matchable) callArgument);
+      } else {
+        listOfMatchableArgs.add(Argument.equals(callArgument));
+      }
+    }
+    return listOfMatchableArgs;
+  }
+
   global static Argument.Matchable any() {
     return new AnyMatchable();
   }

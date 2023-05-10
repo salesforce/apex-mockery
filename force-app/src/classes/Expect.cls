@@ -130,33 +130,33 @@ global class Expect {
     }
 
     public void hasBeenCalledWith() {
-      this.hasBeenCalledWithArguments(Arguments.empty());
+      this.hasBeenCalledWithArguments(Argument.empty());
     }
 
     public void hasBeenCalledWith(final Object arg) {
-      this.hasBeenCalledWithArguments((arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
+      this.hasBeenCalledWithArguments((arg instanceof List<Argument.Matchable>) ? (List<Argument.Matchable>) arg : Argument.of(arg));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2) {
-      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2));
+      this.hasBeenCalledWithArguments(Argument.of(arg1, arg2));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2, arg3));
+      this.hasBeenCalledWithArguments(Argument.of(arg1, arg2, arg3));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
+      this.hasBeenCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4));
     }
 
     public void hasBeenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-      this.hasBeenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
+      this.hasBeenCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4, arg5));
     }
 
-    private void hasBeenCalledWithArguments(final Arguments args) {
+    private void hasBeenCalledWithArguments(final List<Argument.Matchable> args) {
       Boolean hasBeenCalledWithArguments = false;
       for (Integer i = 0; i < this.spy.callLog.size(); ++i) {
-        if (args?.matches(this.spy.callLog.get(i))) {
+        if (Argument.matches(args, this.spy.callLog.get(i))) {
           hasBeenCalledWithArguments = true;
           break;
         }
@@ -166,32 +166,32 @@ global class Expect {
     }
 
     public void hasBeenLastCalledWith() {
-      this.hasBeenLastCalledWithArguments(Arguments.empty());
+      this.hasBeenLastCalledWithArguments(Argument.empty());
     }
 
     public void hasBeenLastCalledWith(final Object arg) {
-      this.hasBeenLastCalledWithArguments((arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
+      this.hasBeenLastCalledWithArguments((arg instanceof List<Argument.Matchable>) ? (List<Argument.Matchable>) arg : Argument.of(arg));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2) {
-      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2));
+      this.hasBeenLastCalledWithArguments(Argument.of(arg1, arg2));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2, arg3));
+      this.hasBeenLastCalledWithArguments(Argument.of(arg1, arg2, arg3));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
+      this.hasBeenLastCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4));
     }
 
     public void hasBeenLastCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-      this.hasBeenLastCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
+      this.hasBeenLastCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4, arg5));
     }
 
-    private void hasBeenLastCalledWithArguments(final Arguments args) {
+    private void hasBeenLastCalledWithArguments(final List<Argument.Matchable> args) {
       this.asserter.isFalse(this.spy.callLog.isEmpty(), buildErrorMessage(this.spy, ErrorMessageType.NEVER_CALLED));
-      this.asserter.isTrue(args?.matches(this.spy.callLog.getLast()), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, args));
+      this.asserter.isTrue(Argument.matches(args, this.spy.callLog.getLast()), buildErrorMessage(this.spy, ErrorMessageType.NOT_LAST_CALLED_WITH, args));
     }
   }
 
@@ -242,9 +242,9 @@ global class Expect {
     }
 
     private List<ErrorMessageRow> buildCallTraces(MethodSpy spy) {
-      final List<Arguments> reversedCallLogArguments = new List<Arguments>();
+      final List<List<Object>> reversedCallLogArguments = new List<List<Object>>();
       for (Integer i = this.spy.callLog.size() - 1; i >= 0; i--) {
-        reversedCallLogArguments.add(Arguments.ofList(this.spy.callLog.get(i)));
+        reversedCallLogArguments.add(this.spy.callLog.get(i));
       }
 
       if (reversedCallLogArguments.isEmpty()) {
@@ -255,9 +255,9 @@ global class Expect {
       rows.add(new ErrorMessageRow('method call history:'));
       final String template = '#{0} {1}({2})';
       for (Integer i = 0; i < reversedCallLogArguments.size(); i++) {
-        final Arguments args = reversedCallLogArguments[i];
+        final List<Object> args = reversedCallLogArguments[i];
         final Integer count = reversedCallLogArguments.size() - i;
-        rows.add(new ErrorMessageRow(String.format(template, new List<Object>{ count, spy.methodName, args }), true));
+        rows.add(new ErrorMessageRow(String.format(template, new List<Object>{ count, spy.methodName, args + '' }), true));
       }
       return rows;
     }

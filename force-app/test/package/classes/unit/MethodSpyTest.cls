@@ -27,7 +27,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithArguments_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Arguments.of('param')).thenReturn('test');
+    sut.whenCalledWith(Argument.of('param')).thenReturn('test');
 
     // Act
     Object result = sut.call(new List<Object>{ 'param' });
@@ -55,7 +55,7 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithEmptyArguments_whenCalledWithoutArgument_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Arguments.empty()).thenReturn('test');
+    sut.whenCalledWith(Argument.empty()).thenReturn('test');
 
     // Act
     Object result = sut.call(new List<Object>());
@@ -131,7 +131,6 @@ private class MethodSpyTest {
     Object result = sut.call(new List<Object>{ 'param', new Account(Name = 'Test'), true });
 
     // Assert
-    Arguments expectedArgs = Arguments.of('param', new Account(Name = 'Test'), Argument.any());
     Assert.areEqual(new List<Object>{ 'param', new Account(Name = 'Test'), true }, sut.callLog.getLast());
   }
 
@@ -188,7 +187,6 @@ private class MethodSpyTest {
     Object result = sut.call(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true });
 
     // Assert
-    Arguments expectedArgs = Arguments.of(Argument.jsonEquals(new List<String>{ 'test' }), Argument.ofType(Account.getSObjectType()), Argument.any());
     Assert.areEqual('Expected Result', result);
     Assert.areEqual(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true }, sut.callLog.getLast());
   }

@@ -260,18 +260,18 @@ Expect.that(myMethodSpy).hasBeenCalledTimes(2);
 
 // hasBeenCalledWith
 Expect.that(myMethodSpy).hasBeenCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
-Expect.that(myMethodSpy).hasBeenCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
+Expect.that(myMethodSpy).hasBeenCalledWith(Argument.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 
 // hasBeenLastCalledWith
 Expect.that(myMethodSpy).hasBeenLastCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
-Expect.that(myMethodSpy).hasBeenLastCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
+Expect.that(myMethodSpy).hasBeenLastCalledWith(Argument.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 ```
 
 Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
 ### Arguments
 
-Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Expect.that(myMethodSpy).hasBeenCalledWith` and `Expect.that(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Arguments` matchers.
+Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Expect.that(myMethodSpy).hasBeenCalledWith` and `Expect.that(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Argument.Matchable` interface.
 
 You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
 
@@ -279,14 +279,14 @@ It wrapes value with a `Argument.equals` when called with any kind of parameter.
 
 When called with a `Argument.Matchable` type, it considers it as a parameter, use it directly without wrapping it with a `Argument.equals`.
 
-If you need more arguments in your method calls, `Arguments` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Arguments.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Arguments.ofList(new List<Object>{...}))))`
+If you need more arguments in your method calls, `Argument` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Argument.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Argument.ofList(new List<Object>{...}))))`
 
 ```java
-Arguments emptyParameters = Arguments.empty();
+List<Argument.Matchable> emptyParameters = Argument.empty();
 
-Arguments myMethodParameters = Arguments.of(10, 'string'); // Up to five
+List<Argument.Matchable> myMethodParameters = Argument.of(10, 'string'); // Up to five
 
-Arguments myMethodWithLongParameters = Arguments.ofList(new List<Object>{10, 'string', true, 20, false, 'Sure'});
+List<Argument.Matchable> myMethodWithLongParameters = Argument.ofList(new List<Object>{10, 'string', true, 20, false, 'Sure'});
 ```
 
 ### Argument matcher
@@ -335,7 +335,7 @@ Argument.ofType(CustomType.class);
 
 #### BYOM (Build your own matcher)
 
-Use the `Argument.Matchable` interface and then use it with `Arguments` APIs
+Use the `Argument.Matchable` interface and then use it with `Argument` APIs
 
 ```java
 @isTest
@@ -350,7 +350,7 @@ public class MyMatchable implements Argument.Matchable {
   }
 }
 
-Arguments param = Arguments.of(new MyMatchable(), ...otherArguments);
+List<Argument.Matchable> args = Argument.of(new MyMatchable(), ...otherArguments);
 ```
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library

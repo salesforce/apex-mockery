@@ -77,7 +77,7 @@ private class ExpectTest {
     Expect.MethodSpyExpectable sut = Expect.that(spy, fakeAsserter);
 
     // Act
-    sut.hasBeenCalledWith(Arguments.ofList(new List<Object>{ new Account(), new Opportunity() }));
+    sut.hasBeenCalledWith(Argument.ofList(new List<Object>{ new Account(), new Opportunity() }));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -109,7 +109,7 @@ private class ExpectTest {
     Expect.MethodSpyExpectable sut = Expect.that(spy, fakeAsserter);
 
     // Act
-    sut.hasBeenCalledWith(Arguments.empty());
+    sut.hasBeenCalledWith(Argument.empty());
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -143,7 +143,7 @@ private class ExpectTest {
     spy.call(new List<Object>{ 'param' });
 
     // Act
-    sut.hasBeenCalledWith(Arguments.of('param'));
+    sut.hasBeenCalledWith(Argument.of('param'));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);
@@ -325,7 +325,7 @@ private class ExpectTest {
     spy.call(new List<Object>{ 'param' });
 
     // Act
-    sut.hasBeenLastCalledWith(Arguments.of('param'));
+    sut.hasBeenLastCalledWith(Argument.of('param'));
 
     // Assert
     Assert.areEqual(2, fakeAsserter.callCount);

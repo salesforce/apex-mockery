@@ -358,6 +358,9 @@ public class ArgumentTest {
       this.size = size;
       this.sob = sob;
     }
+
+    public CustomType() {
+    }
   }
 
   class CustomTypeWithEquals extends CustomType {
@@ -383,6 +386,145 @@ public class ArgumentTest {
   }
 
   public class MatchableStub implements Argument.Matchable {
+    public Boolean matches(Object callArgument) {
+      return true;
+    }
+  }
+
+  @isTest
+  static void givenNothing_whenOfIsCalled_matchesEmptyList() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.empty();
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>());
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
+  static void given1Object_whenOfIsCalled_matchesTheElement() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test');
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>{ 'test' });
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
+  static void given2Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10);
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10 });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test' });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void given3Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10, new Account());
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10, new Account() });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void given4Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10, new Account(), new List<Date>());
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10, new Account(), new List<Date>() });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account(), new List<Date>() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void given5Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void givenListOf10MixType_whenOfListIsCalledWithList_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.ofList(
+      new List<Object>{
+        Argument.equals('test'),
+        Argument.equals(10),
+        Argument.jsonEquals(new Account()),
+        Argument.ofType('List'),
+        new Map<Id, Set<String>>(),
+        new Set<Date>(),
+        new List<Account>(),
+        Blob.valueOf('test'),
+        new CustomMatchable(),
+        Argument.ofType(CustomType.class)
+      }
+    );
+
+    // Act
+    Boolean positive = Argument.matches(
+      sut,
+      new List<Object>{
+        'test',
+        10,
+        new Account(),
+        new List<Date>(),
+        new Map<Id, Set<String>>(),
+        new Set<Date>(),
+        new List<Account>(),
+        Blob.valueOf('test'),
+        'test',
+        new CustomType()
+      }
+    );
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void whenOfListIsCalledWithNull_matchesEmptyList() {
+    // Act
+    List<Argument.Matchable> sut = Argument.ofList(null);
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>());
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  class CustomMatchable implements Argument.Matchable {
     public Boolean matches(Object callArgument) {
       return true;
     }

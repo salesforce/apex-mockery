@@ -69,7 +69,7 @@ global class MethodSpy {
   }
 
   global MethodSpyCall whenCalledWith() {
-    return this.whenCalledWithArguments(Arguments.empty());
+    return this.whenCalledWithArguments(Argument.empty());
   }
 
   global MethodSpyCall whenCalledWith(final Object arg) {
@@ -77,22 +77,22 @@ global class MethodSpy {
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2, arg3));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4, arg5));
   }
 
-  private MethodSpyCall whenCalledWithArguments(final Arguments args) {
+  private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
     if (args == null) {
       throw new Argument.ConfigurationException('Arguments cannot be null');
     }
@@ -139,11 +139,11 @@ global class MethodSpy {
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private final Arguments argsMatchable;
+    private final List<Argument.Matchable> argsMatchable;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
-    public ParameterizedMethodSpyCall(final Arguments argsMatchable) {
+    public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
     }
 
@@ -160,7 +160,7 @@ global class MethodSpy {
     }
 
     public boolean matches(final List<Object> callArguments) {
-      return this.argsMatchable.matches(callArguments);
+      return Argument.matches(this.argsMatchable, callArguments);
     }
 
     public override String toString() {
