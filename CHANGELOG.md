@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/salesforce/apex-mockery/compare/v2.0.0...v2.1.0) (2023-05-12)
+
+
+### Features
+
+* Improve naming and concept segregation ([#50](https://github.com/salesforce/apex-mockery/issues/50)) ([4e35e09](https://github.com/salesforce/apex-mockery/commit/4e35e09380af8ea8a34462a519a2c6b64bcb4fc2))
+
 ## [2.0.0](https://github.com/salesforce/apex-mockery/compare/v1.1.0...v2.0.0) (2023-05-05)
 
 
