@@ -6,7 +6,7 @@
  */
 
 /**
- * Matcher offers publis static methods to build out-of-the-box matchers to be used with Expect
+ * Matchable offers publis static methods to build out-of-the-box matchers to be used with Expect
  *    - Argument.any()
  *    - Argument.equals(Object object)
  *    - Argument.jsonEquals(Object object)
@@ -17,7 +17,7 @@
 @IsTest
 @SuppressWarnings('PMD.EmptyStatementBlock')
 global class Argument {
-  global interface Matcher {
+  global interface Matchable {
     Boolean matches(Object callArgument);
   }
 
@@ -27,31 +27,89 @@ global class Argument {
   private Argument() {
   }
 
-  global static Argument.Matcher any() {
-    return new AnyMatcher();
+  public static boolean matches(final List<Argument.Matchable> matchableArguments, final List<Object> callArguments) {
+    if (matchableArguments == null || callArguments == null) {
+      // If both equals null then return true
+      return matchableArguments == callArguments;
+    }
+
+    if (matchableArguments.size() != callArguments.size()) {
+      return false;
+    }
+
+    for (Integer i = 0; i < matchableArguments.size(); ++i) {
+      if (!matchableArguments[i].matches(callArguments[i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
-  global static Argument.Matcher equals(final Object callArgument) {
-    return new EqualsMatcher(callArgument);
+  global static List<Argument.Matchable> empty() {
+    return new List<Argument.Matchable>();
   }
 
-  global static Argument.Matcher jsonEquals(final Object callArgument) {
-    return new JSONMatcher(callArgument);
+  global static List<Argument.Matchable> of(final Object arg) {
+    return Argument.ofList(new List<Object>{ arg });
   }
 
-  global static Argument.Matcher ofType(final String matchingType) {
-    return new TypeMatcher(matchingType);
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2) {
+    return Argument.ofList(new List<Object>{ arg1, arg2 });
   }
 
-  global static Argument.Matcher ofType(final Schema.SObjectType callArgument) {
-    return new TypeMatcher(callArgument);
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2, final Object arg3) {
+    return Argument.ofList(new List<Object>{ arg1, arg2, arg3 });
   }
 
-  global static Argument.Matcher ofType(final Type callArgument) {
-    return new TypeMatcher(callArgument);
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
+    return Argument.ofList(new List<Object>{ arg1, arg2, arg3, arg4 });
   }
 
-  private class AnyMatcher implements Argument.Matcher {
+  global static List<Argument.Matchable> of(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
+    return Argument.ofList(new List<Object>{ arg1, arg2, arg3, arg4, arg5 });
+  }
+
+  global static List<Argument.Matchable> ofList(final List<Object> listOfArgs) {
+    final List<Argument.Matchable> listOfMatchableArgs = Argument.empty();
+    if (listOfArgs == null) {
+      return listOfMatchableArgs;
+    }
+    for (Object callArgument : listOfArgs) {
+      if (callArgument instanceof Argument.Matchable) {
+        listOfMatchableArgs.add((Argument.Matchable) callArgument);
+      } else {
+        listOfMatchableArgs.add(Argument.equals(callArgument));
+      }
+    }
+    return listOfMatchableArgs;
+  }
+
+  global static Argument.Matchable any() {
+    return new AnyMatchable();
+  }
+
+  global static Argument.Matchable equals(final Object callArgument) {
+    return new EqualsMatchable(callArgument);
+  }
+
+  global static Argument.Matchable jsonEquals(final Object callArgument) {
+    return new JSONMatchable(callArgument);
+  }
+
+  global static Argument.Matchable ofType(final String matchingType) {
+    return new TypeMatchable(matchingType);
+  }
+
+  global static Argument.Matchable ofType(final Schema.SObjectType callArgument) {
+    return new TypeMatchable(callArgument);
+  }
+
+  global static Argument.Matchable ofType(final Type callArgument) {
+    return new TypeMatchable(callArgument);
+  }
+
+  private class AnyMatchable implements Argument.Matchable {
     public Boolean matches(final Object callArgument) {
       return true;
     }
@@ -61,10 +119,10 @@ global class Argument {
     }
   }
 
-  private class EqualsMatcher implements Argument.Matcher {
+  private class EqualsMatchable implements Argument.Matchable {
     private Object callArgumentToMatch;
 
-    public EqualsMatcher(final Object callArgumentToMatch) {
+    public EqualsMatchable(final Object callArgumentToMatch) {
       this.callArgumentToMatch = callArgumentToMatch;
     }
 
@@ -77,11 +135,11 @@ global class Argument {
     }
   }
 
-  private class JSONMatcher implements Argument.Matcher {
+  private class JSONMatchable implements Argument.Matchable {
     private Object callArgumentToMatch;
     private String jsonValue;
 
-    public JSONMatcher(final Object callArgumentToMatch) {
+    public JSONMatchable(final Object callArgumentToMatch) {
       this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
@@ -95,18 +153,18 @@ global class Argument {
     }
   }
 
-  private class TypeMatcher implements Argument.Matcher {
+  private class TypeMatchable implements Argument.Matchable {
     private String callArgumentToMatch;
 
-    public TypeMatcher(final Schema.SObjectType callArgumentToMatch) {
+    public TypeMatchable(final Schema.SObjectType callArgumentToMatch) {
       this.callArgumentToMatch = callArgumentToMatch.getDescribe().getName();
     }
 
-    public TypeMatcher(final String callArgumentToMatch) {
+    public TypeMatchable(final String callArgumentToMatch) {
       this.callArgumentToMatch = callArgumentToMatch;
     }
 
-    public TypeMatcher(final Type callArgumentToMatch) {
+    public TypeMatchable(final Type callArgumentToMatch) {
       this.callArgumentToMatch = callArgumentToMatch.getName();
     }
 

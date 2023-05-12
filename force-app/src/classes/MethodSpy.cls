@@ -10,9 +10,9 @@
  *  - spy.returns(value): always return the same value using spy.returns(value)
  *  - spy.whenCalledWith(Arguments args).thenReturn(value)
  *  - spy.whenCalledWith(Arguments args).thenThrow(error)
- *  note: the matching algorithm is based on Matcher specified in the Arguments instanciation (defaulting to equals)
+ *  note: the matching algorithm is based on Matchable specified in the Arguments instanciation (defaulting to equals)
  *  @see Arguments
- *  @see Matcher
+ *  @see Matchable
  */
 @IsTest
 global class MethodSpy {
@@ -69,33 +69,30 @@ global class MethodSpy {
   }
 
   global MethodSpyCall whenCalledWith() {
-    return this.whenCalledWithArguments(Arguments.empty());
+    return this.whenCalledWithArguments(Argument.empty());
   }
 
   global MethodSpyCall whenCalledWith(final Object arg) {
-    return this.whenCalledWithArguments((arg == null || arg instanceof Arguments) ? (Arguments) arg : Arguments.of(arg));
+    return this.whenCalledWithArguments((arg instanceof List<Argument.Matchable>) ? (List<Argument.Matchable>) arg : Argument.of(arg));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2, arg3));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4));
   }
 
   global MethodSpyCall whenCalledWith(final Object arg1, final Object arg2, final Object arg3, final Object arg4, final Object arg5) {
-    return this.whenCalledWithArguments(Arguments.of(arg1, arg2, arg3, arg4, arg5));
+    return this.whenCalledWithArguments(Argument.of(arg1, arg2, arg3, arg4, arg5));
   }
 
-  private MethodSpyCall whenCalledWithArguments(final Arguments args) {
-    if (args == null) {
-      throw new Argument.ConfigurationException('Arguments cannot be null');
-    }
+  private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(args);
     this.parameterizedMethodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
@@ -139,12 +136,12 @@ global class MethodSpy {
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
-    private final Arguments argsMatcher;
+    private final List<Argument.Matchable> argsMatchable;
     public Object value { get; private set; }
     public Exception error { get; private set; }
 
-    public ParameterizedMethodSpyCall(final Arguments argsMatcher) {
-      this.argsMatcher = argsMatcher;
+    public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
+      this.argsMatchable = argsMatchable;
     }
 
     public void thenReturn(Object value) {
@@ -160,11 +157,11 @@ global class MethodSpy {
     }
 
     public boolean matches(final List<Object> callArguments) {
-      return this.argsMatcher.matches(callArguments);
+      return Argument.matches(this.argsMatchable, callArguments);
     }
 
     public override String toString() {
-      return 'whenCalledWith' + this.argsMatcher + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
+      return 'whenCalledWith' + this.argsMatchable + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
     }
   }
 

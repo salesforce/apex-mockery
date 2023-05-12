@@ -1,9 +1,9 @@
 @isTest
 public class ArgumentTest {
   @isTest
-  static void givenAnyMatcher_matchesAnyKindOfArgument() {
+  static void givenAnyMatchable_matchesAnyKindOfArgument() {
     // Arrange
-    Argument.Matcher sut = Argument.any();
+    Argument.Matchable sut = Argument.any();
 
     // Act & Assert
     Assert.isTrue(sut.matches(null));
@@ -25,9 +25,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatcher_matchesPrimitive() {
+  static void givenEqualsMatchable_matchesPrimitive() {
     // Arrange
-    Argument.Matcher sut = Argument.equals(10);
+    Argument.Matchable sut = Argument.equals(10);
 
     // Act & Assert
     Assert.isTrue(sut.matches(10));
@@ -50,9 +50,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatcher_matchesSObject() {
+  static void givenEqualsMatchable_matchesSObject() {
     // Arrange
-    Argument.Matcher sut = Argument.equals(new Account(Name = 'test'));
+    Argument.Matchable sut = Argument.equals(new Account(Name = 'test'));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Account(Name = 'test')));
@@ -75,9 +75,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatcher_matchesCustomType() {
+  static void givenEqualsMatchable_matchesCustomType() {
     // Arrange
-    Argument.Matcher sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
+    Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
@@ -101,9 +101,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatcher_matchesCollection() {
+  static void givenEqualsMatchable_matchesCollection() {
     // Arrange
-    Argument.Matcher sut = Argument.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
+    Argument.Matchable sut = Argument.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
@@ -127,9 +127,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenTypeMatcher_matchesPrimitive() {
+  static void givenTypeMatchable_matchesPrimitive() {
     // Arrange
-    Argument.Matcher sut = Argument.ofType('Integer');
+    Argument.Matchable sut = Argument.ofType('Integer');
 
     // Act & Assert
     Assert.isTrue(sut.matches(10));
@@ -151,9 +151,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenTypeMatcher_matchesSObject() {
+  static void givenTypeMatchable_matchesSObject() {
     // Arrange
-    Argument.Matcher sut = Argument.ofType(Account.getSObjectType());
+    Argument.Matchable sut = Argument.ofType(Account.getSObjectType());
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Account()));
@@ -176,9 +176,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenTypeMatcher_matchesCustomType() {
+  static void givenTypeMatchable_matchesCustomType() {
     // Arrange
-    Argument.Matcher sut = Argument.ofType(CustomType.class);
+    Argument.Matchable sut = Argument.ofType(CustomType.class);
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
@@ -201,12 +201,12 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenTypeMatcher_matchesDeriveType() {
+  static void givenTypeMatchable_matchesDeriveType() {
     // Arrange
-    Argument.Matcher sut = Argument.ofType(Argument.Matcher.class);
+    Argument.Matchable sut = Argument.ofType(Argument.Matchable.class);
 
     // Act & Assert
-    Assert.isTrue(sut.matches(new MatcherStub()));
+    Assert.isTrue(sut.matches(new MatchableStub()));
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
@@ -226,9 +226,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenTypeMatcher_matchesCollection() {
+  static void givenTypeMatchable_matchesCollection() {
     // Arrange
-    Argument.Matcher sut = Argument.ofType('List');
+    Argument.Matchable sut = Argument.ofType('List');
 
     // Act & Assert
     Assert.isTrue(sut.matches(new List<Object>{ 10, 'String', new Account() }));
@@ -250,9 +250,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenJSONMatcher_matchesPrimitive() {
+  static void givenJSONMatchable_matchesPrimitive() {
     // Arrange
-    Argument.Matcher sut = Argument.jsonEquals(10);
+    Argument.Matchable sut = Argument.jsonEquals(10);
 
     // Act & Assert
     Assert.isTrue(sut.matches(10));
@@ -274,9 +274,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenJSONMatcher_matchesSObject() {
+  static void givenJSONMatchable_matchesSObject() {
     // Arrange
-    Argument.Matcher sut = Argument.jsonEquals(new Account(Name = 'test'));
+    Argument.Matchable sut = Argument.jsonEquals(new Account(Name = 'test'));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Account(Name = 'test')));
@@ -298,9 +298,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenJSONMatcher_matchesCustomType() {
+  static void givenJSONMatchable_matchesCustomType() {
     // Arrange
-    Argument.Matcher sut = Argument.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
+    Argument.Matchable sut = Argument.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
@@ -323,9 +323,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenJSONMatcher_matchesCollection() {
+  static void givenJSONMatchable_matchesCollection() {
     // Arrange
-    Argument.Matcher sut = Argument.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
+    Argument.Matchable sut = Argument.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
 
     // Act & Assert
     Assert.isTrue(sut.matches(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' }));
@@ -358,6 +358,9 @@ public class ArgumentTest {
       this.size = size;
       this.sob = sob;
     }
+
+    public CustomType() {
+    }
   }
 
   class CustomTypeWithEquals extends CustomType {
@@ -382,7 +385,182 @@ public class ArgumentTest {
     }
   }
 
-  public class MatcherStub implements Argument.Matcher {
+  public class MatchableStub implements Argument.Matchable {
+    public Boolean matches(Object callArgument) {
+      return true;
+    }
+  }
+
+  @isTest
+  static void givenNull_whenOfIsCalled_doesNotmatche() {
+    // Arrange
+    List<Argument.Matchable> sut = null;
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>());
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @isTest
+  static void givenNothing_whenNullIsCalled_doesNotmatche() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.empty();
+
+    // Act
+    Boolean result = Argument.matches(sut, null);
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @isTest
+  static void givenNull_whenNullIsCalled_matches() {
+    // Arrange
+    List<Argument.Matchable> sut = null;
+
+    // Act
+    Boolean result = Argument.matches(sut, null);
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
+  static void givenNothing_whenOfIsCalled_matchesEmptyList() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.empty();
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>());
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
+  static void given1Object_whenOfIsCalled_matchesTheElement() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test');
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>{ 'test' });
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
+  static void given2Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10);
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10 });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test' });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void given3Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10, new Account());
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10, new Account() });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void given4Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10, new Account(), new List<Date>());
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10, new Account(), new List<Date>() });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account(), new List<Date>() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void given5Objects_whenOfIsCalled_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
+
+    // Act
+    Boolean positive = Argument.matches(sut, new List<Object>{ 'test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void givenListOf10MixType_whenOfListIsCalledWithList_matchesElementsInOrder() {
+    // Arrange
+    List<Argument.Matchable> sut = Argument.ofList(
+      new List<Object>{
+        Argument.equals('test'),
+        Argument.equals(10),
+        Argument.jsonEquals(new Account()),
+        Argument.ofType('List'),
+        new Map<Id, Set<String>>(),
+        new Set<Date>(),
+        new List<Account>(),
+        Blob.valueOf('test'),
+        new CustomMatchable(),
+        Argument.ofType(CustomType.class)
+      }
+    );
+
+    // Act
+    Boolean positive = Argument.matches(
+      sut,
+      new List<Object>{
+        'test',
+        10,
+        new Account(),
+        new List<Date>(),
+        new Map<Id, Set<String>>(),
+        new Set<Date>(),
+        new List<Account>(),
+        Blob.valueOf('test'),
+        'test',
+        new CustomType()
+      }
+    );
+    Boolean negative = Argument.matches(sut, new List<Object>{ 10, 'test', new Account(), new List<Date>(), new Map<Id, Set<String>>() });
+
+    // Assert
+    Assert.isTrue(positive);
+    Assert.isFalse(negative);
+  }
+
+  @isTest
+  static void whenOfListIsCalledWithNull_matchesEmptyList() {
+    // Act
+    List<Argument.Matchable> sut = Argument.ofList(null);
+
+    // Act
+    Boolean result = Argument.matches(sut, new List<Object>());
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  class CustomMatchable implements Argument.Matchable {
     public Boolean matches(Object callArgument) {
       return true;
     }

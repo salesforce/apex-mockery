@@ -5,14 +5,14 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @isTest
-private class WhenCalledWithCustomMatcher_ThenReturns {
+private class WhenCalledWithCustomMatchable_ThenReturn {
   @isTest
   static void recipe() {
     // Arrange
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(new OperaPastryMatcher()).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new OperaPastryMatchable()).thenReturn(Date.today().addDays(3));
 
     // Act
     OrderConfirmation order = myBakery.order(new Pastry('Opera'));

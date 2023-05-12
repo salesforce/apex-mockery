@@ -245,7 +245,7 @@ Same as if you would have configured the spy twice to return (or throw), the las
 ### Assert on a spy
 
 Use the `Expect` class to assert on a spy
-It exposes the method `that` and returns a `MethodSpyExpect` type.
+It exposes the method `that` and returns a `MethodSpyExpectable` type.
 Use the convenient assertion methods the following way:
 
 ```java
@@ -260,38 +260,38 @@ Expect.that(myMethodSpy).hasBeenCalledTimes(2);
 
 // hasBeenCalledWith
 Expect.that(myMethodSpy).hasBeenCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
-Expect.that(myMethodSpy).hasBeenCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
+Expect.that(myMethodSpy).hasBeenCalledWith(Argument.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 
 // hasBeenLastCalledWith
 Expect.that(myMethodSpy).hasBeenLastCalledWith('stringValue', Argument.any(), true, ...); // up to 5 parameters
-Expect.that(myMethodSpy).hasBeenLastCalledWith(Arguments.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
+Expect.that(myMethodSpy).hasBeenLastCalledWith(Argument.ofList(new List<Object>{Argument.any(), Argument.any(), ... })); // for more than 5 parameters
 ```
 
 Have a look at the [assertions recipes](force-app/recipes/classes/asserting/) to have a deeper overview of what you can do with the assertion API
 
 ### Arguments
 
-Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Expect.that(myMethodSpy).hasBeenCalledWith` and `Expect.that(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Arguments` matchers.
+Configuring a stub (`spy.whenCalledWith(...)`) and asserting (`Expect.that(myMethodSpy).hasBeenCalledWith` and `Expect.that(myMethodSpy).hasBeenLastCalledWith`) a stub uses `Argument.Matchable` interface.
 
 You can either use raw values with notation like `spy.whenCallWith('value1', false, ...)`or `hasBeenCalledWith(param1, param2, ...)` up to 5 arguments.
 
 It wrapes value with a `Argument.equals` when called with any kind of parameter.
 
-When called with a `Argument.Matcher` type, it considers it as a parameter, use it directly without wrapping it with a `Argument.equals`.
+When called with a `Argument.Matchable` type, it considers it as a parameter, use it directly without wrapping it with a `Argument.equals`.
 
-If you need more arguments in your method calls, `Arguments` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Arguments.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Arguments.ofList(new List<Object>{...}))))`
+If you need more arguments in your method calls, `Argument` offers the `ofList` API to create parameters for that, so that you can do `spy.whenCallWith(Argument.ofList(new List<Object>{...})))`or `hasBeenCalledWith(Argument.ofList(new List<Object>{...}))))`
 
 ```java
-Arguments emptyParameters = Arguments.empty();
+List<Argument.Matchable> emptyParameters = Argument.empty();
 
-Arguments myMethodParameters = Arguments.of(10, 'string'); // Up to five
+List<Argument.Matchable> myMethodParameters = Argument.of(10, 'string'); // Up to five
 
-Arguments myMethodWithLongParameters = Arguments.ofList(new List<Object>{10, 'string', true, 20, false, 'Sure'});
+List<Argument.Matchable> myMethodWithLongParameters = Argument.ofList(new List<Object>{10, 'string', true, 20, false, 'Sure'});
 ```
 
 ### Argument matcher
 
-The library provide OOTB (out of the box) Matchers ready for use and fully tested.
+The library provide OOTB (out of the box) Matchables ready for use and fully tested.
 The library accept your own matchers for specific use cases and reusability.
 
 #### Any
@@ -335,11 +335,11 @@ Argument.ofType(CustomType.class);
 
 #### BYOM (Build your own matcher)
 
-Use the `Argument.Matcher` interface and then use it with `Arguments` APIs
+Use the `Argument.Matchable` interface and then use it with `Argument` APIs
 
 ```java
 @isTest
-public class MyMatcher implements Argument.Matcher {
+public class MyMatchable implements Argument.Matchable {
   public Boolean matches(Object callArgument) {
     boolean matches = false;
 
@@ -350,7 +350,7 @@ public class MyMatcher implements Argument.Matcher {
   }
 }
 
-Arguments param = Arguments.of(new MyMatcher(), ...otherArguments);
+List<Argument.Matchable> args = Argument.of(new MyMatchable(), ...otherArguments);
 ```
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
@@ -368,7 +368,7 @@ It contains one classe for each use cases the library covers
 - [ReturnsThenThrows](force-app/recipes/classes/mocking/ReturnsThenThrows.cls): spy configured to throw
 - [Throws](force-app/recipes/classes/mocking/Throws.cls): spy configured to throw
 - [ThrowsThenReturns](force-app/recipes/classes/mocking/ThrowsThenReturns.cls): spy configured to return
-- [WhenCalledWithCustomMatcher_ThenReturns](force-app/recipes/classes/mocking/WhenCalledWithCustomMatcher_ThenReturns.cls): spy configured with custom matcher to return
+- [WhenCalledWithCustomMatchable_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithCustomMatchable_ThenReturn.cls): spy configured with custom matcher to return
 - [WhenCalledWithEqualMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithEqualMatching_ThenReturn.cls): spy configured with equals matcher to return
 - [WhenCalledWithJSONMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithJSONMatching_ThenReturn.cls): spy configured with JSON matcher to return
 - [WhenCalledWithMatchingThrowsAndReturns](force-app/recipes/classes/mocking/WhenCalledWithMatchingThrowsAndReturns.cls): spy configured with matcher to return and to throw
@@ -382,9 +382,9 @@ It contains one classe for each use cases the library covers
 - [HasBeenCalled](force-app/recipes/classes/asserting/HasBeenCalled.cls): spy called
 - [HasBeenCalledTimes](force-app/recipes/classes/asserting/HasBeenCalledTimes.cls): spy called times
 - [HasBeenCalledWith](force-app/recipes/classes/asserting/HasBeenCalledWith.cls): spy called with equal matcher
-- [HasBeenCalledWithCustomMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithCustomMatcher.cls): spy called with custom matcher
-- [HasBeenCalledWithJSONMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithJSONMatcher.cls): spy called with JSON matcher
-- [HasBeenCalledWithTypeMatcher](force-app/recipes/classes/asserting/HasBeenCalledWithTypeMatcher.cls): spy called with type matcher
+- [HasBeenCalledWithCustomMatchable](force-app/recipes/classes/asserting/HasBeenCalledWithCustomMatchable.cls): spy called with custom matcher
+- [HasBeenCalledWithJSONMatchable](force-app/recipes/classes/asserting/HasBeenCalledWithJSONMatchable.cls): spy called with JSON matcher
+- [HasBeenCalledWithTypeMatchable](force-app/recipes/classes/asserting/HasBeenCalledWithTypeMatchable.cls): spy called with type matcher
 - [HasBeenLastCalledWith](force-app/recipes/classes/asserting/HasBeenLastCalledWith.cls): spy last called with equal matcher
 - [HasNotBeenCalled](force-app/recipes/classes/asserting/HasNotBeenCalled.cls): spy not called
 
