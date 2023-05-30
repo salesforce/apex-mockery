@@ -46,5 +46,5 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         with:
           token: ${{ secrets.RELEASE_TOKEN }}
-          release-type: node
+          release-type: sfdx
           package-name: apex-mockery
