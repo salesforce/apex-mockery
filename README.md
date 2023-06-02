@@ -39,6 +39,10 @@ We want its usage to be simple, its maintainability to be easy and to provide th
     - [Mocking](#mocking)
     - [Asserting](#asserting)
 - [Library architecture](#library-architecture)
+- [How to migrate my codebase?](#how-to-migrate-my-codebase)
+  - [When implementing new feature](#when-implementing-new-feature)
+  - [When touching existing/legacy code](#when-touching-existinglegacy-code)
+  - [When refactoring](#when-refactoring)
 - [Authors](#authors)
 - [Contributing](#contributing)
 - [License](#license)
@@ -397,6 +401,36 @@ The library repository has 3 parts:
 - Test classes in the `force-app/recipes` folder are what you can use to have a deeper understanding of the library usages.
 
 ![apex mockery class diagram](resources/class_diagram.png)
+
+## How to migrate my codebase?
+
+Considering the concept of test pyramid, the importance of unit test in term of maintainability, how it impacts positively the deployment speed and how the lib can help you doing that, how do I migrate my entire code base to have a well balanced test pyramid ?
+
+Here are the way we suggest to follow to enforce proper unit test
+
+### When implementing new feature
+
+Look for unit test changes at the PR level, ensure the unit test is well decoupled from its dependencies
+
+- Ensure the code base stays clean
+- Use the code review stage as an enablement tool for the team
+
+### When touching existing/legacy code
+
+Decouple production code using dependency injection
+Then rewrite unit tests
+
+- Speed up test execution of this area of the code
+- Improve maintainability and Developer Experience
+
+### When refactoring
+
+Decouple production code using dependency injection
+Then write unit tests
+Then you can either shrink or delete old integrated test
+
+- The apex class under test becomes decoupled from its dependencies
+- First step towards SOLID design, you’ll be able to segregate responsibility further
 
 ## Authors
 
