@@ -434,8 +434,10 @@ Then you can either shrink or delete old integrated test
 
 ## Authors
 
-- **Sebastien Colladon** - Developer - [scolladon-sfdc](https://github.com/scolladon-sfdc)
-- **Ludovic Meurillon** - Architect - [LudoMeurillon](https://github.com/LudoMeurillon) _Initial work_
+- [Antoine Rosenbach](https://github.com/arosenbach) _Initial contributor_
+- [Lionel Armanet](https://github.com/lionelarmanet) _Initial contributor_
+- [Ludovic Meurillon](https://github.com/LudoMeurillon) _Initial contributor_
+- [Sebastien Colladon](https://github.com/scolladon-sfdc)
 
 ## Contributing
 
