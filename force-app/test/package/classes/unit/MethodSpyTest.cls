@@ -636,18 +636,18 @@ private class MethodSpyTest {
   }
 
   class CustomApex {
-    private String attribut;
+    private String attribute;
 
-    public CustomApex(String attribut) {
-      this.attribut = attribut;
+    public CustomApex(String attribute) {
+      this.attribute = attribute;
     }
   }
 
   class CustomApexWithEquals {
-    private String attribut;
+    private String attribute;
 
-    public CustomApexWithEquals(String attribut) {
-      this.attribut = attribut;
+    public CustomApexWithEquals(String attribute) {
+      this.attribute = attribute;
     }
 
     public Boolean equals(Object o) {
@@ -655,19 +655,19 @@ private class MethodSpyTest {
         return false;
       }
       CustomApexWithEquals subject = (CustomApexWithEquals) o;
-      return this.attribut == subject.attribut;
+      return this.attribute == subject.attribute;
     }
 
     public Integer hashCode() {
-      return this.attribut != null ? this.attribut.hashCode() : -1;
+      return this.attribute != null ? this.attribute.hashCode() : -1;
     }
   }
 
   class NotSerializableCustomApex {
-    private Http notSerializableAttribut;
+    private Http notSerializableAttribute;
 
     public NotSerializableCustomApex() {
-      this.notSerializableAttribut = new Http();
+      this.notSerializableAttribute = new Http();
     }
   }
 }
