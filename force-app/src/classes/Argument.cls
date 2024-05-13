@@ -127,7 +127,7 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      return callArgument == this.callArgumentToMatch;
+      return String.valueOf(callArgument).equals(this.toString());
     }
 
     override public String toString() {
