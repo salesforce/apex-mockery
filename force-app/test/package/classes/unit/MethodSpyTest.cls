@@ -407,12 +407,12 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected First Param', true).thenReturn('Yet another expected Result');
     try {
       // Act
-      sut.call(new List<Object>{ 'Another Param', false });
+      sut.call(new List<Type>{ String.class, Boolean.class }, new List<String>{ 'param', 'bool' }, new List<Object>{ 'Another Param', false });
       Assert.fail('it shoud not reach this line');
     } catch (MethodSpy.ConfigurationException cex) {
       // Assert
       Assert.areEqual(
-        'methodName: No stub value found for a call with args (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
+        'No stub value found for a call of methodName(String param[Another Param], Boolean bool[false])\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
         cex.getMessage()
       );
     }
