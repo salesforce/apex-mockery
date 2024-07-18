@@ -29,7 +29,7 @@ global class MethodSpy {
     this.callLog = new CallLog();
   }
 
-  public Object call(List<Object> args) {
+  public Object call(List<Type> paramTypes, List<String> paramNames, List<Object> args) {
     this.callLog.add(new MethodCall(args));
 
     if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
@@ -53,7 +53,7 @@ global class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallArguments(args).build();
+    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
   global void returns(Object value) {
@@ -167,10 +167,22 @@ global class MethodSpy {
 
   private class ConfigurationExceptionBuilder {
     private MethodSpy spy;
+    private List<Type> callTypes;
+    private List<String> callParamNames;
     private List<Object> callArguments;
 
     public ConfigurationExceptionBuilder withMethodSpy(final MethodSpy spy) {
       this.spy = spy;
+      return this;
+    }
+
+    public ConfigurationExceptionBuilder withCallTypes(final List<Type> callTypes) {
+      this.callTypes = callTypes;
+      return this;
+    }
+
+    public ConfigurationExceptionBuilder withCallParamNames(final List<String> callParamNames) {
+      this.callParamNames = callParamNames;
       return this;
     }
 
@@ -184,10 +196,17 @@ global class MethodSpy {
       for (ParameterizedMethodSpyCall parameterizedCall : this.spy.parameterizedMethodCalls) {
         errorMessages.add(parameterizedCall.toString());
       }
+
+      List<String> callArgumentsAsString = new List<String>();
+      for (Integer i = 0; i < this.callArguments.size(); i++) {
+        callArgumentsAsString.add(this.callTypes[i] + ' ' + this.callParamNames[i] + '[' + this.callArguments[i] + ']');
+      }
       return new ConfigurationException(
-        this.spy.methodName +
-          ': No stub value found for a call with args ' +
-          this.callArguments +
+        'No stub value found for a call of ' +
+          this.spy.methodName +
+          '(' +
+          String.join(callArgumentsAsString, ', ') +
+          ')' +
           '\nHere are the configured stubs:\n\t' +
           String.join(errorMessages, '\n\t')
       );
