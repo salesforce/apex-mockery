@@ -29,6 +29,27 @@ global class MethodSpy {
     this.callLog = new CallLog();
   }
 
+  // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
+  public Object call(List<Object> args) {
+    // Forward compatibility implementation
+    List<Type> paramTypes = new List<Type>();
+    List<String> paramNames = new List<String>();
+
+    for (Object arg : args) {
+      paramTypes.add(Argument.getType(arg)); // Infer type dynamically
+      paramNames.add('<unknown_param_name>'); // Impossible to get this information at runtime
+    }
+
+    // Warn consumer
+    System.Debug(
+      LoggingLevel.WARN,
+      '[apex-mockery] call to the deprecated MethodSpy.call(List<Object> args) method.\nPlease use MethodSpy.call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead.'
+    );
+
+    // Interoperability
+    return this.call(paramTypes, paramNames, args);
+  }
+
   public Object call(List<Type> paramTypes, List<String> paramNames, List<Object> args) {
     this.callLog.add(new MethodCall(args));
 

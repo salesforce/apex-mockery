@@ -169,7 +169,7 @@ global class Argument {
     }
 
     public boolean matches(final Object callArgument) {
-      String typeName = this.getTypeName(callArgument);
+      String typeName = Argument.getTypeName(callArgument);
       if (this.callArgumentToMatch == typeName) {
         return true;
       }
@@ -182,19 +182,24 @@ global class Argument {
       return false;
     }
 
-    private String getTypeName(final Object callArgument) {
-      String result = 'Date';
-      try {
-        Date typeCheck = (Date) callArgument;
-      } catch (System.TypeException te) {
-        String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
-        result = message.substringBefore(' to Date');
-      }
-      return result;
-    }
-
     override public String toString() {
       return callArgumentToMatch + '.Type';
     }
+  }
+
+  private static String getTypeName(final Object callArgument) {
+    String result = 'Date';
+    try {
+      Date typeCheck = (Date) callArgument;
+    } catch (System.TypeException te) {
+      String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
+      result = message.substringBefore(' to Date');
+    }
+    return result;
+  }
+
+  public static Type getType(final Object callArgument) {
+    final String typeName = getTypeName(callArgument);
+    return Type.forName(typeName);
   }
 }
