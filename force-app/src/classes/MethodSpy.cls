@@ -77,10 +77,18 @@ global class MethodSpy {
     throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
+  global void returnsOnce(Object value) {
+    // TODO Implementatiopn
+  }
+
   global void returns(Object value) {
     this.configuredGlobalReturn = true;
     this.configuredGlobalThrow = false;
     this.returnValue = value;
+  }
+
+  global void throwsExceptionOnce(Exception exceptionToThrow) {
+    // TODO Implementatiopn
   }
 
   global void throwsException(Exception exceptionToThrow) {
@@ -165,8 +173,15 @@ global class MethodSpy {
       this.argsMatchable = argsMatchable;
     }
 
+    public void thenReturnOnce(Object value) {
+      // TODO Implementatiopn
+    }
     public void thenReturn(Object value) {
       this.value = value;
+    }
+
+    public void thenThrowOnce(Exception error) {
+      // TODO Implementatiopn
     }
 
     public void thenThrow(Exception error) {
