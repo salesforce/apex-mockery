@@ -169,7 +169,7 @@ global class Argument {
     }
 
     public boolean matches(final Object callArgument) {
-      String typeName = this.getType(callArgument);
+      String typeName = this.getTypeName(callArgument);
       if (this.callArgumentToMatch == typeName) {
         return true;
       }
@@ -182,7 +182,7 @@ global class Argument {
       return false;
     }
 
-    private String getType(final Object callArgument) {
+    private String getTypeName(final Object callArgument) {
       String result = 'Date';
       try {
         Date typeCheck = (Date) callArgument;
