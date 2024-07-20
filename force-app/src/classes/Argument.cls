@@ -114,7 +114,7 @@ global class Argument {
       return true;
     }
 
-    override public String toString() {
+    public override String toString() {
       return 'any';
     }
   }
@@ -127,20 +127,26 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      return String.valueOf(callArgument) == this.toString();
+      if (this.callArgumentToMatch == null && callArgument == null) {
+        return true;
+      }
+
+      if (this.callArgumentToMatch != null) {
+        return this.callArgumentToMatch.equals(callArgument);
+      }
+
+      return false;
     }
 
-    override public String toString() {
-      return callArgumentToMatch + '';
+    public override String toString() {
+      return String.valueOf(this.callArgumentToMatch);
     }
   }
 
   private class JSONMatchable implements Argument.Matchable {
-    private Object callArgumentToMatch;
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
@@ -148,34 +154,35 @@ global class Argument {
       return this.jsonValue == JSON.serialize(callArgument);
     }
 
-    override public String toString() {
-      return 'json(' + callArgumentToMatch + ')';
+    public override String toString() {
+      return 'json(' + this.jsonValue + ')';
     }
   }
 
   private class TypeMatchable implements Argument.Matchable {
-    private String callArgumentToMatch;
+    private String typeNameToMatch;
 
     public TypeMatchable(final Schema.SObjectType callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch.getDescribe().getName();
+      this.typeNameToMatch = callArgumentToMatch.getDescribe().getName();
     }
 
     public TypeMatchable(final String callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
+      this.typeNameToMatch = callArgumentToMatch;
     }
 
     public TypeMatchable(final Type callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch.getName();
+      this.typeNameToMatch = callArgumentToMatch.getName();
     }
 
     public boolean matches(final Object callArgument) {
       String typeName = this.getType(callArgument);
-      if (this.callArgumentToMatch == typeName) {
+      // This is a case-insensitive check and should remain that way.
+      if (this.typeNameToMatch == typeName) {
         return true;
       }
 
       Type actualType = Type.forName(typeName);
-      Type expectedType = Type.forName(this.callArgumentToMatch);
+      Type expectedType = Type.forName(this.typeNameToMatch);
       if (expectedType != null && actualType != null) {
         return expectedType.isAssignableFrom(actualType);
       }
@@ -193,8 +200,8 @@ global class Argument {
       return result;
     }
 
-    override public String toString() {
-      return callArgumentToMatch + '.Type';
+    public override String toString() {
+      return this.typeNameToMatch + '.Type';
     }
   }
 }
