@@ -136,20 +136,18 @@ global class Argument {
   }
 
   private class JSONMatchable implements Argument.Matchable {
-    private Object callArgumentToMatch;
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
     public boolean matches(final Object callArgument) {
-      return this.jsonValue == JSON.serialize(callArgument);
+      return String.valueOf(this.jsonValue).equals(String.valueOf(JSON.serialize(callArgument)));
     }
 
     override public String toString() {
-      return 'json(' + this.callArgumentToMatch + ')';
+      return 'json(' + this.jsonValue + ')';
     }
   }
 
