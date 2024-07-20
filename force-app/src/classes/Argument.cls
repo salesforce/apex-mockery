@@ -131,7 +131,7 @@ global class Argument {
     }
 
     override public String toString() {
-      return callArgumentToMatch + '';
+      return this.callArgumentToMatch + '';
     }
   }
 
@@ -149,7 +149,7 @@ global class Argument {
     }
 
     override public String toString() {
-      return 'json(' + callArgumentToMatch + ')';
+      return 'json(' + this.callArgumentToMatch + ')';
     }
   }
 
@@ -183,7 +183,7 @@ global class Argument {
     }
 
     override public String toString() {
-      return callArgumentToMatch + '.Type';
+      return this.callArgumentToMatch + '.Type';
     }
   }
 
