@@ -131,7 +131,7 @@ global class Argument {
     }
 
     public override String toString() {
-      return String.valueOf(callArgumentToMatch);
+      return String.valueOf(this.callArgumentToMatch);
     }
   }
 
@@ -198,7 +198,7 @@ global class Argument {
     }
 
     public override String toString() {
-      return typeNameToMatch + '.Type';
+      return this.typeNameToMatch + '.Type';
     }
   }
 }
