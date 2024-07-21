@@ -78,25 +78,11 @@ global class Argument {
     for (Object callArgument : listOfArgs) {
       if (callArgument instanceof Argument.Matchable) {
         listOfMatchableArgs.add((Argument.Matchable) callArgument);
-      } else if (isJSON(callArgument)) { 
-        listOfMatchableArgs.add(Argument.jsonEquals(callArgument));
       } else {
         listOfMatchableArgs.add(Argument.equals(callArgument));
       }
     }
     return listOfMatchableArgs;
-  }
-
-  private static Boolean isJSON(Object callArgument) {
-    try {
-      String serializedCallArgument =  JSON.serialize(callArgument);
-      if (serializedCallArgument == null) {
-        return false;
-      }
-      return serializedCallArgument.startsWith('{') && serializedCallArgument.endsWith('}');
-    } catch (JSONException e) {
-      return false; 
-    }
   }
 
   global static Argument.Matchable any() {
@@ -199,14 +185,17 @@ global class Argument {
     }
 
     private String getType(final Object callArgument) {
-      String result = 'Date';
       try {
-        Date typeCheck = (Date) callArgument;
+        castToDate(callArgument);
+        return 'Date';
       } catch (System.TypeException te) {
-        String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
-        result = message.substringBefore(' to Date');
+        return te.getMessage().substringBetween('Invalid conversion from runtime type ', ' to Date');
       }
-      return result;
+    }
+
+    // Date.valueOf() does not work. Use method to avoid assigning to unused variable.
+    private Date castToDate(final Object callArgument) {
+      return (Date) callArgument;
     }
 
     public override String toString() {
