@@ -89,7 +89,11 @@ global class Argument {
 
   private static Boolean isJSON(Object callArgument) {
     try {
-      return JSON.serialize(callArgument)?.startsWith('{') == true;
+      String serializedCallArgument =  JSON.serialize(callArgument);
+      if (serializedCallArgument == null) {
+        return false;
+      }
+      return serializedCallArgument.startsWith('{') && serializedCallArgument.endsWith('}');
     } catch (JSONException e) {
       return false; 
     }
@@ -137,7 +141,7 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      return callArgument == this.callArgumentToMatch;
+      return this.callArgumentToMatch == callArgument;
     }
 
     public override String toString() {
