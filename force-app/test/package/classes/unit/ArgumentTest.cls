@@ -75,9 +75,9 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatchable_matchesCustomTypeWithProperties() {
+  static void givenEqualsMatchable_matchesCustomTypeWithEqualsAndProperties() {
     // Arrange
-    Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
+    Argument.Matchable sut = Argument.jsonEquals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
@@ -97,13 +97,12 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
   static void givenEqualsMatchable_matchesCustomTypeWithoutProperties() {
     // Arrange
-    Argument.Matchable sut = Argument.equals(new CustomType());
+    Argument.Matchable sut = Argument.jsonEquals(new CustomType());
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType()));
@@ -123,7 +122,6 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest

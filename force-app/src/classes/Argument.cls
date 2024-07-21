@@ -78,11 +78,21 @@ global class Argument {
     for (Object callArgument : listOfArgs) {
       if (callArgument instanceof Argument.Matchable) {
         listOfMatchableArgs.add((Argument.Matchable) callArgument);
+      } else if (isJSON(callArgument)) { 
+        listOfMatchableArgs.add(Argument.jsonEquals(callArgument));
       } else {
         listOfMatchableArgs.add(Argument.equals(callArgument));
       }
     }
     return listOfMatchableArgs;
+  }
+
+  private static Boolean isJSON(Object callArgument) {
+    try {
+      return JSON.serialize(callArgument)?.startsWith('{') == true;
+    } catch (JSONException e) {
+      return false; 
+    }
   }
 
   global static Argument.Matchable any() {
@@ -127,35 +137,30 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      if (this.callArgumentToMatch == null && callArgument == null) {
-        return true;
-      }
-
-      if (this.callArgumentToMatch != null) {
-        return this.callArgumentToMatch.equals(callArgument);
-      }
-
-      return false;
+      return callArgument == this.callArgumentToMatch;
     }
 
     public override String toString() {
-      return String.valueOf(this.callArgumentToMatch);
+      return String.valueOf(callArgumentToMatch);
     }
   }
 
   private class JSONMatchable implements Argument.Matchable {
+    private Object callArgumentToMatch;
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
+      this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
-    public boolean matches(final Object callArgument) {
+    public Boolean matches(final Object callArgument) {
       return this.jsonValue == JSON.serialize(callArgument);
     }
 
     public override String toString() {
-      return 'json(' + this.jsonValue + ')';
+      // This should not use the serialized JSON, which would cause a mismatch for whenCalledWith checks.
+      return String.valueOf(callArgumentToMatch); 
     }
   }
 
@@ -192,7 +197,7 @@ global class Argument {
     private String getType(final Object callArgument) {
       String result = 'Date';
       try {
-        Date.valueOf(callArgument);
+        Date typeCheck = (Date) callArgument;
       } catch (System.TypeException te) {
         String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
         result = message.substringBefore(' to Date');
@@ -201,7 +206,7 @@ global class Argument {
     }
 
     public override String toString() {
-      return this.typeNameToMatch + '.Type';
+      return typeNameToMatch + '.Type';
     }
   }
 }
