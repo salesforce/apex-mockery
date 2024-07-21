@@ -75,12 +75,38 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatchable_matchesCustomType() {
+  static void givenEqualsMatchable_matchesCustomTypeWithProperties() {
     // Arrange
     Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
+
+    Assert.isFalse(sut.matches(null));
+    Assert.isFalse(sut.matches(Date.today()));
+    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
+    Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    Assert.isFalse(sut.matches(false));
+    Assert.isFalse(sut.matches(true));
+    Assert.isFalse(sut.matches(new Account(Name = 'test')));
+    Assert.isFalse(sut.matches(10));
+    Assert.isFalse(sut.matches(10.2));
+    Assert.isFalse(sut.matches('test'));
+    Assert.isFalse(sut.matches('001000000000011AAA'));
+    Assert.isFalse(sut.matches(new List<Object>()));
+    Assert.isFalse(sut.matches(new Set<Object>()));
+    Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+  }
+
+  @isTest
+  static void givenEqualsMatchable_matchesCustomTypeWithoutProperties() {
+    // Arrange
+    Argument.Matchable sut = Argument.equals(new CustomType());
+
+    // Act & Assert
+    Assert.isTrue(sut.matches(new CustomType()));
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
