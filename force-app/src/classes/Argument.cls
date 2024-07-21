@@ -149,8 +149,7 @@ global class Argument {
     }
 
     public override String toString() {
-      // This should not use the serialized JSON, which would cause a mismatch for whenCalledWith checks.
-      return String.valueOf(callArgumentToMatch); 
+      return 'json(' + this.callArgumentToMatch + ')'; 
     }
   }
 
