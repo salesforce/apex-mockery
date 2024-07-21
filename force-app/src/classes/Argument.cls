@@ -6,7 +6,7 @@
  */
 
 /**
- * Matchable offers publis static methods to build out-of-the-box matchers to be used with Expect
+ * Matchable offers public static methods to build out-of-the-box matchers to be used with Expect
  *    - Argument.any()
  *    - Argument.equals(Object object)
  *    - Argument.jsonEquals(Object object)
@@ -15,7 +15,7 @@
  *    - Argument.ofType(Schema.SObjectType sobjectType)
  */
 @IsTest
-@SuppressWarnings('PMD.EmptyStatementBlock')
+@SuppressWarnings('PMD.EmptyStatementBlock, PMD.AvoidGlobalModifier')
 global class Argument {
   global interface Matchable {
     Boolean matches(Object callArgument);
@@ -192,7 +192,7 @@ global class Argument {
     private String getType(final Object callArgument) {
       String result = 'Date';
       try {
-        Date typeCheck = (Date) callArgument;
+        Date.valueOf(callArgument);
       } catch (System.TypeException te) {
         String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
         result = message.substringBefore(' to Date');
