@@ -82,6 +82,7 @@ public class ArgumentTest {
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
+
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
     Assert.isFalse(sut.matches(DateTime.now()));
@@ -97,6 +98,8 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
+    Assert.isFalse(sut.matches(new CustomType('TEST', 10, new Account(Name = 'TEST'))));
+    Assert.isFalse(sut.matches(new CustomTypeWithEquals('TEST', 10, new Account(Name = 'TEST'))));
   }
 
   @isTest
