@@ -149,10 +149,6 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      if (this.jsonValue == null) {
-        return callArgument == null;
-      }
-
       return this.jsonValue.equals(JSON.serialize(callArgument));
     }
 
