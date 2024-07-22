@@ -374,6 +374,7 @@ public class ArgumentTest {
         return true;
       }
 
+      // Must do instanceof check for Boolean BEFORE CustomType or else SF will GACK on `(CustomType) o`
       if (o == null || o instanceof Boolean || !(o instanceof CustomType)) {
         return false;
       }
