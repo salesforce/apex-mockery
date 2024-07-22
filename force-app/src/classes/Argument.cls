@@ -131,7 +131,13 @@ global class Argument {
         return callArgument == null;
       }
 
-      return this.callArgumentToMatch.equals(callArgument);
+      // case-sensitive check for string
+      if (this.callArgumentToMatch instanceof String) {
+        return this.callArgumentToMatch.equals(callArgument);
+      }
+
+      // native platform equality check for anything else
+      return this.callArgumentToMatch == callArgument;
     }
 
     public override String toString() {
