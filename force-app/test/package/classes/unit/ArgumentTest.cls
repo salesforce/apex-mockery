@@ -304,8 +304,6 @@ public class ArgumentTest {
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
 
-    // TODO: Fix this. It still fails.
-
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
     Assert.isFalse(sut.matches(DateTime.now()));
