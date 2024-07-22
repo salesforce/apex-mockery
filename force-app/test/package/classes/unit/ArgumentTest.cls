@@ -80,7 +80,7 @@ public class ArgumentTest {
     Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
-    Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
+    Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
     
     // TODO: Fix commented out asserts; they throw a GACK if uncommented.
     Assert.isFalse(sut.matches(null));
@@ -98,9 +98,6 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-
-    // TODO: Fix this. It still fails.
-    // Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
@@ -307,6 +304,8 @@ public class ArgumentTest {
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+
+    // TODO: Fix this. It still fails.
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
