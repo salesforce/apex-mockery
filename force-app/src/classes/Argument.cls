@@ -170,7 +170,7 @@ global class Argument {
 
     public boolean matches(final Object callArgument) {
       String typeName = this.getType(callArgument);
-      // This is a case-insensitive check and should remain that way.
+      // Using a case-insensitive comparison since Apex types are case-insensitive
       if (this.typeNameToMatch == typeName) {
         return true;
       }
@@ -185,16 +185,13 @@ global class Argument {
 
     private String getType(final Object callArgument) {
       try {
-        castToDate(callArgument);
+        // Cast as Date to determine if Object is a valid Date.
+        Date typeCheck = (Date) callArgument; // NOPMD
         return 'Date';
       } catch (System.TypeException te) {
+        // If not a Date, extract Type output from exception message.
         return te.getMessage().substringBetween('Invalid conversion from runtime type ', ' to Date');
       }
-    }
-
-    // Date.valueOf() does not work. Use method to avoid assigning to unused variable.
-    private Date castToDate(final Object callArgument) {
-      return (Date) callArgument;
     }
 
     public override String toString() {
