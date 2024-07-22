@@ -82,24 +82,25 @@ public class ArgumentTest {
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
     
+    // TODO: Fix commented out asserts; they throw a GACK if uncommented.
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
     Assert.isFalse(sut.matches(DateTime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
-    /*
-    Assert.isFalse(sut.matches(false));
-    Assert.isFalse(sut.matches(true));
+    // Assert.isFalse(sut.matches(false));
+    // Assert.isFalse(sut.matches(true));
     Assert.isFalse(sut.matches(new Account(Name = 'test')));
-    Assert.isFalse(sut.matches(10));
+    // Assert.isFalse(sut.matches(10));
     Assert.isFalse(sut.matches(10.2));
     Assert.isFalse(sut.matches('test'));
     Assert.isFalse(sut.matches('001000000000011AAA'));
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
-    */
+
+    // TODO: Fix this. It still fails.
+    // Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
   @isTest
@@ -374,8 +375,7 @@ public class ArgumentTest {
         return true;
       }
 
-      // Must do instanceof check for Boolean BEFORE CustomType or else SF will GACK on `(CustomType) o`
-      if (o == null || o instanceof Boolean || !(o instanceof CustomType)) {
+      if ((o == null) || !(o instanceof CustomType)) {
         return false;
       }
 
