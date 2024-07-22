@@ -81,7 +81,7 @@ public class ArgumentTest {
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
-    
+    Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
     Assert.isFalse(sut.matches(DateTime.now()));
