@@ -127,7 +127,11 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      return this.callArgumentToMatch == callArgument;
+      if (this.callArgumentToMatch == null) {
+        return callArgument == null;
+      }
+
+      return this.callArgumentToMatch.equals(callArgument);
     }
 
     public override String toString() {
@@ -145,7 +149,11 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      return this.jsonValue == JSON.serialize(callArgument);
+      if (this.jsonValue == null) {
+        return callArgument == null;
+      }
+
+      return this.jsonValue.equals(JSON.serialize(callArgument));
     }
 
     public override String toString() {

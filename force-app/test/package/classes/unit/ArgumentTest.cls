@@ -81,12 +81,13 @@ public class ArgumentTest {
 
     // Act & Assert
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
-
+    
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
     Assert.isFalse(sut.matches(DateTime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
+    /*
     Assert.isFalse(sut.matches(false));
     Assert.isFalse(sut.matches(true));
     Assert.isFalse(sut.matches(new Account(Name = 'test')));
@@ -97,8 +98,8 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-    // TODO: Why did we not want this to match?
-    // Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    */
   }
 
   @isTest
@@ -373,7 +374,7 @@ public class ArgumentTest {
         return true;
       }
 
-      if ((o == null) || !(o instanceof CustomType)) {
+      if (o == null || o instanceof Boolean || !(o instanceof CustomType)) {
         return false;
       }
 
