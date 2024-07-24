@@ -6,6 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Set environment variables
         run: |
           echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV

@@ -20,6 +20,10 @@ jobs:
   formatting-and-linting:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
