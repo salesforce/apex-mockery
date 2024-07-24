@@ -42,10 +42,8 @@ jobs:
           echo "SF_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
           echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
 
-      - name: Install SFDX CLI and Scanner
-        run: |
-          npm install @salesforce/cli@${{ vars.SFDX_VERSION }}
-          node_modules/@salesforce/cli/bin/run plugins:install @salesforce/sfdx-scanner
+      - name: Install SFDX CLI
+        run: npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
 
       - name: Install npm dependencies
         run: npm install
