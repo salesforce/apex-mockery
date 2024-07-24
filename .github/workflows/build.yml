@@ -11,9 +11,9 @@ jobs:
           node-version: 20
       - name: Set environment variables
         run: |
-          echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
 
       - name: Install sfdx and connect to DevHub
         run: |
