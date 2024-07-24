@@ -28,7 +28,7 @@ jobs:
 
       - name: Install sfdx and connect to DevHub
         run: |
-          npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
+          npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
           sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth --setdefaultdevhubusername --setalias hub
           sfdx config:set defaultdevhubusername=hub --global
