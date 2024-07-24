@@ -21,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -50,12 +50,8 @@ jobs:
         run: npm run prettier:verify
 
       - name: Apex static analysis
-        uses: mitchspano/sfdx-scan-pull-request@v0.1.7
-        with:
-          pmdconfig: apex-ruleset.xml
-          severity-threshold: 4
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        run: npm run lint:apex
+        
 
       - name: Check documentation writing
         run: npm run lint:doc
@@ -95,10 +91,10 @@ jobs:
   commit-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v5
+      - uses: wagoid/commitlint-github-action@v6
         continue-on-error: true
 
   pr-lint:

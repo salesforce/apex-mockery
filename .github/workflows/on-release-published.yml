@@ -52,7 +52,7 @@ jobs:
           sfdx config:set defaultdevhubusername=hub --global
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Promote latest main package version
         run: sfdx force:package:version:promote --noprompt --package ${{ needs.create-package-version.outputs.packageId }}
