@@ -13,7 +13,8 @@
     "lint": "npm run lint:apex ; npm run lint:doc",
     "lint:apex": "sf scanner run --verbose --target 'force-app/**/*.cls' --format table --category 'apex-mockery' --engine pmd",
     "lint:doc": "write-good README.md --parse",
-    "postinstall": "husky install ; ./postInstall.sh",
+    "postinstall": "./postInstall.sh",
+    "prepare": "husky",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
@@ -21,13 +22,13 @@
     "test": "sf apex run test --result-format human --output-dir ./tests/apex --test-level RunLocalTests --wait 20"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.3.0",
-    "@commitlint/config-conventional": "^17.4.4",
-    "@prettier/plugin-xml": "^2.2.0",
-    "husky": "^8.0.2",
-    "lint-staged": "^13.0.4",
-    "prettier": "^2.8.0",
-    "prettier-plugin-apex": "^1.11.0",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@prettier/plugin-xml": "^3.4.1",
+    "husky": "^9.1.1",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.3",
+    "prettier-plugin-apex": "^2.1.4",
     "write-good": "^1.0.8"
   },
   "lint-staged": {
