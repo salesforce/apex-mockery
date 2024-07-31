@@ -100,6 +100,9 @@ jobs:
         continue-on-error: true
 
   pr-lint:
+    permissions:
+      pull-requests: read
+      statuses: write
     runs-on: ubuntu-latest
     steps:
       - uses: amannn/action-semantic-pull-request@v5
