@@ -24,7 +24,7 @@ global class Mock implements System.StubProvider {
     Object result;
     if (this.spies.containsKey(stubbedMethodName)) {
       MethodSpy spy = this.getSpy(stubbedMethodName);
-      result = spy.call(listOfArgs);
+      result = spy.call(listOfParamTypes, listOfParamNames, listOfArgs);
     }
 
     return result;

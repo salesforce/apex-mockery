@@ -565,4 +565,36 @@ public class ArgumentTest {
       return true;
     }
   }
+
+  @IsTest
+  static void getType_whenCalledWithSObject_returnsSObjectType() {
+    // Assert
+    Assert.areEqual(Account.class, Argument.getType(new Account()));
+    Assert.areEqual(Opportunity.class, Argument.getType(new Opportunity()));
+  }
+
+  @IsTest
+  static void getType_whenCalledWithPrimitive_returnsPrimitiveType() {
+    // Assert
+    Assert.areEqual(Blob.class, Argument.getType(Blob.valueOf('test')));
+    Assert.areEqual(Boolean.class, Argument.getType(true));
+    Assert.areEqual(Date.class, Argument.getType(Date.today()));
+    Assert.areEqual(Datetime.class, Argument.getType(Datetime.now()));
+    Decimal dec = 42.0;
+    Assert.areEqual(Decimal.class, Argument.getType(dec));
+    Assert.areEqual(Double.class, Argument.getType(42.0d));
+    Id contactId = '00300000003T2PGAA0';
+    Assert.areEqual(ID.class, Argument.getType(contactId));
+    Assert.areEqual(Integer.class, Argument.getType(42));
+    Assert.areEqual(Long.class, Argument.getType(42L));
+    Assert.areEqual(String.class, Argument.getType('test'));
+    Assert.areEqual(Time.class, Argument.getType(Time.newInstance(10, 10, 10, 10)));
+  }
+
+  @IsTest
+  static void getType_whenCalledWithObject_returnObjectType() {
+    // Assert
+    Assert.areEqual(List<Account>.class, Argument.getType(new List<Account>()));
+    Assert.areEqual(ArgumentTest.class, Argument.getType(new ArgumentTest()));
+  }
 }

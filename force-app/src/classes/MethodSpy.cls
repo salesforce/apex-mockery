@@ -29,7 +29,28 @@ global class MethodSpy {
     this.callLog = new CallLog();
   }
 
+  // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
   public Object call(List<Object> args) {
+    // Forward compatibility implementation
+    List<Type> paramTypes = new List<Type>();
+    List<String> paramNames = new List<String>();
+
+    for (Object arg : args) {
+      paramTypes.add(Argument.getType(arg)); // Infer type dynamically
+      paramNames.add('<unknown_param_name>'); // Impossible to get this information at runtime
+    }
+
+    // Warn consumer
+    System.Debug(
+      LoggingLevel.WARN,
+      '[apex-mockery] call to the deprecated MethodSpy.call(List<Object> args) method.\nPlease use MethodSpy.call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead.'
+    );
+
+    // Interoperability
+    return this.call(paramTypes, paramNames, args);
+  }
+
+  public Object call(List<Type> paramTypes, List<String> paramNames, List<Object> args) {
     this.callLog.add(new MethodCall(args));
 
     if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
@@ -53,7 +74,7 @@ global class MethodSpy {
       throw this.exceptionToThrow;
     }
 
-    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallArguments(args).build();
+    throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
   global void returns(Object value) {
@@ -167,10 +188,22 @@ global class MethodSpy {
 
   private class ConfigurationExceptionBuilder {
     private MethodSpy spy;
+    private List<Type> callTypes;
+    private List<String> callParamNames;
     private List<Object> callArguments;
 
     public ConfigurationExceptionBuilder withMethodSpy(final MethodSpy spy) {
       this.spy = spy;
+      return this;
+    }
+
+    public ConfigurationExceptionBuilder withCallTypes(final List<Type> callTypes) {
+      this.callTypes = callTypes;
+      return this;
+    }
+
+    public ConfigurationExceptionBuilder withCallParamNames(final List<String> callParamNames) {
+      this.callParamNames = callParamNames;
       return this;
     }
 
@@ -184,10 +217,17 @@ global class MethodSpy {
       for (ParameterizedMethodSpyCall parameterizedCall : this.spy.parameterizedMethodCalls) {
         errorMessages.add(parameterizedCall.toString());
       }
+
+      List<String> callArgumentsAsString = new List<String>();
+      for (Integer i = 0; i < this.callArguments.size(); i++) {
+        callArgumentsAsString.add(this.callTypes[i] + ' ' + this.callParamNames[i] + '[' + this.callArguments[i] + ']');
+      }
       return new ConfigurationException(
-        this.spy.methodName +
-          ': No stub value found for a call with args ' +
-          this.callArguments +
+        'No stub value found for a call of ' +
+          this.spy.methodName +
+          '(' +
+          String.join(callArgumentsAsString, ', ') +
+          ')' +
           '\nHere are the configured stubs:\n\t' +
           String.join(errorMessages, '\n\t')
       );

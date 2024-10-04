@@ -14,7 +14,7 @@ private class MethodSpyTest {
     sut.whenCalledWith(null).thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ null });
+    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ null });
 
     // Assert
     Assert.areEqual('test', result);
@@ -25,14 +25,14 @@ private class MethodSpyTest {
   static void givenSpyConfiguredWithArguments_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith(Argument.of('param')).thenReturn('test');
+    sut.whenCalledWith(Argument.of('value')).thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'param' });
+    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'value' });
 
     // Assert
     Assert.areEqual('test', result);
-    Assert.areEqual(new List<Object>{ 'param' }, sut.callLog.getLast());
+    Assert.areEqual(new List<Object>{ 'value' }, sut.callLog.getLast());
   }
 
   @IsTest
@@ -42,7 +42,7 @@ private class MethodSpyTest {
     sut.whenCalledWith().thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>());
+    Object result = sut.call(new List<Type>(), new List<String>(), new List<Object>());
 
     // Assert
     Assert.areEqual('test', result);
@@ -56,7 +56,7 @@ private class MethodSpyTest {
     sut.whenCalledWith(Argument.empty()).thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>());
+    Object result = sut.call(new List<Type>(), new List<String>(), new List<Object>());
 
     // Assert
     Assert.areEqual('test', result);
@@ -70,7 +70,7 @@ private class MethodSpyTest {
     sut.whenCalledWith('2', 'args').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ '2', 'args' });
+    Object result = sut.call(new List<Type>{ Integer.class, String.class }, new List<String>{ 'count', 'name' }, new List<Object>{ '2', 'args' });
 
     // Assert
     Assert.areEqual('test', result);
@@ -84,7 +84,11 @@ private class MethodSpyTest {
     sut.whenCalledWith('3', 'args', 'test').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ '3', 'args', 'test' });
+    Object result = sut.call(
+      new List<Type>{ Integer.class, String.class, String.class },
+      new List<String>{ 'count', 'name', 'othername' },
+      new List<Object>{ '3', 'args', 'test' }
+    );
 
     // Assert
     Assert.areEqual('test', result);
@@ -98,7 +102,11 @@ private class MethodSpyTest {
     sut.whenCalledWith('test', 'with', '4', 'args').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'test', 'with', '4', 'args' });
+    Object result = sut.call(
+      new List<Type>{ String.class, String.class, Integer.class, String.class },
+      new List<String>{ 'param', 'otherParam', 'count', 'yetanothername' },
+      new List<Object>{ 'test', 'with', '4', 'args' }
+    );
 
     // Assert
     Assert.areEqual('test', result);
@@ -112,7 +120,11 @@ private class MethodSpyTest {
     sut.whenCalledWith('another', 'test', 'with', '5', 'args').thenReturn('test');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'another', 'test', 'with', '5', 'args' });
+    Object result = sut.call(
+      new List<Type>{ String.class, String.class, String.class, Integer.class, String.class },
+      new List<String>{ 'param', 'otherParam', 'anotherParam', 'count', 'yetanothername' },
+      new List<Object>{ 'another', 'test', 'with', '5', 'args' }
+    );
 
     // Assert
     Assert.areEqual('test', result);
@@ -126,7 +138,11 @@ private class MethodSpyTest {
     sut.whenCalledWith('param', new Account(Name = 'Test'), Argument.any()).thenReturn('Expected Result');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'param', new Account(Name = 'Test'), true });
+    Object result = sut.call(
+      new List<Type>{ String.class, Account.class, Boolean.class },
+      new List<String>{ 'param', 'account', 'bool' },
+      new List<Object>{ 'param', new Account(Name = 'Test'), true }
+    );
 
     // Assert
     Assert.areEqual(new List<Object>{ 'param', new Account(Name = 'Test'), true }, sut.callLog.getLast());
@@ -141,7 +157,7 @@ private class MethodSpyTest {
 
     // Act
     try {
-      Object result = sut.call(new List<Object>{ 'param' });
+      Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'param' });
 
       // Assert
       Assert.fail('it shoud not reach this line');
@@ -163,7 +179,7 @@ private class MethodSpyTest {
 
     // Act
     try {
-      Object result = sut.call(new List<Object>{ new Opportunity() });
+      Object result = sut.call(new List<Type>{ Opportunity.class }, new List<String>{ 'oppy' }, new List<Object>{ new Opportunity() });
 
       // Assert
       Assert.fail('it shoud not reach this line');
@@ -182,7 +198,11 @@ private class MethodSpyTest {
       .thenReturn('Expected Result');
 
     // Act
-    Object result = sut.call(new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true });
+    Object result = sut.call(
+      new List<Type>{ List<String>.class, Account.class, Boolean.class },
+      new List<String>{ 'params', 'account', 'bool' },
+      new List<Object>{ new List<String>{ 'test' }, new Account(Name = 'random'), true }
+    );
 
     // Assert
     Assert.areEqual('Expected Result', result);
@@ -196,11 +216,13 @@ private class MethodSpyTest {
     sut.whenCalledWith(new Account()).thenReturn('Account result');
     sut.whenCalledWith(new Opportunity()).thenReturn('Opportunity result');
 
-    // Act && Assert
-    Object firstCallResult = sut.call(new List<Object>{ new Account() });
+    // Act
+    Object firstCallResult = sut.call(new List<Type>{ Account.class }, new List<String>{ 'account' }, new List<Object>{ new Account() });
+
+    // Assert
     Assert.areEqual('Account result', firstCallResult);
     Assert.areEqual(new List<Object>{ new Account() }, sut.callLog.getLast());
-    Object secondCallResult = sut.call(new List<Object>{ new Opportunity() });
+    Object secondCallResult = sut.call(new List<Type>{ Opportunity.class }, new List<String>{ 'oppy' }, new List<Object>{ new Opportunity() });
     Assert.areEqual(new List<Object>{ new Account() }, sut.callLog.get(0));
     Assert.areEqual(new List<Object>{ new Opportunity() }, sut.callLog.getLast());
     Assert.areEqual('Opportunity result', secondCallResult);
@@ -211,10 +233,12 @@ private class MethodSpyTest {
     MethodSpy sut = new MethodSpy('methodName');
     sut.returns('String result');
 
-    // Act && Assert
-    Object result = sut.call(new List<Object>{ new Account() });
+    // Act
+    Object result = sut.call(new List<Type>{ Account.class }, new List<String>{ 'account' }, new List<Object>{ new Account() });
+
+    // Assert
     Assert.areEqual('String result', result);
-    result = sut.call(new List<Object>{ new Opportunity() });
+    result = sut.call(new List<Type>{ Opportunity.class }, new List<String>{ 'oppy' }, new List<Object>{ new Opportunity() });
     Assert.areEqual('String result', result);
   }
 
@@ -225,7 +249,7 @@ private class MethodSpyTest {
     sut.returns('String result');
 
     // Act
-    Object result = sut.call(new List<Object>{});
+    Object result = sut.call(new List<Type>{}, new List<String>{}, new List<Object>{});
 
     // Assert
     Assert.areEqual('String result', result);
@@ -240,7 +264,7 @@ private class MethodSpyTest {
     sut.returns('Last Configuration');
 
     // Act
-    Object result = sut.call(new List<Object>{});
+    Object result = sut.call(new List<Type>{}, new List<String>{}, new List<Object>{});
 
     // Assert
     Assert.areEqual('Last Configuration', result);
@@ -254,7 +278,7 @@ private class MethodSpyTest {
 
     try {
       // Act
-      sut.call(new List<Object>{});
+      sut.call(new List<Type>{}, new List<String>{}, new List<Object>{});
       Assert.fail('it shoud not reach this line');
     } catch (Exception e) {
       // Assert
@@ -275,7 +299,7 @@ private class MethodSpyTest {
 
     try {
       // Act
-      sut.call(new List<Object>{});
+      sut.call(new List<Type>{}, new List<String>{}, new List<Object>{});
       Assert.fail('it shoud not reach this line');
     } catch (Exception e) {
       // Assert
@@ -291,7 +315,7 @@ private class MethodSpyTest {
 
     try {
       // Act
-      sut.call(new List<Object>{ 'Expected Param' });
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'Expected Param' });
       Assert.fail('it shoud not reach this line');
     } catch (Exception e) {
       // Assert
@@ -306,7 +330,7 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected Param').thenReturn('Expected Result');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'Expected Param' });
+    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'Expected Param' });
 
     // Assert
     Assert.areEqual('Expected Result', result);
@@ -320,8 +344,8 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected Param 2').thenReturn('Expected Result 2');
 
     // Act
-    Object result1 = sut.call(new List<Object>{ 'Expected Param 1' });
-    Object result2 = sut.call(new List<Object>{ 'Expected Param 2' });
+    Object result1 = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'Expected Param 1' });
+    Object result2 = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'Expected Param 2' });
 
     // Assert
     Assert.areEqual('Expected Result 1', result1);
@@ -335,7 +359,11 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected First Param', true).thenReturn('Expected Result');
 
     // Act
-    Object result = sut.call(new List<Object>{ 'Expected First Param', true });
+    Object result = sut.call(
+      new List<Type>{ String.class, Boolean.class },
+      new List<String>{ 'param', 'bool' },
+      new List<Object>{ 'Expected First Param', true }
+    );
 
     // Assert
     Assert.areEqual('Expected Result', result);
@@ -348,7 +376,7 @@ private class MethodSpyTest {
     sut.whenCalledWith(Argument.ofType(Account.getSObjectType()), true).thenReturn('Expected Result');
 
     // Act
-    Object result = sut.call(new List<Object>{ new Account(), true });
+    Object result = sut.call(new List<Type>{ Account.class, Boolean.class }, new List<String>{ 'account', 'bool' }, new List<Object>{ new Account(), true });
 
     // Assert
     Assert.areEqual('Expected Result', result);
@@ -362,7 +390,11 @@ private class MethodSpyTest {
 
     // Act
     try {
-      Object result = sut.call(new List<Object>{ new Opportunity(), true });
+      Object result = sut.call(
+        new List<Type>{ Opportunity.class, Boolean.class },
+        new List<String>{ 'oppy', 'bool' },
+        new List<Object>{ new Opportunity(), true }
+      );
       // Assert
       Assert.fail('it shoud not reach this line');
     } catch (Exception ex) {
@@ -378,8 +410,16 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected First Param 2', false).thenReturn('Expected Result 2');
 
     // Act
-    Object result1 = sut.call(new List<Object>{ 'Expected First Param 1', true });
-    Object result2 = sut.call(new List<Object>{ 'Expected First Param 2', false });
+    Object result1 = sut.call(
+      new List<Type>{ String.class, Boolean.class },
+      new List<String>{ 'param', 'bool' },
+      new List<Object>{ 'Expected First Param 1', true }
+    );
+    Object result2 = sut.call(
+      new List<Type>{ String.class, Boolean.class },
+      new List<String>{ 'param', 'bool' },
+      new List<Object>{ 'Expected First Param 2', false }
+    );
 
     // Assert
     Assert.areEqual('Expected Result 1', result1);
@@ -392,7 +432,7 @@ private class MethodSpyTest {
     MethodSpy sut = new MethodSpy('methodName');
 
     // Act
-    object actual = sut.call(new List<Object>{});
+    object actual = sut.call(new List<Type>{}, new List<String>{}, new List<Object>{});
 
     // Assert
     Assert.areEqual(null, actual);
@@ -407,12 +447,12 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected First Param', true).thenReturn('Yet another expected Result');
     try {
       // Act
-      sut.call(new List<Object>{ 'Another Param', false });
+      sut.call(new List<Type>{ String.class, Boolean.class }, new List<String>{ 'param', 'bool' }, new List<Object>{ 'Another Param', false });
       Assert.fail('it shoud not reach this line');
     } catch (MethodSpy.ConfigurationException cex) {
       // Assert
       Assert.areEqual(
-        'methodName: No stub value found for a call with args (Another Param, false)\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
+        'No stub value found for a call of methodName(String param[Another Param], Boolean bool[false])\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
         cex.getMessage()
       );
     }
@@ -426,8 +466,12 @@ private class MethodSpyTest {
     sut.returns('Default Result');
 
     // Act
-    Object result1 = sut.call(new List<Object>{ 'Expected First Param', true });
-    Object result2 = sut.call(new List<Object>{ 'Another Param', false });
+    Object result1 = sut.call(
+      new List<Type>{ String.class, Boolean.class },
+      new List<String>{ 'param', 'bool' },
+      new List<Object>{ 'Expected First Param', true }
+    );
+    Object result2 = sut.call(new List<Type>{ String.class, Boolean.class }, new List<String>{ 'param', 'bool' }, new List<Object>{ 'Another Param', false });
 
     // Assert
     Assert.areEqual('Expected Result', result1);
@@ -442,8 +486,12 @@ private class MethodSpyTest {
     sut.whenCalledWith('Expected First Param', true).thenReturn('Expected Result');
 
     // Act
-    Object result1 = sut.call(new List<Object>{ 'Expected First Param', true });
-    Object result2 = sut.call(new List<Object>{ 'Another Param', false });
+    Object result1 = sut.call(
+      new List<Type>{ String.class, Boolean.class },
+      new List<String>{ 'param', 'bool' },
+      new List<Object>{ 'Expected First Param', true }
+    );
+    Object result2 = sut.call(new List<Type>{ String.class, Boolean.class }, new List<String>{ 'param', 'bool' }, new List<Object>{ 'Another Param', false });
 
     // Assert
     Assert.areEqual('Expected Result', result1);
@@ -458,7 +506,7 @@ private class MethodSpyTest {
     sut.whenCalledWith(param).thenReturn(new Account());
 
     // Act
-    Object actual = sut.call(new List<Object>{ param });
+    Object actual = sut.call(new List<Type>{ CustomApex.class }, new List<String>{ 'customType' }, new List<Object>{ param });
 
     // Assert
     Object expected = new Account();
@@ -474,7 +522,7 @@ private class MethodSpyTest {
 
     // Act
     try {
-      Object actual = sut.call(new List<Object>{ new Account() });
+      Object actual = sut.call(new List<Type>{ Account.class }, new List<String>{ 'account' }, new List<Object>{ new Account() });
 
       // Assert
       Assert.fail('Expected exception was not thrown');
@@ -491,7 +539,7 @@ private class MethodSpyTest {
     sut.whenCalledWith(param).thenReturn(new Account());
 
     // Act
-    Object actual = sut.call(new List<Object>{ param });
+    Object actual = sut.call(new List<Type>{ CustomApexWithEquals.class }, new List<String>{ 'customType' }, new List<Object>{ param });
 
     // Assert
     Object expected = new Account();
@@ -506,7 +554,7 @@ private class MethodSpyTest {
     sut.whenCalledWith(param).thenReturn(new Account());
 
     // Act
-    Object actual = sut.call(new List<Object>{ param });
+    Object actual = sut.call(new List<Type>{ NotSerializableCustomApex.class }, new List<String>{ 'customType' }, new List<Object>{ param });
 
     // Assert
     Object expected = new Account();
@@ -522,15 +570,15 @@ private class MethodSpyTest {
     sut.whenCalledWith(2).thenReturn('result 2');
 
     // Act & Assert
-    Object result1 = sut.call(new List<Object>{ 1 });
+    Object result1 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 1 });
     Assert.areEqual('result 1', result1);
 
     // Act & Assert
-    Object result2 = sut.call(new List<Object>{ 2 });
+    Object result2 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 2 });
     Assert.areEqual('result 2', result2);
 
     // Act & Assert
-    Object resultDefault = sut.call(new List<Object>{ 3 });
+    Object resultDefault = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 3 });
     Assert.areEqual('result default', resultDefault);
   }
 
@@ -543,7 +591,7 @@ private class MethodSpyTest {
 
     // Act & Assert
     try {
-      sut.call(new List<Object>{ 1 });
+      sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 1 });
       Assert.fail('Expected exception was not thrown');
     } catch (Exception e) {
       Assert.areEqual('test exception', e.getMessage());
@@ -558,7 +606,7 @@ private class MethodSpyTest {
     sut.returns('result');
 
     // Act
-    Object result = sut.call(new List<Object>{ 1 });
+    Object result = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 1 });
 
     // Assert
     Assert.areEqual('result', result);
@@ -573,15 +621,15 @@ private class MethodSpyTest {
     sut.returns('result default');
 
     // Act & Assert
-    Object result1 = sut.call(new List<Object>{ 1 });
+    Object result1 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 1 });
     Assert.areEqual('result 1', result1);
 
     // Act & Assert
-    Object result2 = sut.call(new List<Object>{ 2 });
+    Object result2 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 2 });
     Assert.areEqual('result 2', result2);
 
     // Act & Assert
-    Object resultDefault = sut.call(new List<Object>{ 3 });
+    Object resultDefault = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 3 });
     Assert.areEqual('result default', resultDefault);
   }
 
@@ -594,16 +642,16 @@ private class MethodSpyTest {
     sut.whenCalledWith(2).thenReturn('result 2');
 
     // Act & Assert
-    Object result1 = sut.call(new List<Object>{ 1 });
+    Object result1 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 1 });
     Assert.areEqual('result 1', result1);
 
     // Act & Assert
-    Object result2 = sut.call(new List<Object>{ 2 });
+    Object result2 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 2 });
     Assert.areEqual('result 2', result2);
 
     // Act & Assert
     try {
-      sut.call(new List<Object>{ 3 });
+      sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 3 });
       Assert.fail('Expected exception was not thrown');
     } catch (Exception e) {
       Assert.areEqual('test exception', e.getMessage());
@@ -619,16 +667,16 @@ private class MethodSpyTest {
     sut.throwsException(new IllegalArgumentException('test exception'));
 
     // Act & Assert
-    Object result1 = sut.call(new List<Object>{ 1 });
+    Object result1 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 1 });
     Assert.areEqual('result 1', result1);
 
     // Act & Assert
-    Object result2 = sut.call(new List<Object>{ 2 });
+    Object result2 = sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 2 });
     Assert.areEqual('result 2', result2);
 
     // Act & Assert
     try {
-      sut.call(new List<Object>{ 3 });
+      sut.call(new List<Type>{ Integer.class }, new List<String>{ 'count' }, new List<Object>{ 3 });
       Assert.fail('Expected exception was not thrown');
     } catch (Exception e) {
       Assert.areEqual('test exception', e.getMessage());

@@ -131,25 +131,23 @@ global class Argument {
     }
 
     override public String toString() {
-      return callArgumentToMatch + '';
+      return this.callArgumentToMatch + '';
     }
   }
 
   private class JSONMatchable implements Argument.Matchable {
-    private Object callArgumentToMatch;
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
     public boolean matches(final Object callArgument) {
-      return this.jsonValue == JSON.serialize(callArgument);
+      return String.valueOf(this.jsonValue).equals(String.valueOf(JSON.serialize(callArgument)));
     }
 
     override public String toString() {
-      return 'json(' + callArgumentToMatch + ')';
+      return 'json(' + this.jsonValue + ')';
     }
   }
 
@@ -169,7 +167,7 @@ global class Argument {
     }
 
     public boolean matches(final Object callArgument) {
-      String typeName = this.getType(callArgument);
+      String typeName = Argument.getTypeName(callArgument);
       if (this.callArgumentToMatch == typeName) {
         return true;
       }
@@ -182,19 +180,24 @@ global class Argument {
       return false;
     }
 
-    private String getType(final Object callArgument) {
-      String result = 'Date';
-      try {
-        Date typeCheck = (Date) callArgument;
-      } catch (System.TypeException te) {
-        String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
-        result = message.substringBefore(' to Date');
-      }
-      return result;
-    }
-
     override public String toString() {
-      return callArgumentToMatch + '.Type';
+      return this.callArgumentToMatch + '.Type';
     }
+  }
+
+  private static String getTypeName(final Object callArgument) {
+    String result = 'Date';
+    try {
+      Date typeCheck = (Date) callArgument;
+    } catch (System.TypeException te) {
+      String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
+      result = message.substringBefore(' to Date');
+    }
+    return result;
+  }
+
+  public static Type getType(final Object callArgument) {
+    final String typeName = getTypeName(callArgument);
+    return Type.forName(typeName);
   }
 }
