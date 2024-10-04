@@ -12,5 +12,6 @@
       "files": "*.{cmp,page,component}",
       "options": { "parser": "html" }
     }
-  ]
+  ],
+  "plugins": ["prettier-plugin-apex", "@prettier/plugin-xml"]
 }

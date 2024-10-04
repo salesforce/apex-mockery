@@ -13,35 +13,35 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
-          echo "SFDX_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
+          echo "SF_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
 
       - name: Install sfdx and connect to DevHub
         run: |
-          npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
+          npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
-          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth --setdefaultdevhubusername --setalias hub
-          sfdx config:set defaultdevhubusername=hub --global
+          sf org login sfdx-url --sfdx-url-file sfdx_auth --set-default-dev-hub --alias hub
+          sf config set target-dev-hub=hub --global
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create scratch org
-        run: sfdx force:org:create --definitionfile config/project-scratch-def.json --setalias scratch-org --setdefaultusername --durationdays 1
+        run: sf org create scratch --definition-file config/project-scratch-def.json --alias scratch-org --set-default --duration-days 1
 
       - name: Check package installation
-        run: sfdx force:package:install --package ${{ inputs.packageId }} --wait 10
+        run: sf force package install --package ${{ inputs.packageId }} --wait 10
 
       - name: Deploy cross namespace tests
         run: |
-          sfdx force:source:deploy --sourcepath force-app/recipes/classes/setup
-          sfdx force:source:deploy --sourcepath force-app/test/namespace
+          sf project deploy start --source-dir force-app/recipes/classes/setup
+          sf project deploy start --source-dir force-app/test/namespace
 
       - name: Execute tests
-        run: sfdx force:apex:test:run --resultformat human --outputdir ./tests/apex --testlevel RunLocalTests --wait 20
+        run: sf apex run test --result-format human --output-dir ./tests/apex --test-level RunLocalTests --wait 20
 
       - name: Delete scratch org
         if: always()
-        run: sfdx force:org:delete --noprompt
+        run: sf org delete scratch --no-prompt
