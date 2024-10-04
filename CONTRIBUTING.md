@@ -30,7 +30,7 @@ npm install
 ### 3) Build application
 
 ```bash
-sfdx force:source:push
+sf project deploy start
 ```
 
 Rebuild every time you made a change in the source and you need to test locally

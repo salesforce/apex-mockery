@@ -6,31 +6,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Set environment variables
         run: |
-          echo "SFDX_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
-          echo "SFDX_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_SOURCE_MEMBER_POLLING=true" >> $GITHUB_ENV
+          echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
 
       - name: Install sfdx and connect to DevHub
         run: |
-          npm install --global sfdx-cli@${{ vars.SFDX_VERSION }}
+          npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
-          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth --setdefaultdevhubusername --setalias hub
-          sfdx config:set defaultdevhubusername=hub --global
+          sf org login sfdx-url --sfdx-url-file sfdx_auth --set-default-dev-hub --alias hub
+          sf config set target-dev-hub=hub --global
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create scratch org
-        run: sfdx force:org:create --nonamespace --definitionfile config/project-scratch-def.json --setalias scratch-org --setdefaultusername --durationdays 1
+        run: sf org create scratch --no-namespace --definition-file config/project-scratch-def.json --alias scratch-org --set-default --duration-days 1
 
       - name: Push source to scratch org
-        run: sfdx force:source:push
+        run: sf project deploy start
 
       - name: Run Apex tests
         run: npm run test
 
       - name: Delete scratch org
         if: always()
-        run: sfdx force:org:delete --noprompt
+        run: sf org delete scratch --no-prompt
