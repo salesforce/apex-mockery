@@ -75,11 +75,12 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatchable_matchesCustomType() {
+  static void givenEqualsMatchable_matchesCustomTypeWithEquals() {
     // Arrange
     Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
+    Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
 
     Assert.isFalse(sut.matches(null));
@@ -97,7 +98,8 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(new CustomType('TEST', 10, new Account(Name = 'TEST'))));
+    Assert.isFalse(sut.matches(new CustomTypeWithEquals('TEST', 10, new Account(Name = 'TEST'))));
   }
 
   @isTest

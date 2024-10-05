@@ -6,7 +6,7 @@
  */
 
 /**
- * Matchable offers publis static methods to build out-of-the-box matchers to be used with Expect
+ * Matchable offers public static methods to build out-of-the-box matchers to be used with Expect
  *    - Argument.any()
  *    - Argument.equals(Object object)
  *    - Argument.jsonEquals(Object object)
@@ -15,7 +15,7 @@
  *    - Argument.ofType(Schema.SObjectType sobjectType)
  */
 @IsTest
-@SuppressWarnings('PMD.EmptyStatementBlock')
+@SuppressWarnings('PMD.EmptyStatementBlock, PMD.AvoidGlobalModifier')
 global class Argument {
   global interface Matchable {
     Boolean matches(Object callArgument);
@@ -114,7 +114,7 @@ global class Argument {
       return true;
     }
 
-    override public String toString() {
+    public override String toString() {
       return 'any';
     }
   }
@@ -127,11 +127,21 @@ global class Argument {
     }
 
     public Boolean matches(final Object callArgument) {
-      return callArgument == this.callArgumentToMatch;
+      if (this.callArgumentToMatch == null) {
+        return callArgument == null;
+      }
+
+      // case-sensitive check for string
+      if (this.callArgumentToMatch instanceof String) {
+        return this.callArgumentToMatch.equals(callArgument);
+      }
+
+      // native platform equality check for anything else
+      return this.callArgumentToMatch == callArgument;
     }
 
-    override public String toString() {
-      return callArgumentToMatch + '';
+    public override String toString() {
+      return String.valueOf(this.callArgumentToMatch);
     }
   }
 
@@ -144,38 +154,39 @@ global class Argument {
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
-    public boolean matches(final Object callArgument) {
-      return this.jsonValue == JSON.serialize(callArgument);
+    public Boolean matches(final Object callArgument) {
+      return this.jsonValue.equals(JSON.serialize(callArgument));
     }
 
-    override public String toString() {
-      return 'json(' + callArgumentToMatch + ')';
+    public override String toString() {
+      return 'json(' + this.callArgumentToMatch + ')';
     }
   }
 
   private class TypeMatchable implements Argument.Matchable {
-    private String callArgumentToMatch;
+    private String typeNameToMatch;
 
     public TypeMatchable(final Schema.SObjectType callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch.getDescribe().getName();
+      this.typeNameToMatch = callArgumentToMatch.getDescribe().getName();
     }
 
     public TypeMatchable(final String callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
+      this.typeNameToMatch = callArgumentToMatch;
     }
 
     public TypeMatchable(final Type callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch.getName();
+      this.typeNameToMatch = callArgumentToMatch.getName();
     }
 
     public boolean matches(final Object callArgument) {
       String typeName = this.getType(callArgument);
-      if (this.callArgumentToMatch == typeName) {
+      // Using a case-insensitive comparison since Apex types are case-insensitive
+      if (this.typeNameToMatch == typeName) {
         return true;
       }
 
       Type actualType = Type.forName(typeName);
-      Type expectedType = Type.forName(this.callArgumentToMatch);
+      Type expectedType = Type.forName(this.typeNameToMatch);
       if (expectedType != null && actualType != null) {
         return expectedType.isAssignableFrom(actualType);
       }
@@ -183,18 +194,18 @@ global class Argument {
     }
 
     private String getType(final Object callArgument) {
-      String result = 'Date';
       try {
-        Date typeCheck = (Date) callArgument;
+        // Cast as Date to determine if Object is a valid Date.
+        Date typeCheck = (Date) callArgument; // NOPMD
+        return 'Date';
       } catch (System.TypeException te) {
-        String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
-        result = message.substringBefore(' to Date');
+        // If not a Date, extract Type output from exception message.
+        return te.getMessage().substringBetween('Invalid conversion from runtime type ', ' to Date');
       }
-      return result;
     }
 
-    override public String toString() {
-      return callArgumentToMatch + '.Type';
+    public override String toString() {
+      return this.typeNameToMatch + '.Type';
     }
   }
 }
