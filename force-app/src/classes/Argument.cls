@@ -159,7 +159,7 @@ global class Argument {
     }
 
     public override String toString() {
-      return 'json(' + this.callArgumentToMatch + ')'; 
+      return 'json(' + this.callArgumentToMatch + ')';
     }
   }
 
