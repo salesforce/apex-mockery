@@ -4,7 +4,7 @@
       "path": "force-app/src",
       "default": true,
       "package": "Apex Mockery",
-      "versionNumber": "2.1.0.NEXT",
+      "versionNumber": "2.2.0.NEXT",
       "versionName": "v2.1.0",
       "postInstallUrl": "https://github.com/salesforce/apex-mockery#installation",
       "releaseNotesUrl": "https://github.com/salesforce/apex-mockery/releases"

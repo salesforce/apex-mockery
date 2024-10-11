@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/salesforce/apex-mockery/compare/v2.1.0...v2.2.0) (2024-10-11)
+
+
+### Features
+
+* add names and types of method parameters in error output ([#62](https://github.com/salesforce/apex-mockery/issues/62)) ([4c6cc01](https://github.com/salesforce/apex-mockery/commit/4c6cc012b1a90c8b756f08d148a454a25642c84e))
+
+
+### Bug Fixes
+
+* spy calls with newer SObjects (and misc. updates) ([#63](https://github.com/salesforce/apex-mockery/issues/63)) ([d914655](https://github.com/salesforce/apex-mockery/commit/d91465551026e4034fa7c75fc2ec243c4c595dd1))
+
 ## [2.1.0](https://github.com/salesforce/apex-mockery/compare/v2.0.0...v2.1.0) (2023-05-12)
 
 
