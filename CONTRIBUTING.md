@@ -27,7 +27,7 @@ This will install all the tools needed to contribute
 npm install
 ```
 
-### 2) Build application
+### 3) Build application
 
 ```bash
 sf project deploy start

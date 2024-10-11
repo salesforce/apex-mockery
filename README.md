@@ -108,7 +108,7 @@ Mock myMock = Mock.forType(MyType.class, new MyNamespace.MyStubBuilder());
 
 ### Stub
 
-Use the `stub` attribut to access the stub,
+Use the `stub` attribute to access the stub,
 
 ```java
 MyType myTypeStub = (MyType) myMock.stub;
