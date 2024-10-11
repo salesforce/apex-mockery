@@ -146,20 +146,18 @@ global class Argument {
   }
 
   private class JSONMatchable implements Argument.Matchable {
-    private Object callArgumentToMatch;
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
-    public Boolean matches(final Object callArgument) {
-      return this.jsonValue.equals(JSON.serialize(callArgument));
+    public boolean matches(final Object callArgument) {
+      return String.valueOf(this.jsonValue).equals(String.valueOf(JSON.serialize(callArgument)));
     }
 
-    public override String toString() {
-      return 'json(' + this.callArgumentToMatch + ')';
+    override public String toString() {
+      return 'json(' + this.jsonValue + ')';
     }
   }
 
@@ -179,8 +177,7 @@ global class Argument {
     }
 
     public boolean matches(final Object callArgument) {
-      String typeName = this.getType(callArgument);
-      // Using a case-insensitive comparison since Apex types are case-insensitive
+      String typeName = Argument.getTypeName(callArgument);
       if (this.typeNameToMatch == typeName) {
         return true;
       }
@@ -193,19 +190,24 @@ global class Argument {
       return false;
     }
 
-    private String getType(final Object callArgument) {
-      try {
-        // Cast as Date to determine if Object is a valid Date.
-        Date typeCheck = (Date) callArgument; // NOPMD
-        return 'Date';
-      } catch (System.TypeException te) {
-        // If not a Date, extract Type output from exception message.
-        return te.getMessage().substringBetween('Invalid conversion from runtime type ', ' to Date');
-      }
-    }
-
-    public override String toString() {
+    override public String toString() {
       return this.typeNameToMatch + '.Type';
     }
+  }
+
+  private static String getTypeName(final Object callArgument) {
+    String result = 'Date';
+    try {
+      Date typeCheck = (Date) callArgument;
+    } catch (System.TypeException te) {
+      String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
+      result = message.substringBefore(' to Date');
+    }
+    return result;
+  }
+
+  public static Type getType(final Object callArgument) {
+    final String typeName = getTypeName(callArgument);
+    return Type.forName(typeName);
   }
 }
