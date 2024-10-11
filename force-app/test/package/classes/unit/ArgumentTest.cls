@@ -75,11 +75,12 @@ public class ArgumentTest {
   }
 
   @isTest
-  static void givenEqualsMatchable_matchesCustomType() {
+  static void givenEqualsMatchable_matchesCustomTypeWithEquals() {
     // Arrange
     Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
 
     // Act & Assert
+    Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
     Assert.isTrue(sut.matches(new CustomTypeWithEquals('test', 10, new Account(Name = 'test'))));
 
     Assert.isFalse(sut.matches(null));
@@ -97,7 +98,8 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new List<Object>()));
     Assert.isFalse(sut.matches(new Set<Object>()));
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
-    Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
+    Assert.isFalse(sut.matches(new CustomType('TEST', 10, new Account(Name = 'TEST'))));
+    Assert.isFalse(sut.matches(new CustomTypeWithEquals('TEST', 10, new Account(Name = 'TEST'))));
   }
 
   @isTest
@@ -564,5 +566,37 @@ public class ArgumentTest {
     public Boolean matches(Object callArgument) {
       return true;
     }
+  }
+
+  @IsTest
+  static void getType_whenCalledWithSObject_returnsSObjectType() {
+    // Assert
+    Assert.areEqual(Account.class, Argument.getType(new Account()));
+    Assert.areEqual(Opportunity.class, Argument.getType(new Opportunity()));
+  }
+
+  @IsTest
+  static void getType_whenCalledWithPrimitive_returnsPrimitiveType() {
+    // Assert
+    Assert.areEqual(Blob.class, Argument.getType(Blob.valueOf('test')));
+    Assert.areEqual(Boolean.class, Argument.getType(true));
+    Assert.areEqual(Date.class, Argument.getType(Date.today()));
+    Assert.areEqual(Datetime.class, Argument.getType(Datetime.now()));
+    Decimal dec = 42.0;
+    Assert.areEqual(Decimal.class, Argument.getType(dec));
+    Assert.areEqual(Double.class, Argument.getType(42.0d));
+    Id contactId = '00300000003T2PGAA0';
+    Assert.areEqual(ID.class, Argument.getType(contactId));
+    Assert.areEqual(Integer.class, Argument.getType(42));
+    Assert.areEqual(Long.class, Argument.getType(42L));
+    Assert.areEqual(String.class, Argument.getType('test'));
+    Assert.areEqual(Time.class, Argument.getType(Time.newInstance(10, 10, 10, 10)));
+  }
+
+  @IsTest
+  static void getType_whenCalledWithObject_returnObjectType() {
+    // Assert
+    Assert.areEqual(List<Account>.class, Argument.getType(new List<Account>()));
+    Assert.areEqual(ArgumentTest.class, Argument.getType(new ArgumentTest()));
   }
 }
