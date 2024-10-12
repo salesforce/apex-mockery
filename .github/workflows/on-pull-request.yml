@@ -45,6 +45,19 @@ jobs:
       - name: Install SFDX CLI
         run: npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
 
+      - name: Get npm cache directory
+        id: cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: ${{ steps.cache-dir.outputs.dir }}
+          key: ${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ hashFiles('**/package-lock.json') }}
+
       - name: Install npm dependencies
         run: npm install
 
