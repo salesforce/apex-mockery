@@ -181,6 +181,7 @@ global class MethodSpy {
     MethodSpyCall thenReturn(Object value);
     MethodSpyCall thenThrow(Exception error);
     MethodSpyCall thenReturnOnce(Object value);
+    MethodSpyCall thenThrowOnce(Exception error);
     Boolean matches(List<Object> callArguments);
     Object getValue();
     Exception getException();
@@ -197,6 +198,7 @@ global class MethodSpy {
     public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
       this.valuesOnce = new List<Object>();
+      this.exceptionsOnce = new List<Exception>();
     }
 
     public MethodSpyCall thenReturnOnce(final Object value) {
@@ -208,8 +210,9 @@ global class MethodSpy {
       return this;
     }
 
-    public void thenThrowOnce(Exception error) {
-      // TODO Implementatiopn
+    public MethodSpyCall thenThrowOnce(final Exception error) {
+      this.exceptionsOnce.add(error);
+      return this;
     }
 
     public MethodSpyCall thenThrow(final Exception error) {
@@ -225,6 +228,9 @@ global class MethodSpy {
     }
 
     public Exception getException() {
+      if (!this.exceptionsOnce.isEmpty()) {
+        return this.exceptionsOnce.remove(0);
+      }
       return this.error;
     }
 
