@@ -30,11 +30,11 @@
 		}
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^19.3.0",
-		"@commitlint/config-conventional": "^19.2.2",
+		"@commitlint/cli": "^19.5.0",
+		"@commitlint/config-conventional": "^19.5.0",
 		"@prettier/plugin-xml": "^3.4.1",
-		"husky": "^9.1.1",
-		"lint-staged": "^15.2.7",
+		"husky": "^9.1.6",
+		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
 		"prettier-plugin-apex": "^2.1.5",
 		"wireit": "^0.14.9",
