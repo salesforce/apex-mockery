@@ -14,7 +14,6 @@
     "lint:apex": "sf scanner run --verbose --target 'force-app/**/*.cls' --format table --category 'apex-mockery' --engine pmd",
     "lint:doc": "write-good README.md --parse",
     "postinstall": "./postInstall.sh",
-    "prepare": "husky",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
