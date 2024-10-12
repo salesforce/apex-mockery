@@ -8,6 +8,32 @@
 @IsTest
 private class MethodSpyOnceTest {
   @IsTest
+  static void givenSpyConfiguredWithReturnOnceThrowOnce_whenCalledMultipleTImes_spyThrowsOnceReturnsOnceThenGlobalReturnsOnceThenGlobalReturns() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.returnsOnce('once');
+    sut.returns('every');
+    sut.whenCalledWith('str').thenReturnOnce('match').thenThrowOnce(new IllegalArgumentException('match'));
+
+    // Act & Assert
+    Object resultOnce = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Assert.areEqual('once', resultOnce);
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match', e.getMessage());
+    }
+
+    Object resultMatcher = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Object resultNoMatcher = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+
+    // Assert
+    Assert.areEqual('match', resultMatcher);
+    Assert.areEqual('every', resultNoMatcher);
+  }
+
+  @IsTest
   static void givenSpyConfiguredWithReturnOnce_whenCalledMultipleTImes_spyReturnsOnce() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');

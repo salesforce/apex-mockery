@@ -239,7 +239,11 @@ global class MethodSpy {
     }
 
     public Boolean matches(final List<Object> callArguments) {
-      return Argument.matches(this.argsMatchable, callArguments);
+      return Argument.matches(this.argsMatchable, callArguments) && this.isConfigured();
+    }
+
+    private Boolean isConfigured() {
+      return this.value != null || this.error != null || !this.valuesOnce.isEmpty() || !this.exceptionsOnce.isEmpty();
     }
 
     public override String toString() {
