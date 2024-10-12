@@ -24,7 +24,9 @@ global class MethodSpy {
   private Boolean configuredGlobalReturn = false;
   private Boolean configuredGlobalReturnOnce = false;
   private Boolean configuredGlobalThrow = false;
+  private Boolean configuredGlobalThrowOnce = false;
   private Exception exceptionToThrow;
+  private Exception exceptionToThrowOnce;
 
   global MethodSpy(String methodName) {
     this.methodName = methodName;
@@ -59,6 +61,12 @@ global class MethodSpy {
       this.configuredGlobalReturnOnce = false;
       return this.returnValueOnce;
     }
+
+    if (this.configuredGlobalThrowOnce) {
+      this.configuredGlobalThrowOnce = false;
+      throw this.exceptionToThrowOnce;
+    }
+
     if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
       return null;
     }
@@ -95,14 +103,16 @@ global class MethodSpy {
     this.returnValue = value;
   }
 
-  global void throwsExceptionOnce(Exception exceptionToThrow) {
-    // TODO Implementatiopn
-  }
-
   global void throwsException(Exception exceptionToThrow) {
     this.configuredGlobalThrow = true;
     this.configuredGlobalReturn = false;
     this.exceptionToThrow = exceptionToThrow;
+  }
+
+  global void throwsExceptionOnce(Exception exceptionToThrowOnce) {
+    this.configuredGlobalThrowOnce = true;
+    this.configuredGlobalReturnOnce = false;
+    this.exceptionToThrowOnce = exceptionToThrowOnce;
   }
 
   global MethodSpyCall whenCalledWith() {
