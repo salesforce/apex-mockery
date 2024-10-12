@@ -56,4 +56,63 @@ private class MethodSpyOnceTest {
       Assert.areEqual('match', e.getMessage());
     }
   }
+
+  @IsTest
+  static void givenSpyConfiguredWithMatcherReturnOnce_whenCalledWithMatchingMultipleTimes_spyReturnsOnce() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.returnsOnce('once');
+    sut.returns('every');
+    sut.whenCalledWith('str').thenReturnOnce('match once').thenReturn('match');
+
+    // Act
+    Object resultOnce = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ null });
+    Object resultNoMatcher = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ null });
+    Object resultMatcherOnce = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Object resultMatcher = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+
+    // Assert
+    Assert.areEqual('once', resultOnce);
+    Assert.areEqual('every', resultNoMatcher);
+    Assert.areEqual('match once', resultMatcherOnce);
+    Assert.areEqual('match', resultMatcher);
+  }
+
+  @IsTest
+  static void givenSpyConfiguredWithMatcherThrowOnce_whenCalledWithMatchingMultipleTimes_spyThrowsOnce() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.throwsExceptionOnce(new IllegalArgumentException('once'));
+    sut.throwsException(new IllegalArgumentException('every'));
+    sut.whenCalledWith('str').thenThrowOnce(new IllegalArgumentException('match once')).thenThrow(new IllegalArgumentException('match'));
+
+    // Act & Assert
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ null });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('once', e.getMessage());
+    }
+
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ null });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('every', e.getMessage());
+    }
+
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match once', e.getMessage());
+    }
+
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match', e.getMessage());
+    }
+  }
 }
