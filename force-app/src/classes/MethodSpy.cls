@@ -247,7 +247,21 @@ global class MethodSpy {
     }
 
     public override String toString() {
-      return 'whenCalledWith' + this.argsMatchable + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
+      final List<String> oncesString = new List<String>();
+      for (Exception e : this.exceptionsOnce) {
+        oncesString.add('.thenThrowOnce(' + e + ')');
+      }
+      for (Object o : this.valuesOnce) {
+        oncesString.add('.thenReturnOnce(' + o + ')');
+      }
+
+      return 'whenCalledWith' +
+        this.argsMatchable +
+        '' +
+        String.join(oncesString, '') +
+        (!this.valuesOnce.isEmpty() ? 'thenReturnOnce(' + this.valuesOnce + ')' : '') +
+        (this.error != null ? '.thenThrow(' + this.error + ')' : '') +
+        (this.value != null ? '.thenReturn(' + this.value + ')' : '');
     }
   }
 
