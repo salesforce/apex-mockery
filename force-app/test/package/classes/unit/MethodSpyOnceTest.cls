@@ -115,4 +115,60 @@ private class MethodSpyOnceTest {
       Assert.areEqual('match', e.getMessage());
     }
   }
+
+  @IsTest
+  static void givenSpyConfiguredWithMatcherThrowThrowOnceReturnReturnOnce_whenCalledWithMatchingMultipleTimes_spyThrowsOnceFirstThenThrowsAndNeverReturns() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith('str')
+      .thenReturn('match')
+      .thenThrow(new IllegalArgumentException('match'))
+      .thenReturnOnce('match once')
+      .thenThrowOnce(new IllegalArgumentException('match once'));
+
+    // Act & Assert
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match once', e.getMessage());
+    }
+
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match', e.getMessage());
+    }
+
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match', e.getMessage());
+    }
+  }
+
+  @IsTest
+  static void givenSpyConfiguredWithMatcherThrowOnceReturnOnceReturn_whenCalledWithMatchingMultipleTimes_spyThrowsOnceFirstThenReturnsOnceThenReturns() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    sut.whenCalledWith('str').thenReturn('match').thenReturnOnce('match once').thenThrowOnce(new IllegalArgumentException('match once'));
+
+    // Act & Assert
+    try {
+      sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      Assert.fail('it shoud not reach this line');
+    } catch (Exception e) {
+      Assert.areEqual('match once', e.getMessage());
+    }
+
+    // Act
+    Object resultMatcherOnce = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Object resultMatcher = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+
+    // Assert
+    Assert.areEqual('match once', resultMatcherOnce);
+    Assert.areEqual('match', resultMatcher);
+  }
 }

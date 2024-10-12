@@ -235,7 +235,7 @@ global class MethodSpy {
     }
 
     public Boolean shouldThrow() {
-      return this.error != null;
+      return this.error != null || !this.exceptionsOnce.isEmpty();
     }
 
     public Boolean matches(final List<Object> callArguments) {
