@@ -20,7 +20,9 @@ global class MethodSpy {
   global CallLog callLog { get; private set; }
   private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
+  private Object returnValueOnce;
   private Boolean configuredGlobalReturn = false;
+  private Boolean configuredGlobalReturnOnce = false;
   private Boolean configuredGlobalThrow = false;
   private Exception exceptionToThrow;
 
@@ -53,6 +55,10 @@ global class MethodSpy {
   public Object call(List<Type> paramTypes, List<String> paramNames, List<Object> args) {
     this.callLog.add(new MethodCall(args));
 
+    if (this.configuredGlobalReturnOnce) {
+      this.configuredGlobalReturnOnce = false;
+      return this.returnValueOnce;
+    }
     if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
       return null;
     }
@@ -78,7 +84,9 @@ global class MethodSpy {
   }
 
   global void returnsOnce(Object value) {
-    // TODO Implementatiopn
+    this.configuredGlobalReturnOnce = true;
+    this.configuredGlobalThrowOnce = false;
+    this.returnValueOnce = value;
   }
 
   global void returns(Object value) {
