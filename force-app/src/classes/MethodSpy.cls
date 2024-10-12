@@ -18,7 +18,7 @@
 global class MethodSpy {
   global String methodName { get; private set; }
   global CallLog callLog { get; private set; }
-  private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
+  private List<MethodSpyCall> methodCalls = new List<MethodSpyCall>();
   private Object returnValue;
   private Object returnValueOnce;
   private Boolean configuredGlobalReturn = false;
@@ -67,16 +67,16 @@ global class MethodSpy {
       throw this.exceptionToThrowOnce;
     }
 
-    if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
+    if (this.methodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
       return null;
     }
 
-    for (ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls) {
-      if (parameterizedCall.matches(args)) {
-        if (parameterizedCall.shouldThrow()) {
-          throw parameterizedCall.error;
+    for (MethodSpyCall methodCall : this.methodCalls) {
+      if (methodCall.matches(args)) {
+        if (methodCall.shouldThrow()) {
+          throw methodCall.getException();
         }
-        return parameterizedCall.value;
+        return methodCall.getValue();
       }
     }
 
@@ -141,7 +141,7 @@ global class MethodSpy {
 
   private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(args);
-    this.parameterizedMethodCalls.add(parameterizedMethodCall);
+    this.methodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
   }
 
@@ -178,39 +178,61 @@ global class MethodSpy {
   }
 
   global interface MethodSpyCall {
-    void thenReturn(Object value);
-    void thenThrow(Exception error);
+    MethodSpyCall thenReturn(Object value);
+    MethodSpyCall thenThrow(Exception error);
+    MethodSpyCall thenReturnOnce(Object value);
+    Boolean matches(List<Object> callArguments);
+    Object getValue();
+    Exception getException();
+    Boolean shouldThrow();
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
     private final List<Argument.Matchable> argsMatchable;
-    public Object value { get; private set; }
-    public Exception error { get; private set; }
+    private final List<Object> valuesOnce;
+    private final List<Exception> exceptionsOnce;
+    private Object value;
+    private Exception error;
 
     public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
+      this.valuesOnce = new List<Object>();
     }
 
-    public void thenReturnOnce(Object value) {
-      // TODO Implementatiopn
+    public MethodSpyCall thenReturnOnce(final Object value) {
+      this.valuesOnce.add(value);
+      return this;
     }
-    public void thenReturn(Object value) {
+    public MethodSpyCall thenReturn(final Object value) {
       this.value = value;
+      return this;
     }
 
     public void thenThrowOnce(Exception error) {
       // TODO Implementatiopn
     }
 
-    public void thenThrow(Exception error) {
+    public MethodSpyCall thenThrow(final Exception error) {
       this.error = error;
+      return this;
     }
 
-    public boolean shouldThrow() {
+    public Object getValue() {
+      if (!this.valuesOnce.isEmpty()) {
+        return this.valuesOnce.remove(0);
+      }
+      return this.value;
+    }
+
+    public Exception getException() {
+      return this.error;
+    }
+
+    public Boolean shouldThrow() {
       return this.error != null;
     }
 
-    public boolean matches(final List<Object> callArguments) {
+    public Boolean matches(final List<Object> callArguments) {
       return Argument.matches(this.argsMatchable, callArguments);
     }
 
@@ -247,7 +269,7 @@ global class MethodSpy {
 
     public ConfigurationException build() {
       List<String> errorMessages = new List<String>();
-      for (ParameterizedMethodSpyCall parameterizedCall : this.spy.parameterizedMethodCalls) {
+      for (MethodSpyCall parameterizedCall : this.spy.methodCalls) {
         errorMessages.add(parameterizedCall.toString());
       }
 
