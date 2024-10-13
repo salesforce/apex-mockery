@@ -19,7 +19,7 @@
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
-    "prepush": "npm run test && npm run lint",
+    "prepush": "npm run lint && npm run build && npm run test",
     "test": "sf apex run test --result-format human --output-dir ./tests/apex --test-level RunLocalTests --synchronous",
     "test:incremental": "wireit"
   },
