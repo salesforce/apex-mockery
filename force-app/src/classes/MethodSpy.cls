@@ -16,21 +16,20 @@
  */
 @IsTest
 global class MethodSpy {
-  global String methodName { get; private set; }
-  global CallLog callLog { get; private set; }
-  private List<ParameterizedMethodSpyCall> methodCalls = new List<ParameterizedMethodSpyCall>();
+  global final String methodName { get; private set; }
+  global final CallLog callLog { get; private set; }
+  private final List<ParameterizedMethodSpyCall> methodCalls;
+  private final List<OnceHolder> onceHolders;
   private Object returnValue;
-  private Object returnValueOnce;
   private Boolean configuredGlobalReturn = false;
-  private Boolean configuredGlobalReturnOnce = false;
   private Boolean configuredGlobalThrow = false;
-  private Boolean configuredGlobalThrowOnce = false;
   private Exception exceptionToThrow;
-  private Exception exceptionToThrowOnce;
 
   global MethodSpy(String methodName) {
     this.methodName = methodName;
     this.callLog = new CallLog();
+    this.methodCalls = new List<ParameterizedMethodSpyCall>();
+    this.onceHolders = new List<OnceHolder>();
   }
 
   // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
@@ -57,44 +56,39 @@ global class MethodSpy {
   public Object call(List<Type> paramTypes, List<String> paramNames, List<Object> args) {
     this.callLog.add(new MethodCall(args));
 
-    if (this.configuredGlobalReturnOnce) {
-      this.configuredGlobalReturnOnce = false;
-      return this.returnValueOnce;
-    }
-
-    if (this.configuredGlobalThrowOnce) {
-      this.configuredGlobalThrowOnce = false;
-      throw this.exceptionToThrowOnce;
-    }
-
-    if (this.methodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
+    if (!this.isConfigured()) {
       return null;
     }
 
     for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
-      if (methodCall.matches(args)) {
-        if (methodCall.shouldThrow()) {
-          throw methodCall.getException();
-        }
-        return methodCall.getValue();
+      if (methodCall.matchesOnce(args)) {
+        return methodCall.getValueOnce();
       }
     }
 
-    if (this.configuredGlobalReturn) {
-      return this.returnValue;
+    if (!this.onceHolders.isEmpty()) {
+      return this.onceHolders.remove(0).getValue();
+    }
+
+    for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
+      if (methodCall.matches(args)) {
+        return methodCall.getValue();
+      }
     }
 
     if (this.configuredGlobalThrow) {
       throw this.exceptionToThrow;
     }
 
+    if (this.configuredGlobalReturn) {
+      return this.returnValue;
+    }
+
     throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
-  global void returnsOnce(Object value) {
-    this.configuredGlobalReturnOnce = true;
-    this.configuredGlobalThrowOnce = false;
-    this.returnValueOnce = value;
+  private Boolean isConfigured() {
+    return !this.methodCalls.isEmpty() || this.configuredGlobalReturn || this.configuredGlobalThrow || !this.onceHolders.isEmpty();
   }
 
   global void returns(Object value) {
@@ -109,10 +103,12 @@ global class MethodSpy {
     this.exceptionToThrow = exceptionToThrow;
   }
 
+  global void returnsOnce(Object value) {
+    this.onceHolders.add(new ValueOnceHolder(value));
+  }
+
   global void throwsExceptionOnce(Exception exceptionToThrowOnce) {
-    this.configuredGlobalThrowOnce = true;
-    this.configuredGlobalReturnOnce = false;
-    this.exceptionToThrowOnce = exceptionToThrowOnce;
+    this.onceHolders.add(new ExceptionOnceHolder(exceptionToThrowOnce));
   }
 
   global MethodSpyCall whenCalledWith() {
@@ -186,19 +182,17 @@ global class MethodSpy {
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
     private final List<Argument.Matchable> argsMatchable;
-    private final List<Object> valuesOnce;
-    private final List<Exception> exceptionsOnce;
-    private Object value;
+    private final List<OnceHolder> onceHolders;
+    private Object value = DEFAULT_MEMORY_ADDRESS; // It is possible to configure to return null or Exception
     private Exception error;
 
     public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
-      this.valuesOnce = new List<Object>();
-      this.exceptionsOnce = new List<Exception>();
+      this.onceHolders = new List<OnceHolder>();
     }
 
     public MethodSpyCall thenReturnOnce(final Object value) {
-      this.valuesOnce.add(value);
+      this.onceHolders.add(new ValueOnceHolder(value));
       return this;
     }
     public MethodSpyCall thenReturn(final Object value) {
@@ -207,7 +201,7 @@ global class MethodSpy {
     }
 
     public MethodSpyCall thenThrowOnce(final Exception error) {
-      this.exceptionsOnce.add(error);
+      this.onceHolders.add(new ExceptionOnceHolder(error));
       return this;
     }
 
@@ -216,48 +210,46 @@ global class MethodSpy {
       return this;
     }
 
+    public Object getValueOnce() {
+      // Check for configuration is done in matchesOnce
+      return this.onceHolders.remove(0).getValue();
+    }
+
     public Object getValue() {
-      if (!this.valuesOnce.isEmpty()) {
-        return this.valuesOnce.remove(0);
+      if (this.error != null) {
+        throw this.error;
       }
-      return this.value;
-    }
-
-    public Exception getException() {
-      if (!this.exceptionsOnce.isEmpty()) {
-        return this.exceptionsOnce.remove(0);
-      }
-      return this.error;
-    }
-
-    public Boolean shouldThrow() {
-      return this.error != null || !this.exceptionsOnce.isEmpty();
+      return this.value !== DEFAULT_MEMORY_ADDRESS ? this.value : null;
     }
 
     public Boolean matches(final List<Object> callArguments) {
       return Argument.matches(this.argsMatchable, callArguments) && this.isConfigured();
     }
 
+    public Boolean matchesOnce(final List<Object> callArguments) {
+      return Argument.matches(this.argsMatchable, callArguments) && this.isConfiguredOnce();
+    }
+
     private Boolean isConfigured() {
-      return this.value != null || this.error != null || !this.valuesOnce.isEmpty() || !this.exceptionsOnce.isEmpty();
+      return this.value !== DEFAULT_MEMORY_ADDRESS || this.error != null;
+    }
+
+    private Boolean isConfiguredOnce() {
+      return !this.onceHolders.isEmpty();
     }
 
     public override String toString() {
       final List<String> oncesString = new List<String>();
-      for (Exception e : this.exceptionsOnce) {
-        oncesString.add('.thenThrowOnce(' + e + ')');
-      }
-      for (Object o : this.valuesOnce) {
-        oncesString.add('.thenReturnOnce(' + o + ')');
+      for (OnceHolder onceHolder : this.onceHolders) {
+        oncesString.add(onceHolder.toString());
       }
 
       return 'whenCalledWith' +
         this.argsMatchable +
         '' +
         String.join(oncesString, '') +
-        (!this.valuesOnce.isEmpty() ? 'thenReturnOnce(' + this.valuesOnce + ')' : '') +
         (this.error != null ? '.thenThrow(' + this.error + ')' : '') +
-        (this.value != null ? '.thenReturn(' + this.value + ')' : '');
+        (this.value !== DEFAULT_MEMORY_ADDRESS ? '.thenReturn(' + this.value + ')' : '');
     }
   }
 
@@ -308,6 +300,43 @@ global class MethodSpy {
       );
     }
   }
+
+  private interface OnceHolder {
+    Object getValue();
+  }
+
+  private class ValueOnceHolder implements OnceHolder {
+    private final Object value;
+
+    public ValueOnceHolder(final Object value) {
+      this.value = value;
+    }
+    public Object getValue() {
+      return this.value;
+    }
+
+    public override String toString() {
+      return '.thenReturnOnce(' + this.value + ')';
+    }
+  }
+
+  private class ExceptionOnceHolder implements OnceHolder {
+    public final Exception value;
+
+    public ExceptionOnceHolder(final Exception value) {
+      this.value = value;
+    }
+
+    public Object getValue() {
+      throw this.value;
+    }
+
+    public override String toString() {
+      return '.thenThrowOnce(' + this.value + ')';
+    }
+  }
+
+  private static String DEFAULT_MEMORY_ADDRESS = '';
 
   global class ConfigurationException extends Exception {
   }
