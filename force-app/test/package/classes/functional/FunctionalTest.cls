@@ -28,7 +28,7 @@ private class FunctionalTest {
 
     insertSObjectSpy.whenCalledWith(Argument.of(Argument.ofType(Account.getSObjectType()))).thenReturn(succeed('001000000000000AAA'));
 
-    insertSObjectSpy.whenCalledWith(Argument.of(Argument.ofType(Opportunity.getSObjectType()))).thenReturn(succeed('006000000000000AAA'));
+    insertSObjectSpy.whenCalledWith(Argument.of(Argument.ofType(Opportunity.getSObjectType()))).thenReturnOnce(succeed('006000000000000AAA'));
 
     BusinessService sut = new BusinessService((DMLDelegate) dmlDelegateMock.stub);
 
