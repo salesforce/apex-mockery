@@ -14,10 +14,10 @@ private class MethodSpyOnceTest {
     sut.returnsOnce('global once');
     sut.throwsExceptionOnce(new IllegalArgumentException('global once'));
     sut.returns('global');
-    sut.throwsException(new IllegalArgumentException('global')); // It overrides returns
+    sut.throwsException(new IllegalArgumentException('global')); // It overrides returns (last global configuration overrides)
     sut.whenCalledWith('str')
       .thenReturn('match')
-      .thenThrow(new IllegalArgumentException('match')) // It overrides thenReturn
+      .thenThrow(new IllegalArgumentException('match')) // It overrides thenReturn (last matching configuration overrides)
       .thenReturnOnce('match once')
       .thenThrowOnce(new IllegalArgumentException('match once'));
 
