@@ -16,13 +16,13 @@
  */
 @IsTest
 global class MethodSpy {
+  private static String DEFAULT_MEMORY_ADDRESS = '';
+
   global final String methodName { get; private set; }
   global final CallLog callLog { get; private set; }
   private final List<ParameterizedMethodSpyCall> methodCalls;
   private final List<OnceHolder> onceHolders;
   private Object returnValue;
-  private Boolean configuredGlobalReturn = false;
-  private Boolean configuredGlobalThrow = false;
   private Exception exceptionToThrow;
 
   global MethodSpy(String methodName) {
@@ -30,6 +30,8 @@ global class MethodSpy {
     this.callLog = new CallLog();
     this.methodCalls = new List<ParameterizedMethodSpyCall>();
     this.onceHolders = new List<OnceHolder>();
+    this.returnValue = DEFAULT_MEMORY_ADDRESS;
+    this.exceptionToThrow = null;
   }
 
   // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
@@ -76,11 +78,11 @@ global class MethodSpy {
       }
     }
 
-    if (this.configuredGlobalThrow) {
+    if (this.exceptionToThrow != null) {
       throw this.exceptionToThrow;
     }
 
-    if (this.configuredGlobalReturn) {
+    if (this.returnValue !== DEFAULT_MEMORY_ADDRESS) {
       return this.returnValue;
     }
 
@@ -88,18 +90,16 @@ global class MethodSpy {
   }
 
   private Boolean isConfigured() {
-    return !this.methodCalls.isEmpty() || this.configuredGlobalReturn || this.configuredGlobalThrow || !this.onceHolders.isEmpty();
+    return !this.methodCalls.isEmpty() || this.returnValue !== DEFAULT_MEMORY_ADDRESS || this.exceptionToThrow != null || !this.onceHolders.isEmpty();
   }
 
   global void returns(Object value) {
-    this.configuredGlobalReturn = true;
-    this.configuredGlobalThrow = false;
+    this.exceptionToThrow = null;
     this.returnValue = value;
   }
 
   global void throwsException(Exception exceptionToThrow) {
-    this.configuredGlobalThrow = true;
-    this.configuredGlobalReturn = false;
+    this.returnValue = DEFAULT_MEMORY_ADDRESS;
     this.exceptionToThrow = exceptionToThrow;
   }
 
@@ -197,6 +197,7 @@ global class MethodSpy {
     }
     public MethodSpyCall thenReturn(final Object value) {
       this.value = value;
+      this.error = null;
       return this;
     }
 
@@ -207,6 +208,7 @@ global class MethodSpy {
 
     public MethodSpyCall thenThrow(final Exception error) {
       this.error = error;
+      this.value = DEFAULT_MEMORY_ADDRESS;
       return this;
     }
 
@@ -335,8 +337,6 @@ global class MethodSpy {
       return '.thenThrowOnce(' + this.value + ')';
     }
   }
-
-  private static String DEFAULT_MEMORY_ADDRESS = '';
 
   global class ConfigurationException extends Exception {
   }
