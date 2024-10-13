@@ -370,8 +370,10 @@ It contains one classe for each use cases the library covers
 
 - [No Configuration](force-app/recipes/classes/mocking/NoConfiguration.cls): spy not configured
 - [Returns](force-app/recipes/classes/mocking/Returns.cls): spy configured to return
+- [Returns](force-app/recipes/classes/mocking/ReturnsOnce.cls): spy configured to return once
 - [ReturnsThenThrows](force-app/recipes/classes/mocking/ReturnsThenThrows.cls): spy configured to throw
 - [Throws](force-app/recipes/classes/mocking/Throws.cls): spy configured to throw
+- [ThrowsOnce](force-app/recipes/classes/mocking/ThrowsOnce.cls): spy configured to throw once
 - [ThrowsThenReturns](force-app/recipes/classes/mocking/ThrowsThenReturns.cls): spy configured to return
 - [WhenCalledWithCustomMatchable_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithCustomMatchable_ThenReturn.cls): spy configured with custom matcher to return
 - [WhenCalledWithEqualMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithEqualMatching_ThenReturn.cls): spy configured with equals matcher to return
@@ -379,7 +381,9 @@ It contains one classe for each use cases the library covers
 - [WhenCalledWithMatchingThrowsAndReturns](force-app/recipes/classes/mocking/WhenCalledWithMatchingThrowsAndReturns.cls): spy configured with matcher to return and to throw
 - [WhenCalledWithNotMatchingAndReturn](force-app/recipes/classes/mocking/WhenCalledWithNotMatchingAndReturn.cls): spy configured with matcher and global return, called without matching parameters
 - [WhenCalledWithTypeMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithTypeMatching_ThenReturn.cls): spy configured with type matcher to return
-- [WhenCalledWith_ThenThrow](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrow.cls): spy configured with JSON matcher to throw
+- [WhenCalledWith_ThenReturnOnce](force-app/recipes/classes/mocking/WhenCalledWith_ThenReturnOnce.cls): spy configured with a matcher to return once
+- [WhenCalledWith_ThenThrow](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrow.cls): spy configured with a matcher to throw
+- [WhenCalledWith_ThenThrowOnce](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrowOnce.cls): spy configured with a matcher to throw once
 - [WhenCalledWithoutMatchingConfiguration](force-app/recipes/classes/mocking/WhenCalledWithoutMatchingConfiguration.cls): spy configured and called without matching parameters
 
 #### Asserting
