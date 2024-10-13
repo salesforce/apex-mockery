@@ -18,7 +18,7 @@
 global class MethodSpy {
   global String methodName { get; private set; }
   global CallLog callLog { get; private set; }
-  private List<MethodSpyCall> methodCalls = new List<MethodSpyCall>();
+  private List<ParameterizedMethodSpyCall> methodCalls = new List<ParameterizedMethodSpyCall>();
   private Object returnValue;
   private Object returnValueOnce;
   private Boolean configuredGlobalReturn = false;
@@ -71,7 +71,7 @@ global class MethodSpy {
       return null;
     }
 
-    for (MethodSpyCall methodCall : this.methodCalls) {
+    for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
       if (methodCall.matches(args)) {
         if (methodCall.shouldThrow()) {
           throw methodCall.getException();
@@ -182,10 +182,6 @@ global class MethodSpy {
     MethodSpyCall thenThrow(Exception error);
     MethodSpyCall thenReturnOnce(Object value);
     MethodSpyCall thenThrowOnce(Exception error);
-    Boolean matches(List<Object> callArguments);
-    Object getValue();
-    Exception getException();
-    Boolean shouldThrow();
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
@@ -293,8 +289,8 @@ global class MethodSpy {
 
     public ConfigurationException build() {
       List<String> errorMessages = new List<String>();
-      for (MethodSpyCall parameterizedCall : this.spy.methodCalls) {
-        errorMessages.add(parameterizedCall.toString());
+      for (MethodSpyCall methodCall : this.spy.methodCalls) {
+        errorMessages.add(methodCall.toString());
       }
 
       List<String> callArgumentsAsString = new List<String>();
