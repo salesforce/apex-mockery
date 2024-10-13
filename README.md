@@ -218,9 +218,10 @@ Have a look at the [mocking recipes](force-app/recipes/classes/mocking/) to have
 The order of the spy configuration drive how it will behave.
 
 1. If no configuration at all, then return null (default behavior).
-1. Then, it checks the `whenCalledWith` configurations.
-1. Then, it checks the global `returns` configurations.
-1. Then, it checks the global `throwsException` configurations.
+1. Then, it checks the "matching" `whenCalledWith` `once` configurations and apply them in setup order.
+1. Then, it checks the "global once" (`returnsOnce` or `throwsExceptionOnce`) configuration and apply them in setup order.
+1. Then, it checks the "matching" `whenCalledWith` configurations and apply them in setup order.
+1. Then, it checks the "global" (`returns` or `throwsException`) configurations and apply them in setup order.
 
 If there is a configuration and it does not match then it throws a `ConfigurationException`.
 The error message will contains the arguments and the configuration.
