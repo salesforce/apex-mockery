@@ -1,64 +1,49 @@
 {
-  "name": "Apex Mockery",
-  "private": true,
-  "version": "2.1.0",
-  "description": "Salesforce App",
-  "keyword": [
-    "salesforce",
-    "apex",
-    "test",
-    "mock"
-  ],
-  "scripts": {
-    "build": "wireit",
-    "lint": "npm run lint:apex ; npm run lint:doc",
-    "lint:apex": "sf scanner run --verbose --target 'force-app/**/*.cls' --format table --category 'apex-mockery' --engine pmd",
-    "lint:doc": "write-good README.md --parse",
-    "postinstall": "./postInstall.sh",
-    "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
-    "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
-    "precommit": "lint-staged",
-    "prepush": "npm run test && npm run lint",
-    "test": "wireit"
-  },
-  "wireit": {
-    "build": {
-      "command": "sf project deploy start",
-      "files": [
-        "**/*.cls"
-      ],
-      "output": []
-    },
-    "test": {
-      "command": "sf apex run test --result-format human --output-dir ./tests/apex --test-level RunLocalTests --synchronous --code-coverage --detailed-coverage",
-      "files": [
-        "**/*.cls"
-      ],
-      "output": [
-        "coverage"
-      ],
-      "dependencies": [
-        "build"
-      ]
-    }
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
-    "@prettier/plugin-xml": "^3.4.1",
-    "husky": "^9.1.1",
-    "lint-staged": "^15.2.7",
-    "prettier": "^3.3.3",
-    "prettier-plugin-apex": "^2.1.5",
-    "wireit": "^0.14.9",
-    "write-good": "^1.0.8"
-  },
-  "lint-staged": {
-    "**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
-      "prettier --write"
-    ],
-    "README.md": [
-      "write-good --parse"
-    ]
-  }
+	"name": "Apex Mockery",
+	"private": true,
+	"version": "2.1.0",
+	"description": "Salesforce App",
+	"keyword": ["salesforce", "apex", "test", "mock"],
+	"scripts": {
+		"build": "wireit",
+		"lint": "npm run lint:apex ; npm run lint:doc",
+		"lint:apex": "sf scanner run --verbose --target 'force-app/**/*.cls' --format table --category 'apex-mockery' --engine pmd",
+		"lint:doc": "write-good README.md --parse",
+		"postinstall": "./postInstall.sh",
+		"prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
+		"prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
+		"precommit": "lint-staged",
+		"prepush": "npm run lint && npm run build && npm run test",
+		"test": "wireit"
+	},
+	"wireit": {
+		"build": {
+			"command": "sf project deploy start",
+			"files": ["**/*.cls"],
+			"output": []
+		},
+		"test": {
+			"command": "sf apex run test --result-format human --output-dir ./tests/apex --test-level RunLocalTests --synchronous --code-coverage --detailed-coverage",
+			"files": ["**/*.cls"],
+			"output": ["coverage"],
+			"dependencies": ["build"]
+		}
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^19.3.0",
+		"@commitlint/config-conventional": "^19.2.2",
+		"@prettier/plugin-xml": "^3.4.1",
+		"husky": "^9.1.1",
+		"lint-staged": "^15.2.7",
+		"prettier": "^3.3.3",
+		"prettier-plugin-apex": "^2.1.5",
+		"wireit": "^0.14.9",
+		"write-good": "^1.0.8"
+	},
+	"lint-staged": {
+		"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
+			"prettier --write"
+		],
+		"README.md": ["write-good --parse"]
+	}
 }
