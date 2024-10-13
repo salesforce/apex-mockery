@@ -12,7 +12,7 @@ private class ApexMockeryOverview {
     mockery.Mock deliveryServiceMock = mockery.Mock.forType(DeliveryService.class, new StubBuilderImpl());
     mockery.MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenReturn(Date.today().addDays(3));
+    planDeliverySpy.whenCalledWith(new Pastry('Chocolatine')).thenReturn(Date.today().addDays(3)).thenReturnOnce(Date.today().addDays(2));
     planDeliverySpy.whenCalledWith(new OperaPastryMatchable()).thenThrow(new RecipeException());
     planDeliverySpy.returns(Date.today().addDays(4));
 
@@ -20,11 +20,20 @@ private class ApexMockeryOverview {
     mockery.Expect.that(planDeliverySpy).hasBeenCalledTimes(0);
 
     // Act & Assert
+    // Once matcher (imagine first command is delivered early)
     OrderConfirmation order = myBakery.order(new Pastry('Chocolatine'));
     mockery.Expect.that(planDeliverySpy).hasBeenCalled();
     mockery.Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Chocolatine'));
     mockery.Expect.that(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Chocolatine'));
     mockery.Expect.that(planDeliverySpy).hasBeenCalledTimes(1);
+    Assert.areEqual(Date.today().addDays(2), order.deliveryDate);
+
+    // Matcher
+    order = myBakery.order(new Pastry('Chocolatine'));
+    mockery.Expect.that(planDeliverySpy).hasBeenCalled();
+    mockery.Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Chocolatine'));
+    mockery.Expect.that(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Chocolatine'));
+    mockery.Expect.that(planDeliverySpy).hasBeenCalledTimes(2);
     Assert.areEqual(Date.today().addDays(3), order.deliveryDate);
 
     order = myBakery.order(new Pastry('Croissant'));
@@ -32,7 +41,7 @@ private class ApexMockeryOverview {
     mockery.Expect.that(planDeliverySpy).hasBeenCalledWith(mockery.Argument.jsonEquals(new Pastry('Chocolatine')));
     mockery.Expect.that(planDeliverySpy).hasBeenCalledWith(new Pastry('Croissant'));
     mockery.Expect.that(planDeliverySpy).hasBeenLastCalledWith(new Pastry('Croissant'));
-    mockery.Expect.that(planDeliverySpy).hasBeenCalledTimes(2);
+    mockery.Expect.that(planDeliverySpy).hasBeenCalledTimes(3);
     Assert.areEqual(Date.today().addDays(4), order.deliveryDate);
 
     try {
