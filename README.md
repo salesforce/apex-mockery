@@ -24,7 +24,9 @@ We want its usage to be simple, its maintainability to be easy and to provide th
     - [How to Configure a spy](#how-to-configure-a-spy)
       - [Default behaviour](#default-behaviour)
       - [Global returns](#global-returns)
+      - [Global returns once](#global-returns-once)
       - [Global throws](#global-throws)
+      - [Global throws once](#global-throws-once)
       - [Parameterized configuration](#parameterized-configuration)
       - [Configuration order matters !](#configuration-order-matters-)
   - [Assert on a spy](#assert-on-a-spy)
@@ -155,6 +157,22 @@ Assert.areEqual(new Account(Name='Test'), result);
 
 Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Returns.cls)
 
+##### Global returns once
+
+Configure it to return a specific value once, whatever the parameter received
+The stub will return the configured value once
+
+```java
+// Arrange
+myMethodSpy.returnsOnce(new Account(Name='Test'));
+// Act
+Object result = myTypeStub.myMethod();
+// Assert
+Assert.areEqual(new Account(Name='Test'), result);
+```
+
+Have a look at the [ReturnsOnce recipe](force-app/recipes/classes/mocking/ReturnsOnce.cls)
+
 ##### Global throws
 
 Configure it to throw a specific exception, whatever the parameter received
@@ -176,10 +194,33 @@ try {
 
 Have a look at the [Throws recipe](force-app/recipes/classes/mocking/Throws.cls)
 
+##### Global throws once
+
+Configure it to throw a specific exception once, whatever the parameter received
+The stub will throw the configured exception once
+
+```java
+// Arrange
+myMethodSpy.throwsExceptionOnce(new MyException());
+try {
+    // Act
+    Object result = myTypeStub.myMethod();
+
+    // Assert
+    Assert.fail('Expected exception was not thrown');
+} catch (Exception ex) {
+    Assert.isInstanceOfType(ex, MyException.class);
+}
+```
+
+Have a look at the [ThrowsOnce recipe](force-app/recipes/classes/mocking/ThrowsOnce.cls)
+
 ##### Parameterized configuration
 
 Configure it to return a specific value, when call with specific parameters
+Configure it to return a specific value once, when call with specific parameters
 Configure it to throw a specific value, when call with specific parameters
+Configure it to throw a specific value once, when call with specific parameters
 
 ```java
 // Arrange
@@ -189,8 +230,24 @@ myMethodSpy
 
 // Arrange
 myMethodSpy
+    .whenCalledWith(Argument.any(), 10)
+    .thenReturnOnce(new Account(Name='Test Once'));
+
+// Arrange
+myMethodSpy
     .whenCalledWith(Argument.any(), -1)
     .thenThrow(new MyException);
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenThrowOnce(new MyOtherException);
+
+// Act
+Object result = myTypeStub.myMethod('nothing', 10);
+
+// Assert
+Assert.areEqual(new Account(Name='Test Once'), result);
 
 // Act
 Object result = myTypeStub.myMethod('nothing', 10);
@@ -200,7 +257,17 @@ Assert.areEqual(new Account(Name='Test'), result);
 
 // Act
 try {
-    Object result = myTypeStub.myMethod('value', -1);
+    myTypeStub.myMethod('value', -1);
+
+    // Assert
+    Assert.fail('Expected exception was not thrown');
+} catch (Exception ex) {
+    Assert.isInstanceOfType(ex, MyOtherException.class);
+}
+
+// Act
+try {
+    myTypeStub.myMethod('value', -1);
 
     // Assert
     Assert.fail('Expected exception was not thrown');
