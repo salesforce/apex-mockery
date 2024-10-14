@@ -16,22 +16,18 @@
  */
 @IsTest
 global class MethodSpy {
-  private static String DEFAULT_MEMORY_ADDRESS = '';
-
   global final String methodName { get; private set; }
   global final CallLog callLog { get; private set; }
   private final List<ParameterizedMethodSpyCall> methodCalls;
-  private final List<OnceHolder> onceHolders;
-  private Object returnValue;
-  private Exception exceptionToThrow;
+  private final List<ConfiguredBehavior> configuredBehaviorOnces;
+  private ConfiguredBehavior returnBehavior;
+  private ConfiguredBehavior exceptionBehavior;
 
   global MethodSpy(String methodName) {
     this.methodName = methodName;
     this.callLog = new CallLog();
     this.methodCalls = new List<ParameterizedMethodSpyCall>();
-    this.onceHolders = new List<OnceHolder>();
-    this.returnValue = DEFAULT_MEMORY_ADDRESS;
-    this.exceptionToThrow = null;
+    this.configuredBehaviorOnces = new List<ConfiguredBehavior>();
   }
 
   // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
@@ -68,8 +64,8 @@ global class MethodSpy {
       }
     }
 
-    if (!this.onceHolders.isEmpty()) {
-      return this.onceHolders.remove(0).getValue();
+    if (!this.configuredBehaviorOnces.isEmpty()) {
+      return this.configuredBehaviorOnces.remove(0).getBehavior();
     }
 
     for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
@@ -78,37 +74,37 @@ global class MethodSpy {
       }
     }
 
-    if (this.exceptionToThrow != null) {
-      throw this.exceptionToThrow;
+    if (this.exceptionBehavior != null) {
+      return this.exceptionBehavior.getBehavior();
     }
 
-    if (this.returnValue !== DEFAULT_MEMORY_ADDRESS) {
-      return this.returnValue;
+    if (this.returnBehavior != null) {
+      return this.returnBehavior.getBehavior();
     }
 
     throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
   private Boolean isConfigured() {
-    return !this.methodCalls.isEmpty() || this.returnValue !== DEFAULT_MEMORY_ADDRESS || this.exceptionToThrow != null || !this.onceHolders.isEmpty();
+    return !this.methodCalls.isEmpty() || this.returnBehavior != null || this.exceptionBehavior != null || !this.configuredBehaviorOnces.isEmpty();
   }
 
   global void returns(Object value) {
-    this.exceptionToThrow = null;
-    this.returnValue = value;
+    this.exceptionBehavior = null;
+    this.returnBehavior = new ConfiguredValueBehavior(value);
   }
 
   global void throwsException(Exception exceptionToThrow) {
-    this.returnValue = DEFAULT_MEMORY_ADDRESS;
-    this.exceptionToThrow = exceptionToThrow;
+    this.returnBehavior = null;
+    this.exceptionBehavior = new ConfiguredExceptionBehavior(exceptionToThrow);
   }
 
   global void returnsOnce(Object value) {
-    this.onceHolders.add(new ValueOnceHolder(value));
+    this.configuredBehaviorOnces.add(new ConfiguredValueBehaviorOnce(value));
   }
 
   global void throwsExceptionOnce(Exception exceptionToThrowOnce) {
-    this.onceHolders.add(new ExceptionOnceHolder(exceptionToThrowOnce));
+    this.configuredBehaviorOnces.add(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
   }
 
   global MethodSpyCall whenCalledWith() {
@@ -182,46 +178,45 @@ global class MethodSpy {
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
     private final List<Argument.Matchable> argsMatchable;
-    private final List<OnceHolder> onceHolders;
-    private Object value = DEFAULT_MEMORY_ADDRESS; // It is possible to configure to return null or Exception
-    private Exception error;
+    private final List<ConfiguredBehavior> configuredBehaviorOnces;
+    private ConfiguredBehavior returnBehavior;
+    private ConfiguredBehavior exceptionBehavior;
 
     public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
-      this.onceHolders = new List<OnceHolder>();
+      this.configuredBehaviorOnces = new List<ConfiguredBehavior>();
     }
 
-    public MethodSpyCall thenReturnOnce(final Object value) {
-      this.onceHolders.add(new ValueOnceHolder(value));
-      return this;
-    }
     public MethodSpyCall thenReturn(final Object value) {
-      this.value = value;
-      this.error = null;
-      return this;
-    }
-
-    public MethodSpyCall thenThrowOnce(final Exception error) {
-      this.onceHolders.add(new ExceptionOnceHolder(error));
+      this.returnBehavior = new ConfiguredValueBehavior(value);
+      this.exceptionBehavior = null;
       return this;
     }
 
     public MethodSpyCall thenThrow(final Exception error) {
-      this.error = error;
-      this.value = DEFAULT_MEMORY_ADDRESS;
+      this.exceptionBehavior = new ConfiguredExceptionBehavior(error);
+      this.returnBehavior = null;
+      return this;
+    }
+
+    public MethodSpyCall thenReturnOnce(final Object value) {
+      this.configuredBehaviorOnces.add(new ConfiguredValueBehaviorOnce(value));
+      return this;
+    }
+
+    public MethodSpyCall thenThrowOnce(final Exception error) {
+      this.configuredBehaviorOnces.add(new ConfiguredExceptionBehaviorOnce(error));
       return this;
     }
 
     public Object getValueOnce() {
       // Check for configuration is done in matchesOnce
-      return this.onceHolders.remove(0).getValue();
+      return this.configuredBehaviorOnces.remove(0).getBehavior();
     }
 
     public Object getValue() {
-      if (this.error != null) {
-        throw this.error;
-      }
-      return this.value !== DEFAULT_MEMORY_ADDRESS ? this.value : null;
+      final ConfiguredBehavior configuredBehavior = this.exceptionBehavior != null ? this.exceptionBehavior : this.returnBehavior;
+      return configuredBehavior?.getBehavior();
     }
 
     public Boolean matches(final List<Object> callArguments) {
@@ -233,25 +228,25 @@ global class MethodSpy {
     }
 
     private Boolean isConfigured() {
-      return this.value !== DEFAULT_MEMORY_ADDRESS || this.error != null;
+      return this.returnBehavior != null || this.exceptionBehavior != null;
     }
 
     private Boolean isConfiguredOnce() {
-      return !this.onceHolders.isEmpty();
+      return !this.configuredBehaviorOnces.isEmpty();
     }
 
     public override String toString() {
       final List<String> oncesString = new List<String>();
-      for (OnceHolder onceHolder : this.onceHolders) {
-        oncesString.add(onceHolder.toString());
+      for (ConfiguredBehavior configuredBehaviorOnce : this.configuredBehaviorOnces) {
+        oncesString.add(configuredBehaviorOnce.toString());
       }
 
       return 'whenCalledWith' +
         this.argsMatchable +
         '' +
         String.join(oncesString, '') +
-        (this.error != null ? '.thenThrow(' + this.error + ')' : '') +
-        (this.value !== DEFAULT_MEMORY_ADDRESS ? '.thenReturn(' + this.value + ')' : '');
+        (this.returnBehavior != null ? this.returnBehavior.toString() : '') +
+        (this.exceptionBehavior != null ? this.exceptionBehavior.toString() : '');
     }
   }
 
@@ -303,34 +298,55 @@ global class MethodSpy {
     }
   }
 
-  private interface OnceHolder {
-    Object getValue();
-  }
+  private abstract class ConfiguredBehavior {
+    public final Object value;
+    abstract Object getBehavior();
 
-  private class ValueOnceHolder implements OnceHolder {
-    private final Object value;
-
-    public ValueOnceHolder(final Object value) {
+    public ConfiguredBehavior(final Object value) {
       this.value = value;
     }
-    public Object getValue() {
+  }
+
+  private virtual class ConfiguredValueBehavior extends ConfiguredBehavior {
+    public ConfiguredValueBehavior(final Object value) {
+      super(value);
+    }
+
+    public override Object getBehavior() {
       return this.value;
     }
 
+    public override virtual String toString() {
+      return '.thenReturn(' + this.value + ')';
+    }
+  }
+
+  private class ConfiguredValueBehaviorOnce extends ConfiguredValueBehavior {
+    public ConfiguredValueBehaviorOnce(final Object value) {
+      super(value);
+    }
     public override String toString() {
       return '.thenReturnOnce(' + this.value + ')';
     }
   }
 
-  private class ExceptionOnceHolder implements OnceHolder {
-    public final Exception value;
-
-    public ExceptionOnceHolder(final Exception value) {
-      this.value = value;
+  private virtual class ConfiguredExceptionBehavior extends ConfiguredBehavior {
+    public ConfiguredExceptionBehavior(final Exception value) {
+      super(value);
     }
 
-    public Object getValue() {
-      throw this.value;
+    public override Object getBehavior() {
+      throw (Exception) this.value;
+    }
+
+    public override virtual String toString() {
+      return '.thenThrow(' + this.value + ')';
+    }
+  }
+
+  private class ConfiguredExceptionBehaviorOnce extends ConfiguredExceptionBehavior {
+    public ConfiguredExceptionBehaviorOnce(final Exception value) {
+      super(value);
     }
 
     public override String toString() {
