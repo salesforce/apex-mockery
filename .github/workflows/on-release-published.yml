@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Promote latest main package version
-        run: sf force package version promote --no-prompt --package ${{ needs.create-package-version.outputs.packageId }}
+        run: sf package version promote --no-prompt --package ${{ needs.create-package-version.outputs.packageId }}
 
   update-release:
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
           ### Unlocked Package installation
           - Production [link](https://login.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
           - Sandbox [link](https://test.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
-          - sfdx command: \`sf force package install --package $packageId\`
+          - sfdx command: \`sf package install --package $packageId\`
           EOF
           )
           echo "links<<EOF" >> $GITHUB_ENV

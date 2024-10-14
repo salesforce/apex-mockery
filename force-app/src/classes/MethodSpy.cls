@@ -16,17 +16,16 @@
  */
 @IsTest
 global class MethodSpy {
-  global String methodName { get; private set; }
-  global CallLog callLog { get; private set; }
-  private List<ParameterizedMethodSpyCall> parameterizedMethodCalls = new List<ParameterizedMethodSpyCall>();
-  private Object returnValue;
-  private Boolean configuredGlobalReturn = false;
-  private Boolean configuredGlobalThrow = false;
-  private Exception exceptionToThrow;
+  global final String methodName { get; private set; }
+  global final CallLog callLog { get; private set; }
+  private final List<ParameterizedMethodSpyCall> methodCalls;
+  private final BehaviorManagement behaviorManager;
 
   global MethodSpy(String methodName) {
     this.methodName = methodName;
     this.callLog = new CallLog();
+    this.methodCalls = new List<ParameterizedMethodSpyCall>();
+    this.behaviorManager = new BehaviorManagement();
   }
 
   // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
@@ -53,40 +52,51 @@ global class MethodSpy {
   public Object call(List<Type> paramTypes, List<String> paramNames, List<Object> args) {
     this.callLog.add(new MethodCall(args));
 
-    if (this.parameterizedMethodCalls.isEmpty() && !this.configuredGlobalReturn && !this.configuredGlobalThrow) {
+    if (!this.isConfigured()) {
       return null;
     }
 
-    for (ParameterizedMethodSpyCall parameterizedCall : this.parameterizedMethodCalls) {
-      if (parameterizedCall.matches(args)) {
-        if (parameterizedCall.shouldThrow()) {
-          throw parameterizedCall.error;
-        }
-        return parameterizedCall.value;
+    for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
+      if (methodCall.matchesOnce(args)) {
+        return methodCall.getConfiguredBehavior();
       }
     }
 
-    if (this.configuredGlobalReturn) {
-      return this.returnValue;
+    if (this.behaviorManager.hasConfiguredOnceBehavior()) {
+      return this.behaviorManager.getConfiguredBehavior();
     }
 
-    if (this.configuredGlobalThrow) {
-      throw this.exceptionToThrow;
+    for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
+      if (methodCall.matches(args)) {
+        return methodCall.getConfiguredBehavior();
+      }
+    }
+
+    if (this.behaviorManager.hasConfiguredGeneralBehavior()) {
+      return this.behaviorManager.getConfiguredBehavior();
     }
 
     throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
+  private Boolean isConfigured() {
+    return this.methodCalls.size() > 0 || this.behaviorManager.hasConfiguredOnceBehavior() || this.behaviorManager.hasConfiguredGeneralBehavior();
+  }
+
   global void returns(Object value) {
-    this.configuredGlobalReturn = true;
-    this.configuredGlobalThrow = false;
-    this.returnValue = value;
+    this.behaviorManager.setGeneralBehavior(new ConfiguredValueBehavior(value));
   }
 
   global void throwsException(Exception exceptionToThrow) {
-    this.configuredGlobalThrow = true;
-    this.configuredGlobalReturn = false;
-    this.exceptionToThrow = exceptionToThrow;
+    this.behaviorManager.setGeneralBehavior(new ConfiguredExceptionBehavior(exceptionToThrow));
+  }
+
+  global void returnsOnce(Object value) {
+    this.behaviorManager.queueOnceBehavior(new ConfiguredValueBehaviorOnce(value));
+  }
+
+  global void throwsExceptionOnce(Exception exceptionToThrowOnce) {
+    this.behaviorManager.queueOnceBehavior(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
   }
 
   global MethodSpyCall whenCalledWith() {
@@ -115,7 +125,7 @@ global class MethodSpy {
 
   private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
     final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(args);
-    this.parameterizedMethodCalls.add(parameterizedMethodCall);
+    this.methodCalls.add(parameterizedMethodCall);
     return parameterizedMethodCall;
   }
 
@@ -152,37 +162,55 @@ global class MethodSpy {
   }
 
   global interface MethodSpyCall {
-    void thenReturn(Object value);
-    void thenThrow(Exception error);
+    MethodSpyCall thenReturn(Object value);
+    MethodSpyCall thenThrow(Exception error);
+    MethodSpyCall thenReturnOnce(Object value);
+    MethodSpyCall thenThrowOnce(Exception error);
   }
 
   private class ParameterizedMethodSpyCall implements MethodSpyCall {
     private final List<Argument.Matchable> argsMatchable;
-    public Object value { get; private set; }
-    public Exception error { get; private set; }
+    private final BehaviorManagement behaviorManager;
 
     public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
+      this.behaviorManager = new BehaviorManagement();
     }
 
-    public void thenReturn(Object value) {
-      this.value = value;
+    public MethodSpyCall thenReturn(final Object value) {
+      this.behaviorManager.setGeneralBehavior(new ConfiguredValueBehavior(value));
+      return this;
     }
 
-    public void thenThrow(Exception error) {
-      this.error = error;
+    public MethodSpyCall thenThrow(final Exception exceptionToThrow) {
+      this.behaviorManager.setGeneralBehavior(new ConfiguredExceptionBehavior(exceptionToThrow));
+      return this;
     }
 
-    public boolean shouldThrow() {
-      return this.error != null;
+    public MethodSpyCall thenReturnOnce(final Object value) {
+      this.behaviorManager.queueOnceBehavior(new ConfiguredValueBehaviorOnce(value));
+      return this;
     }
 
-    public boolean matches(final List<Object> callArguments) {
-      return Argument.matches(this.argsMatchable, callArguments);
+    public MethodSpyCall thenThrowOnce(final Exception exceptionToThrowOnce) {
+      this.behaviorManager.queueOnceBehavior(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
+      return this;
+    }
+
+    public Object getConfiguredBehavior() {
+      return this.behaviorManager.getConfiguredBehavior();
+    }
+
+    public Boolean matches(final List<Object> callArguments) {
+      return this.behaviorManager.hasConfiguredGeneralBehavior() && Argument.matches(this.argsMatchable, callArguments);
+    }
+
+    public Boolean matchesOnce(final List<Object> callArguments) {
+      return this.behaviorManager.hasConfiguredOnceBehavior() && Argument.matches(this.argsMatchable, callArguments);
     }
 
     public override String toString() {
-      return 'whenCalledWith' + this.argsMatchable + '' + (this.shouldThrow() ? '.thenThrow(' + this.error + ')' : '.thenReturn(' + this.value + ')');
+      return 'whenCalledWith' + this.argsMatchable + this.behaviorManager;
     }
   }
 
@@ -214,8 +242,8 @@ global class MethodSpy {
 
     public ConfigurationException build() {
       List<String> errorMessages = new List<String>();
-      for (ParameterizedMethodSpyCall parameterizedCall : this.spy.parameterizedMethodCalls) {
-        errorMessages.add(parameterizedCall.toString());
+      for (MethodSpyCall methodCall : this.spy.methodCalls) {
+        errorMessages.add(methodCall.toString());
       }
 
       List<String> callArgumentsAsString = new List<String>();
@@ -231,6 +259,96 @@ global class MethodSpy {
           '\nHere are the configured stubs:\n\t' +
           String.join(errorMessages, '\n\t')
       );
+    }
+  }
+
+  private class BehaviorManagement {
+    private final List<ConfiguredBehavior> onceBehaviors = new List<ConfiguredBehavior>();
+    private ConfiguredBehavior generalBehavior;
+
+    public void queueOnceBehavior(final ConfiguredBehavior configuredBehavior) {
+      this.onceBehaviors.add(configuredBehavior);
+    }
+
+    public void setGeneralBehavior(final ConfiguredBehavior configuredBehavior) {
+      this.generalBehavior = configuredBehavior;
+    }
+
+    public Boolean hasConfiguredOnceBehavior() {
+      return this.onceBehaviors.size() > 0;
+    }
+
+    public Boolean hasConfiguredGeneralBehavior() {
+      return this.generalBehavior != null;
+    }
+
+    public Object getConfiguredBehavior() {
+      final ConfiguredBehavior behaviorToApply = this.hasConfiguredOnceBehavior() ? this.onceBehaviors.remove(0) : this.generalBehavior;
+      return behaviorToApply?.getBehavior();
+    }
+
+    public override String toString() {
+      final List<String> oncesString = new List<String>();
+      for (ConfiguredBehavior configuredBehaviorOnce : this.onceBehaviors) {
+        oncesString.add(configuredBehaviorOnce.toString());
+      }
+      return String.join(oncesString, '') + (this.generalBehavior != null ? this.generalBehavior.toString() : '');
+    }
+  }
+
+  private abstract class ConfiguredBehavior {
+    public final Object value;
+    abstract Object getBehavior();
+
+    public ConfiguredBehavior(final Object value) {
+      this.value = value;
+    }
+  }
+
+  private virtual class ConfiguredValueBehavior extends ConfiguredBehavior {
+    public ConfiguredValueBehavior(final Object value) {
+      super(value);
+    }
+
+    public override Object getBehavior() {
+      return this.value;
+    }
+
+    public override virtual String toString() {
+      return '.thenReturn(' + this.value + ')';
+    }
+  }
+
+  private class ConfiguredValueBehaviorOnce extends ConfiguredValueBehavior {
+    public ConfiguredValueBehaviorOnce(final Object value) {
+      super(value);
+    }
+    public override String toString() {
+      return '.thenReturnOnce(' + this.value + ')';
+    }
+  }
+
+  private virtual class ConfiguredExceptionBehavior extends ConfiguredBehavior {
+    public ConfiguredExceptionBehavior(final Exception value) {
+      super(value);
+    }
+
+    public override Object getBehavior() {
+      throw (Exception) this.value;
+    }
+
+    public override virtual String toString() {
+      return '.thenThrow(' + this.value + ')';
+    }
+  }
+
+  private class ConfiguredExceptionBehaviorOnce extends ConfiguredExceptionBehavior {
+    public ConfiguredExceptionBehaviorOnce(final Exception value) {
+      super(value);
+    }
+
+    public override String toString() {
+      return '.thenThrowOnce(' + this.value + ')';
     }
   }
 
