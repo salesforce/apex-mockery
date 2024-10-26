@@ -29,7 +29,7 @@ jobs:
         run: sf org create scratch --no-namespace --definition-file config/project-scratch-def.json --alias scratch-org --set-default --duration-days 1
 
       - name: Push source to scratch org
-        run: sf project deploy start
+        run: npm run build
 
       - name: Run Apex tests
         run: npm run test
