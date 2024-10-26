@@ -18,14 +18,14 @@
 global class MethodSpy {
   global final String methodName { get; private set; }
   global final CallLog callLog { get; private set; }
-  private final List<ParameterizedMethodSpyCall> methodCalls;
-  private final BehaviorManagement behaviorManager;
+  private final List<MatchingParamsMethodSpyConfig> matchingBehaviorManagers;
+  private final BehaviorManagement defaultBehaviorManager;
 
   global MethodSpy(String methodName) {
     this.methodName = methodName;
     this.callLog = new CallLog();
-    this.methodCalls = new List<ParameterizedMethodSpyCall>();
-    this.behaviorManager = new BehaviorManagement();
+    this.matchingBehaviorManagers = new List<MatchingParamsMethodSpyConfig>();
+    this.defaultBehaviorManager = new BehaviorManagement();
   }
 
   // @deprecated use call(List<Type> paramTypes, List<String> paramNames, List<Object> args) instead
@@ -56,47 +56,49 @@ global class MethodSpy {
       return null;
     }
 
-    for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
+    for (MatchingParamsMethodSpyConfig methodCall : this.matchingBehaviorManagers) {
       if (methodCall.matchesOnce(args)) {
-        return methodCall.getConfiguredBehavior();
+        return methodCall.pollConfiguredBehavior();
       }
     }
 
-    if (this.behaviorManager.hasConfiguredOnceBehavior()) {
-      return this.behaviorManager.getConfiguredBehavior();
+    if (this.defaultBehaviorManager.hasConfiguredOnceBehavior()) {
+      return this.defaultBehaviorManager.pollConfiguredBehavior();
     }
 
-    for (ParameterizedMethodSpyCall methodCall : this.methodCalls) {
+    for (MatchingParamsMethodSpyConfig methodCall : this.matchingBehaviorManagers) {
       if (methodCall.matches(args)) {
-        return methodCall.getConfiguredBehavior();
+        return methodCall.pollConfiguredBehavior();
       }
     }
 
-    if (this.behaviorManager.hasConfiguredGeneralBehavior()) {
-      return this.behaviorManager.getConfiguredBehavior();
+    if (this.defaultBehaviorManager.hasConfiguredGeneralBehavior()) {
+      return this.defaultBehaviorManager.pollConfiguredBehavior();
     }
 
     throw new ConfigurationExceptionBuilder().withMethodSpy(this).withCallTypes(paramTypes).withCallParamNames(paramNames).withCallArguments(args).build();
   }
 
   private Boolean isConfigured() {
-    return this.methodCalls.size() > 0 || this.behaviorManager.hasConfiguredOnceBehavior() || this.behaviorManager.hasConfiguredGeneralBehavior();
+    return this.matchingBehaviorManagers.size() > 0 ||
+      this.defaultBehaviorManager.hasConfiguredOnceBehavior() ||
+      this.defaultBehaviorManager.hasConfiguredGeneralBehavior();
   }
 
   global void returns(Object value) {
-    this.behaviorManager.setGeneralBehavior(new ConfiguredValueBehavior(value));
+    this.defaultBehaviorManager.configureDefault(new ConfiguredValueBehavior(value));
   }
 
   global void throwsException(Exception exceptionToThrow) {
-    this.behaviorManager.setGeneralBehavior(new ConfiguredExceptionBehavior(exceptionToThrow));
+    this.defaultBehaviorManager.configureDefault(new ConfiguredExceptionBehavior(exceptionToThrow));
   }
 
   global void returnsOnce(Object value) {
-    this.behaviorManager.queueOnceBehavior(new ConfiguredValueBehaviorOnce(value));
+    this.defaultBehaviorManager.configureOnce(new ConfiguredValueBehaviorOnce(value));
   }
 
   global void throwsExceptionOnce(Exception exceptionToThrowOnce) {
-    this.behaviorManager.queueOnceBehavior(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
+    this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
   }
 
   global MethodSpyCall whenCalledWith() {
@@ -124,8 +126,8 @@ global class MethodSpy {
   }
 
   private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
-    final ParameterizedMethodSpyCall parameterizedMethodCall = new ParameterizedMethodSpyCall(args);
-    this.methodCalls.add(parameterizedMethodCall);
+    final MatchingParamsMethodSpyConfig parameterizedMethodCall = new MatchingParamsMethodSpyConfig(args);
+    this.matchingBehaviorManagers.add(parameterizedMethodCall);
     return parameterizedMethodCall;
   }
 
@@ -168,49 +170,49 @@ global class MethodSpy {
     MethodSpyCall thenThrowOnce(Exception error);
   }
 
-  private class ParameterizedMethodSpyCall implements MethodSpyCall {
+  private class MatchingParamsMethodSpyConfig implements MethodSpyCall {
     private final List<Argument.Matchable> argsMatchable;
-    private final BehaviorManagement behaviorManager;
+    private final BehaviorManagement defaultBehaviorManager;
 
-    public ParameterizedMethodSpyCall(final List<Argument.Matchable> argsMatchable) {
+    public MatchingParamsMethodSpyConfig(final List<Argument.Matchable> argsMatchable) {
       this.argsMatchable = argsMatchable;
-      this.behaviorManager = new BehaviorManagement();
+      this.defaultBehaviorManager = new BehaviorManagement();
     }
 
     public MethodSpyCall thenReturn(final Object value) {
-      this.behaviorManager.setGeneralBehavior(new ConfiguredValueBehavior(value));
+      this.defaultBehaviorManager.configureDefault(new ConfiguredValueBehavior(value));
       return this;
     }
 
     public MethodSpyCall thenThrow(final Exception exceptionToThrow) {
-      this.behaviorManager.setGeneralBehavior(new ConfiguredExceptionBehavior(exceptionToThrow));
+      this.defaultBehaviorManager.configureDefault(new ConfiguredExceptionBehavior(exceptionToThrow));
       return this;
     }
 
     public MethodSpyCall thenReturnOnce(final Object value) {
-      this.behaviorManager.queueOnceBehavior(new ConfiguredValueBehaviorOnce(value));
+      this.defaultBehaviorManager.configureOnce(new ConfiguredValueBehaviorOnce(value));
       return this;
     }
 
     public MethodSpyCall thenThrowOnce(final Exception exceptionToThrowOnce) {
-      this.behaviorManager.queueOnceBehavior(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
+      this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
       return this;
     }
 
-    public Object getConfiguredBehavior() {
-      return this.behaviorManager.getConfiguredBehavior();
+    public Object pollConfiguredBehavior() {
+      return this.defaultBehaviorManager.pollConfiguredBehavior();
     }
 
     public Boolean matches(final List<Object> callArguments) {
-      return this.behaviorManager.hasConfiguredGeneralBehavior() && Argument.matches(this.argsMatchable, callArguments);
+      return this.defaultBehaviorManager.hasConfiguredGeneralBehavior() && Argument.matches(this.argsMatchable, callArguments);
     }
 
     public Boolean matchesOnce(final List<Object> callArguments) {
-      return this.behaviorManager.hasConfiguredOnceBehavior() && Argument.matches(this.argsMatchable, callArguments);
+      return this.defaultBehaviorManager.hasConfiguredOnceBehavior() && Argument.matches(this.argsMatchable, callArguments);
     }
 
     public override String toString() {
-      return 'whenCalledWith' + this.argsMatchable + this.behaviorManager;
+      return 'whenCalledWith' + this.argsMatchable + this.defaultBehaviorManager;
     }
   }
 
@@ -242,7 +244,7 @@ global class MethodSpy {
 
     public ConfigurationException build() {
       List<String> errorMessages = new List<String>();
-      for (MethodSpyCall methodCall : this.spy.methodCalls) {
+      for (MethodSpyCall methodCall : this.spy.matchingBehaviorManagers) {
         errorMessages.add(methodCall.toString());
       }
 
@@ -266,11 +268,11 @@ global class MethodSpy {
     private final List<ConfiguredBehavior> onceBehaviors = new List<ConfiguredBehavior>();
     private ConfiguredBehavior generalBehavior;
 
-    public void queueOnceBehavior(final ConfiguredBehavior configuredBehavior) {
+    public void configureOnce(final ConfiguredBehavior configuredBehavior) {
       this.onceBehaviors.add(configuredBehavior);
     }
 
-    public void setGeneralBehavior(final ConfiguredBehavior configuredBehavior) {
+    public void configureDefault(final ConfiguredBehavior configuredBehavior) {
       this.generalBehavior = configuredBehavior;
     }
 
@@ -282,9 +284,9 @@ global class MethodSpy {
       return this.generalBehavior != null;
     }
 
-    public Object getConfiguredBehavior() {
+    public Object pollConfiguredBehavior() {
       final ConfiguredBehavior behaviorToApply = this.hasConfiguredOnceBehavior() ? this.onceBehaviors.remove(0) : this.generalBehavior;
-      return behaviorToApply?.getBehavior();
+      return behaviorToApply?.apply();
     }
 
     public override String toString() {
