@@ -298,21 +298,19 @@ global class MethodSpy {
     }
   }
 
-  private abstract class ConfiguredBehavior {
-    public final Object value;
-    abstract Object getBehavior();
-
-    public ConfiguredBehavior(final Object value) {
-      this.value = value;
-    }
+  private interface ConfiguredBehavior {
+    Object apply();
   }
 
-  private virtual class ConfiguredValueBehavior extends ConfiguredBehavior {
+  private virtual class ConfiguredValueBehavior implements ConfiguredBehavior {
+    public final Object value;
     public ConfiguredValueBehavior(final Object value) {
-      super(value);
+      this.value = value;
+    }
+    private ConfiguredValueBehavior() {
     }
 
-    public override Object getBehavior() {
+    public Object apply() {
       return this.value;
     }
 
@@ -323,34 +321,36 @@ global class MethodSpy {
 
   private class ConfiguredValueBehaviorOnce extends ConfiguredValueBehavior {
     public ConfiguredValueBehaviorOnce(final Object value) {
-      super(value);
+      this.value = value;
     }
     public override String toString() {
       return '.thenReturnOnce(' + this.value + ')';
     }
   }
 
-  private virtual class ConfiguredExceptionBehavior extends ConfiguredBehavior {
-    public ConfiguredExceptionBehavior(final Exception value) {
-      super(value);
+  private virtual class ConfiguredExceptionBehavior implements ConfiguredBehavior {
+    public final Exception error;
+    public ConfiguredExceptionBehavior(final Exception error) {
+      this.error = error;
+    }
+    private ConfiguredExceptionBehavior() {
     }
 
-    public override Object getBehavior() {
-      throw (Exception) this.value;
+    public Object apply() {
+      throw (Exception) this.error;
     }
 
     public override virtual String toString() {
-      return '.thenThrow(' + this.value + ')';
+      return '.thenThrow(' + this.error + ')';
     }
   }
 
   private class ConfiguredExceptionBehaviorOnce extends ConfiguredExceptionBehavior {
-    public ConfiguredExceptionBehaviorOnce(final Exception value) {
-      super(value);
+    public ConfiguredExceptionBehaviorOnce(final Exception error) {
+      this.error = error;
     }
-
     public override String toString() {
-      return '.thenThrowOnce(' + this.value + ')';
+      return '.thenThrowOnce(' + this.error + ')';
     }
   }
 
