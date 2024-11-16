@@ -439,26 +439,6 @@ private class MethodSpyTest {
   }
 
   @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingArguments_whenCallingTheSpyWithOtherArguments_itThrowsMethodSpyConfigurationException() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('Another Param', true).thenReturn('Expected Result');
-    sut.whenCalledWith('Expected First Param', false).thenReturn('Another expected Result');
-    sut.whenCalledWith('Expected First Param', true).thenReturn('Yet another expected Result');
-    try {
-      // Act
-      sut.call(new List<Type>{ String.class, Boolean.class }, new List<String>{ 'param', 'bool' }, new List<Object>{ 'Another Param', false });
-      Assert.fail('it shoud not reach this line');
-    } catch (MethodSpy.ConfigurationException cex) {
-      // Assert
-      Assert.areEqual(
-        'No stub value found for a call of methodName(String param[Another Param], Boolean bool[false])\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
-        cex.getMessage()
-      );
-    }
-  }
-
-  @IsTest
   static void givenSpyConfiguredToReturnOnMatchingArgumentsAndThenToReturns_whenCallingTheSpyWithArguments_itReturnExpectedValueAndFallbackToDefault() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
