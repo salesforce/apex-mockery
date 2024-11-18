@@ -54,7 +54,7 @@ private class MockTest {
   }
 
   @IsTest
-  static void givenAMethodName_whenCallingSpyOnMultipleTimes_thenReturnsSameMethodSpy() {
+  static void givenAMethodName_whenCallingSpyOnMultipleTimes_thenReturnsSameMethodSpyCaseInsensitive() {
     // Arrange
     String methodName = 'methodName';
     Mock sut = Mock.forType(DummyInterface.class);
@@ -65,6 +65,21 @@ private class MockTest {
 
     // Assert
     Assert.areEqual(expected, result);
+    Assert.isTrue(expected === result);
+
+    // Act
+    result = sut.spyOn(methodName.toUpperCase());
+
+    // Assert
+    Assert.areEqual(expected, result);
+    Assert.isTrue(expected === result);
+
+    // Act
+    result = sut.spyOn(methodName.toLowerCase());
+
+    // Assert
+    Assert.areEqual(expected, result);
+    Assert.isTrue(expected === result);
   }
 
   @IsTest
