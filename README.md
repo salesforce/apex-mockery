@@ -484,10 +484,20 @@ public class MyMatchable implements Argument.Matchable {
 
     return matches;
   }
+
+  public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof MyMatchable)) {
+        return false;
+      }
+      MyMatchable other = (MyMatchable) obj;
+      return <this fields custom comparison with other instance>;
+    }
 }
 
 List<Argument.Matchable> args = Argument.of(new MyMatchable(), ...otherArguments);
 ```
+
+Implements the `public Boolean equals(Object obj)` method on your custom matchable so we can compare list of arguments
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
 
