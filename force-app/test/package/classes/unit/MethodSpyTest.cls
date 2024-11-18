@@ -8,6 +8,29 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
+  static void givenSpyConfiguredWithArguments_whenConfiguredWithSameArgument_thenReturnSameConfiguration() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+
+    // Act
+    MethodSpy.MethodSpyCall spyCallNull = sut.whenCalledWith(null);
+    MethodSpy.MethodSpyCall spyCallString = sut.whenCalledWith('str');
+    MethodSpy.MethodSpyCall otherSpyCallNull = sut.whenCalledWith(null);
+    MethodSpy.MethodSpyCall otherSpyCallString = sut.whenCalledWith('str');
+
+    // Assert
+    Assert.areNotEqual(spyCallNull, spyCallString);
+    Assert.areNotEqual(otherSpyCallNull, spyCallString);
+    Assert.areNotEqual(spyCallNull, otherSpyCallString);
+    Assert.areNotEqual(otherSpyCallNull, otherSpyCallString);
+
+    Assert.areEqual(spyCallNull, otherSpyCallNull);
+    Assert.isTrue(spyCallNull === otherSpyCallNull);
+    Assert.areEqual(spyCallString, otherSpyCallString);
+    Assert.isTrue(spyCallString === otherSpyCallString);
+  }
+
+  @IsTest
   static void givenSpyConfiguredWithNullArguments_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
