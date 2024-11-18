@@ -117,6 +117,10 @@ global class Argument {
     public override String toString() {
       return 'any';
     }
+
+    public Boolean equals(Object obj) {
+      return obj != null && obj instanceof AnyMatchable;
+    }
   }
 
   private class EqualsMatchable implements Argument.Matchable {
@@ -143,6 +147,14 @@ global class Argument {
     public override String toString() {
       return String.valueOf(this.callArgumentToMatch);
     }
+
+    public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof EqualsMatchable)) {
+        return false;
+      }
+      EqualsMatchable other = (EqualsMatchable) obj;
+      return this.matches(other.callArgumentToMatch);
+    }
   }
 
   private class JSONMatchable implements Argument.Matchable {
@@ -158,6 +170,14 @@ global class Argument {
 
     override public String toString() {
       return 'json(' + this.jsonValue + ')';
+    }
+
+    public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof JSONMatchable)) {
+        return false;
+      }
+      JSONMatchable other = (JSONMatchable) obj;
+      return this.jsonValue.equals(other.jsonValue);
     }
   }
 
@@ -193,6 +213,14 @@ global class Argument {
     override public String toString() {
       return this.typeNameToMatch + '.Type';
     }
+
+    public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof TypeMatchable)) {
+        return false;
+      }
+      TypeMatchable other = (TypeMatchable) obj;
+      return this.typeNameToMatch == other.typeNameToMatch;
+    }
   }
 
   private static String getTypeName(final Object callArgument) {
@@ -209,5 +237,23 @@ global class Argument {
   public static Type getType(final Object callArgument) {
     final String typeName = getTypeName(callArgument);
     return Type.forName(typeName);
+  }
+
+  global static Boolean areListsEqual(final List<Argument.Matchable> list1, final List<Argument.Matchable> list2) {
+    if (list1 == null || list2 == null) {
+      return list1 == list2;
+    }
+
+    final Integer size = list1.size();
+    if (size != list2.size()) {
+      return false;
+    }
+
+    for (Integer i = 0; i < size; ++i) {
+      if (list1[i] != list2[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }

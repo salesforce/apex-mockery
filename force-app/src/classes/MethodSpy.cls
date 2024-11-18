@@ -142,6 +142,12 @@ global class MethodSpy {
   }
 
   private MethodSpyCall whenCalledWithArguments(final List<Argument.Matchable> args) {
+    for (MatchingParamsMethodSpyConfig matchingConfig : this.matchingBehaviorManagers) {
+      if (Argument.areListsEqual(args, matchingConfig.argsMatchable)) {
+        return matchingConfig;
+      }
+    }
+
     final MatchingParamsMethodSpyConfig parameterizedMethodCall = new MatchingParamsMethodSpyConfig(args);
     this.matchingBehaviorManagers.add(parameterizedMethodCall);
     return parameterizedMethodCall;
