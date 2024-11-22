@@ -28,6 +28,9 @@ jobs:
       - name: Create scratch org
         run: sf org create scratch --no-namespace --definition-file config/project-scratch-def.json --alias scratch-org --set-default --duration-days 1
 
+      - name: Install npm dependencies
+        run: npm install
+
       - name: Push source to scratch org
         run: npm run build
 
