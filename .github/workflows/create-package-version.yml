@@ -26,6 +26,14 @@ jobs:
           echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
           echo "SF_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
       - name: Install sfdx and connect to DevHub
         run: |
           npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
@@ -33,12 +41,9 @@ jobs:
           sf org login sfdx-url --sfdx-url-file sfdx_auth --set-default-dev-hub --alias hub
           sf config set target-dev-hub=hub --global
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Create package version
         id: create
         run: |
-          packageId=$(sf force package version create --definition-file config/project-scratch-def.json --package "${{ inputs.packageAlias }}" --branch "${{ inputs.branch }}" --tag ${{ github.sha }} --wait 120 --code-coverage --skip-ancestor-check --installation-key-bypass --json | jq -e -r ".result.SubscriberPackageVersionId")
+          packageId=$(sf package version create --definition-file config/project-scratch-def.json --package "${{ inputs.packageAlias }}" --branch "${{ inputs.branch }}" --tag ${{ github.sha }} --wait 120 --code-coverage --skip-ancestor-check --installation-key-bypass --json | jq -e -r ".result.SubscriberPackageVersionId")
           echo "packageId=$packageId" >> $GITHUB_ENV
           echo "packageId=$packageId" >> $GITHUB_OUTPUT

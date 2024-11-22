@@ -20,21 +20,15 @@ jobs:
   formatting-and-linting:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/cache@v4
+      - uses: actions/setup-node@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          node-version: 20
+          cache: 'npm'
 
       - name: Set environment variables
         run: |
