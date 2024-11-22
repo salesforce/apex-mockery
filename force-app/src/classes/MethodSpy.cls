@@ -94,22 +94,22 @@ global class MethodSpy {
   }
 
   global void returnsOnce(Object value) {
-    this.defaultBehaviorManager.configureOnce(new ConfiguredValueBehaviorOnce(value));
+    this.returns(value, 1);
   }
 
   global void throwsExceptionOnce(Exception exceptionToThrowOnce) {
-    this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
+    this.throwsException(exceptionToThrowOnce, 1);
   }
 
   global void returns(Object value, final Integer times) {
     for (Integer i = 0; i < times; ++i) {
-      this.returnsOnce(value);
+      this.defaultBehaviorManager.configureOnce(new ConfiguredValueBehaviorOnce(value));
     }
   }
 
   global void throwsException(Exception exceptionToThrowTimes, final Integer times) {
     for (Integer i = 0; i < times; ++i) {
-      this.throwsExceptionOnce(exceptionToThrowTimes);
+      this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowTimes));
     }
   }
 
@@ -204,25 +204,23 @@ global class MethodSpy {
     }
 
     public MethodSpyCall thenReturnOnce(final Object value) {
-      this.defaultBehaviorManager.configureOnce(new ConfiguredValueBehaviorOnce(value));
-      return this;
+      return this.thenReturn(value, 1);
     }
 
     public MethodSpyCall thenThrowOnce(final Exception exceptionToThrowOnce) {
-      this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
-      return this;
+      return this.thenThrow(exceptionToThrowOnce, 1);
     }
 
     public MethodSpyCall thenReturn(final Object value, final Integer times) {
       for (Integer i = 0; i < times; ++i) {
-        this.thenReturnOnce(value);
+        this.defaultBehaviorManager.configureOnce(new ConfiguredValueBehaviorOnce(value));
       }
       return this;
     }
 
     public MethodSpyCall thenThrow(final Exception exceptionToThrowTimes, final Integer times) {
       for (Integer i = 0; i < times; ++i) {
-        this.thenThrowOnce(exceptionToThrowTimes);
+        this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowTimes));
       }
       return this;
     }
