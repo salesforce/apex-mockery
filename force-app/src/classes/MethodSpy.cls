@@ -101,13 +101,13 @@ global class MethodSpy {
     this.defaultBehaviorManager.configureOnce(new ConfiguredExceptionBehaviorOnce(exceptionToThrowOnce));
   }
 
-  global void returnsTimes(final Integer times, Object value) {
+  global void returns(Object value, final Integer times) {
     for (Integer i = 0; i < times; ++i) {
       this.returnsOnce(value);
     }
   }
 
-  global void throwsExceptionTimes(final Integer times, Exception exceptionToThrowTimes) {
+  global void throwsException(Exception exceptionToThrowTimes, final Integer times) {
     for (Integer i = 0; i < times; ++i) {
       this.throwsExceptionOnce(exceptionToThrowTimes);
     }
@@ -180,8 +180,8 @@ global class MethodSpy {
     MethodSpyCall thenThrow(Exception error);
     MethodSpyCall thenReturnOnce(Object value);
     MethodSpyCall thenThrowOnce(Exception error);
-    MethodSpyCall thenReturnTimes(Integer times, Object value);
-    MethodSpyCall thenThrowTimes(INteger times, Exception error);
+    MethodSpyCall thenReturn(Object value, Integer times);
+    MethodSpyCall thenThrow(Exception error, Integer times);
   }
 
   private class MatchingParamsMethodSpyConfig implements MethodSpyCall {
@@ -213,14 +213,14 @@ global class MethodSpy {
       return this;
     }
 
-    public MethodSpyCall thenReturnTimes(final Integer times, final Object value) {
+    public MethodSpyCall thenReturn(final Object value, final Integer times) {
       for (Integer i = 0; i < times; ++i) {
         this.thenReturnOnce(value);
       }
       return this;
     }
 
-    public MethodSpyCall thenThrowTimes(final Integer times, final Exception exceptionToThrowTimes) {
+    public MethodSpyCall thenThrow(final Exception exceptionToThrowTimes, final Integer times) {
       for (Integer i = 0; i < times; ++i) {
         this.thenThrowOnce(exceptionToThrowTimes);
       }

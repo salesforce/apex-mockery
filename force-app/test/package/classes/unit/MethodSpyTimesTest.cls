@@ -11,7 +11,7 @@ private class MethodSpyTimesTest {
   static void givenSpyConfiguredToGloballyReturnsNTimes_whenCalledN1Times_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.returnsTimes(3, 'global');
+    sut.returns('global', 3);
 
     // Act
     for (Integer i = 0; i < 3; ++i) {
@@ -28,7 +28,7 @@ private class MethodSpyTimesTest {
   static void givenSpyConfiguredToGloballyThrowsNTimes_whenCalledN1Times_throwssConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.throwsExceptionTimes(3, new IllegalArgumentException('global'));
+    sut.throwsException(new IllegalArgumentException('global'), 3);
 
     // Act
     for (Integer i = 0; i < 3; ++i) {
@@ -49,7 +49,7 @@ private class MethodSpyTimesTest {
   static void givenSpyConfiguredToMatchReturnsNTimes_whenCalledN1Times_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('str').thenReturnTimes(3, 'match');
+    sut.whenCalledWith('str').thenReturn('match', 3);
 
     // Act
     for (Integer i = 0; i < 3; ++i) {
@@ -66,7 +66,7 @@ private class MethodSpyTimesTest {
   static void givenSpyConfiguredToMatchThrowsNTimes_whenCalledN1Times_throwssConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('str').thenThrowTimes(3, new IllegalArgumentException('match'));
+    sut.whenCalledWith('str').thenThrow(new IllegalArgumentException('match'), 3);
 
     // Act
     for (Integer i = 0; i < 3; ++i) {
