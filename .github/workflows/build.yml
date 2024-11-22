@@ -6,9 +6,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "npm"
+      
       - name: Set environment variables
         run: |
           echo "SF_DISABLE_AUTOUPDATE=true" >> $GITHUB_ENV
@@ -21,9 +26,6 @@ jobs:
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
           sf org login sfdx-url --sfdx-url-file sfdx_auth --set-default-dev-hub --alias hub
           sf config set target-dev-hub=hub --global
-
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Create scratch org
         run: sf org create scratch --no-namespace --definition-file config/project-scratch-def.json --alias scratch-org --set-default --duration-days 1

@@ -44,15 +44,20 @@ jobs:
           echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
           echo "SF_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
       - name: Install sfdx and connect to DevHub
         run: |
           npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
           echo ${{ secrets.DEVHUB_URL }} > sfdx_auth
           sf org login sfdx-url --sfdx-url-file sfdx_auth --set-default-dev-hub --alias hub
           sf config set target-dev-hub=hub --global
-
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Promote latest main package version
         run: sf package version promote --no-prompt --package ${{ needs.create-package-version.outputs.packageId }}
