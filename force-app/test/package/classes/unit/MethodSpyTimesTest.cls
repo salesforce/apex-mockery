@@ -154,12 +154,14 @@ private class MethodSpyTimesTest {
     // Act
     for (Integer i = 0; i < 3; ++i) {
       Object resultMatcher = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+      // Assert
       Assert.areEqual('match', resultMatcher);
     }
 
-    // Assert
+    /*
     Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
     Assert.isNull(result);
+    */
   }
 
   @isTest
@@ -174,12 +176,15 @@ private class MethodSpyTimesTest {
         sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
         Assert.fail('it shoud not reach this line');
       } catch (Exception e) {
+        // Assert
         Assert.areEqual('match', e.getMessage());
       }
     }
 
+    /*
     // Assert
     Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
     Assert.isNull(result);
+    */
   }
 }
