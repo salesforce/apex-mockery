@@ -599,4 +599,133 @@ public class ArgumentTest {
     Assert.areEqual(List<Account>.class, Argument.getType(new List<Account>()));
     Assert.areEqual(ArgumentTest.class, Argument.getType(new ArgumentTest()));
   }
+
+  @IsTest
+  static void areListsEqual_whenCalledWithNull_returnsTrue() {
+    // Arrange
+    final List<Argument.Matchable> list1 = null;
+    final List<Argument.Matchable> list2 = null;
+
+    // Act
+    final Boolean result = Argument.areListsEqual(list1, list2);
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @IsTest
+  static void areListsEqual_whenCalledWithOneNull_returnsFalse() {
+    // Arrange
+    final List<Argument.Matchable> list1 = new List<Argument.Matchable>();
+    final List<Argument.Matchable> list2 = null;
+
+    // Act
+    Boolean result = Argument.areListsEqual(list1, list2);
+
+    // Assert
+    Assert.isFalse(result);
+
+    // Act
+    result = Argument.areListsEqual(list2, list1);
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @IsTest
+  static void areListsEqual_whenCalledWithDifferentListInSize_returnsFalse() {
+    // Arrange
+    final List<Argument.Matchable> list1 = new List<Argument.Matchable>{ Argument.any(), Argument.any() };
+    final List<Argument.Matchable> list2 = new List<Argument.Matchable>{ Argument.any() };
+
+    // Act
+    final Boolean result = Argument.areListsEqual(list1, list2);
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @IsTest
+  static void areListsEqual_whenCalledWithDifferentList_returnsFalse() {
+    // Arrange
+    final List<Argument.Matchable> list1 = new List<Argument.Matchable>{ Argument.any(), Argument.any() };
+    final List<Argument.Matchable> list2 = new List<Argument.Matchable>{ Argument.any(), Argument.equals('str') };
+
+    // Act
+    final Boolean result = Argument.areListsEqual(list1, list2);
+
+    // Assert
+    Assert.isFalse(result);
+  }
+
+  @IsTest
+  static void areListsEqual_whenCalledWithSameList_returnsFalse() {
+    // Arrange
+    final List<Argument.Matchable> list1 = new List<Argument.Matchable>{
+      Argument.any(),
+      Argument.equals('str'),
+      Argument.jsonEquals(new Account(Name = 'Test')),
+      Argument.ofType(Opportunity.getSObjectType())
+    };
+    final List<Argument.Matchable> list2 = new List<Argument.Matchable>{
+      Argument.any(),
+      Argument.equals('str'),
+      Argument.jsonEquals(new Account(Name = 'Test')),
+      Argument.ofType(Opportunity.getSObjectType())
+    };
+
+    // Act
+    final Boolean result = Argument.areListsEqual(list1, list2);
+
+    // Assert
+    Assert.isTrue(result);
+  }
+
+  @isTest
+  static void ArgumentAnyMatchable_equals_spec() {
+    // Act && Assert
+    Assert.isTrue(Argument.any() == Argument.any());
+    Assert.isFalse(Argument.any() == null);
+    Assert.isFalse(Argument.any() == Argument.equals('str'));
+    Assert.isFalse(Argument.any() == Argument.jsonEquals('str'));
+    Assert.isFalse(Argument.any() == Argument.ofType(Account.getSObjectType()));
+  }
+
+  @isTest
+  static void ArgumentEqualsMatchable_equals_spec() {
+    // Act && Assert
+    Assert.isTrue(Argument.equals(new Account()) == Argument.equals(new Account()));
+    Assert.isTrue(Argument.equals('str') == Argument.equals('str'));
+    Assert.isTrue(Argument.equals('STR') == Argument.equals('str'));
+    Assert.isFalse(Argument.equals('STR') == Argument.equals('not str'));
+    Assert.isFalse(Argument.equals('any') == Argument.any());
+    Assert.isFalse(Argument.equals(new Account()) == Argument.jsonEquals(new Account()));
+    Assert.isFalse(Argument.equals(new Account()) == Argument.ofType(Account.getSObjectType()));
+  }
+
+  @isTest
+  static void ArgumentJSONMatchable_equals_spec() {
+    // Act && Assert
+    Assert.isTrue(Argument.jsonEquals(new Account()) == Argument.jsonEquals(new Account()));
+    Assert.isTrue(Argument.jsonEquals('str') == Argument.jsonEquals('str'));
+    Assert.isFalse(Argument.jsonEquals('STR') == Argument.jsonEquals('str'));
+    Assert.isFalse(Argument.jsonEquals('STR') == Argument.jsonEquals('not str'));
+    Assert.isFalse(Argument.jsonEquals('any') == Argument.any());
+    Assert.isFalse(Argument.jsonEquals(new Account()) == Argument.equals(new Account()));
+    Assert.isFalse(Argument.jsonEquals(new Account()) == Argument.ofType(Account.getSObjectType()));
+  }
+
+  @isTest
+  static void ArgumentTypeMatchable_equals_spec() {
+    // Act && Assert
+    Assert.isTrue(Argument.ofType(Account.getSObjectType()) == Argument.ofType(Account.getSObjectType()));
+    Assert.isTrue(Argument.ofType('string') == Argument.ofType('string'));
+    Assert.isTrue(Argument.ofType(Argument.class) == Argument.ofType(Argument.class));
+    Assert.isFalse(Argument.ofType(Argument.class) == Argument.ofType(ArgumentTest.class));
+    Assert.isFalse(Argument.ofType(Account.getSObjectType()) == Argument.ofType(Opportunity.getSObjectType()));
+    Assert.isFalse(Argument.ofType('test') == Argument.ofType('other'));
+    Assert.isFalse(Argument.ofType('any') == Argument.any());
+    Assert.isFalse(Argument.ofType(Account.getSObjectType()) == Argument.equals(new Account()));
+    Assert.isFalse(Argument.ofType(Argument.class) == Argument.jsonEquals(new Account()));
+  }
 }

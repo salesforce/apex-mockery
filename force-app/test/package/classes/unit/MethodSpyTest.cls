@@ -8,6 +8,29 @@
 @IsTest
 private class MethodSpyTest {
   @IsTest
+  static void givenSpyConfiguredWithArguments_whenConfiguredWithSameArgument_thenReturnSameConfiguration() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+
+    // Act
+    MethodSpy.MethodSpyCall spyCallNull = sut.whenCalledWith(null);
+    MethodSpy.MethodSpyCall spyCallString = sut.whenCalledWith('str');
+    MethodSpy.MethodSpyCall otherSpyCallNull = sut.whenCalledWith(null);
+    MethodSpy.MethodSpyCall otherSpyCallString = sut.whenCalledWith('str');
+
+    // Assert
+    Assert.areNotEqual(spyCallNull, spyCallString);
+    Assert.areNotEqual(otherSpyCallNull, spyCallString);
+    Assert.areNotEqual(spyCallNull, otherSpyCallString);
+    Assert.areNotEqual(otherSpyCallNull, otherSpyCallString);
+
+    Assert.areEqual(spyCallNull, otherSpyCallNull);
+    Assert.isTrue(spyCallNull === otherSpyCallNull);
+    Assert.areEqual(spyCallString, otherSpyCallString);
+    Assert.isTrue(spyCallString === otherSpyCallString);
+  }
+
+  @IsTest
   static void givenSpyConfiguredWithNullArguments_whenCalledWithMatching_spyIsCalled() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -436,26 +459,6 @@ private class MethodSpyTest {
 
     // Assert
     Assert.areEqual(null, actual);
-  }
-
-  @IsTest
-  static void givenSpyConfiguredOnceToReturnOnMatchingArguments_whenCallingTheSpyWithOtherArguments_itThrowsMethodSpyConfigurationException() {
-    // Arrange
-    MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('Another Param', true).thenReturn('Expected Result');
-    sut.whenCalledWith('Expected First Param', false).thenReturn('Another expected Result');
-    sut.whenCalledWith('Expected First Param', true).thenReturn('Yet another expected Result');
-    try {
-      // Act
-      sut.call(new List<Type>{ String.class, Boolean.class }, new List<String>{ 'param', 'bool' }, new List<Object>{ 'Another Param', false });
-      Assert.fail('it shoud not reach this line');
-    } catch (MethodSpy.ConfigurationException cex) {
-      // Assert
-      Assert.areEqual(
-        'No stub value found for a call of methodName(String param[Another Param], Boolean bool[false])\nHere are the configured stubs:\n\twhenCalledWith(Another Param, true).thenReturn(Expected Result)\n\twhenCalledWith(Expected First Param, false).thenReturn(Another expected Result)\n\twhenCalledWith(Expected First Param, true).thenReturn(Yet another expected Result)',
-        cex.getMessage()
-      );
-    }
   }
 
   @IsTest
