@@ -157,6 +157,19 @@ Assert.areEqual(new Account(Name='Test'), result);
 
 Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Returns.cls)
 
+You can also configure it to return the same object multipe times
+
+```java
+// Arrange
+myMethodSpy.returns(new Account(Name='Test'), 3);
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  Object result = myTypeStub.myMethod();
+  // Assert
+  Assert.areEqual(new Account(Name='Test'), result);
+}
+```
+
 ##### Global returns once
 
 Configure it to return a specific value once, whatever the parameter received
@@ -194,6 +207,24 @@ try {
 
 Have a look at the [Throws recipe](force-app/recipes/classes/mocking/Throws.cls)
 
+You can also configure it to throw the same exception multipe times
+
+```java
+// Arrange
+myMethodSpy.throwsException(new MyException(), 3);
+for(Integer i = 0 ; i < 3 ; ++i) {
+  try {
+      // Act
+      Object result = myTypeStub.myMethod();
+
+      // Assert
+      Assert.fail('Expected exception was not thrown');
+  } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, MyException.class);
+  }
+}
+```
+
 ##### Global throws once
 
 Configure it to throw a specific exception once, whatever the parameter received
@@ -219,8 +250,10 @@ Have a look at the [ThrowsOnce recipe](force-app/recipes/classes/mocking/ThrowsO
 
 Configure it to return a specific value, when call with specific parameters
 Configure it to return a specific value once, when call with specific parameters
+Configure it to return a specific value times N, when call with specific parameters
 Configure it to throw a specific value, when call with specific parameters
 Configure it to throw a specific value once, when call with specific parameters
+Configure it to throw a specific value times N, when call with specific parameters
 
 ```java
 // Arrange
@@ -235,13 +268,24 @@ myMethodSpy
 
 // Arrange
 myMethodSpy
+    .whenCalledWith(Argument.any(), 10)
+    .thenReturn(new Account(Name='Test Times'), 3);
+
+// Arrange
+myMethodSpy
     .whenCalledWith(Argument.any(), -1)
     .thenThrow(new MyException);
 
 // Arrange
 myMethodSpy
     .whenCalledWith(Argument.any(), -1)
-    .thenThrowOnce(new MyOtherException);
+    .thenThrowOnce(new MyOtherException());
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenThrow(new MyException(), 3);
+
 
 // Act
 Object result = myTypeStub.myMethod('nothing', 10);
@@ -254,6 +298,14 @@ Object result = myTypeStub.myMethod('nothing', 10);
 
 // Assert
 Assert.areEqual(new Account(Name='Test'), result);
+
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  Object result = myTypeStub.myMethod('nothing', 10);
+
+  // Assert
+  Assert.areEqual(new Account(Name='Test Times'), result);
+}
 
 // Act
 try {
@@ -274,6 +326,18 @@ try {
 } catch (Exception ex) {
     Assert.isInstanceOfType(ex, MyException.class);
 }
+
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  try {
+      myTypeStub.myMethod('value', -1);
+
+      // Assert
+      Assert.fail('Expected exception was not thrown');
+  } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, MyException.class);
+  }
+}
 ```
 
 Have a look at the [mocking recipes](force-app/recipes/classes/mocking/) to have a deeper overview of what you can do with the mocking API.
@@ -285,8 +349,8 @@ Have a look at the [mocking recipes](force-app/recipes/classes/mocking/) to have
 The order of the spy configuration drive how it will behave.
 
 1. If no configuration at all, then return null (default behavior).
-1. Then, it checks the "matching" `whenCalledWith` `once` configurations and apply them in setup order.
-1. Then, it checks the "global once" (`returnsOnce` or `throwsExceptionOnce`) configuration and apply them in setup order.
+1. Then, it checks the "matching" `whenCalledWith` `once` and `times` configurations and apply them in setup order.
+1. Then, it checks the "global once" and "global times" (`returnsOnce` or `throwsExceptionOnce` or `returns(object, integer)` or `throws(exception, integer)`) configuration and apply them in setup order.
 1. Then, it checks the "matching" `whenCalledWith` configurations and apply them in setup order.
 1. Then, it checks the "global" (`returns` or `throwsException`) configurations and apply them in setup order.
 
