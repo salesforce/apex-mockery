@@ -51,11 +51,4 @@ private class ApexMockeryOverview {
       Assert.isInstanceOfType(ex, RecipeException.class);
     }
   }
-
-  private class OperaPastryMatchable implements namespace.Argument.Matchable {
-    public Boolean matches(Object callArgument) {
-      Pastry p = (Pastry) callArgument;
-      return p.name == 'Opera';
-    }
-  }
 }
