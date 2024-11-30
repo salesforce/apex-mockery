@@ -21,11 +21,16 @@
     }
   ],
   "name": "apex-mockery",
-  "namespace": "mockery",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "56.0",
   "packageAliases": {
     "Apex Mockery": "0HoDn000000kA5aKAE",
     "Apex Mockery NS Test": "0HoDn000000kA6JKAU"
+  },
+  "replacements": {
+    "glob": "force-app/recipes/**/*.cls",
+    "stringToReplace": "namespace.",
+    "replaceWithEnv": "SF_NAMESPACE_DOT",
+    "allowUnsetEnvVariable": true
   }
 }
