@@ -44,6 +44,14 @@ jobs:
           echo "SF_DISABLE_TELEMETRY=true" >> $GITHUB_ENV
           echo "SF_PROJECT_AUTOUPDATE_DISABLE_FOR_PACKAGE_VERSION_CREATE=true" >> $GITHUB_ENV
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
       - name: Install sfdx and connect to DevHub
         run: |
           npm install --global @salesforce/cli@${{ vars.SFDX_VERSION }}
@@ -51,11 +59,8 @@ jobs:
           sf org login sfdx-url --sfdx-url-file sfdx_auth --set-default-dev-hub --alias hub
           sf config set target-dev-hub=hub --global
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Promote latest main package version
-        run: sf force package version promote --no-prompt --package ${{ needs.create-package-version.outputs.packageId }}
+        run: sf package version promote --no-prompt --package ${{ needs.create-package-version.outputs.packageId }}
 
   update-release:
     runs-on: ubuntu-latest
@@ -68,7 +73,7 @@ jobs:
           ### Unlocked Package installation
           - Production [link](https://login.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
           - Sandbox [link](https://test.salesforce.com/packaging/installPackage.apexp?p0=$packageId)
-          - sfdx command: \`sf force package install --package $packageId\`
+          - sfdx command: \`sf package install --package $packageId\`
           EOF
           )
           echo "links<<EOF" >> $GITHUB_ENV

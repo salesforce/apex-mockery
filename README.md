@@ -24,7 +24,9 @@ We want its usage to be simple, its maintainability to be easy and to provide th
     - [How to Configure a spy](#how-to-configure-a-spy)
       - [Default behaviour](#default-behaviour)
       - [Global returns](#global-returns)
+      - [Global returns once](#global-returns-once)
       - [Global throws](#global-throws)
+      - [Global throws once](#global-throws-once)
       - [Parameterized configuration](#parameterized-configuration)
       - [Configuration order matters !](#configuration-order-matters-)
   - [Assert on a spy](#assert-on-a-spy)
@@ -108,7 +110,7 @@ Mock myMock = Mock.forType(MyType.class, new MyNamespace.MyStubBuilder());
 
 ### Stub
 
-Use the `stub` attribut to access the stub,
+Use the `stub` attribute to access the stub,
 
 ```java
 MyType myTypeStub = (MyType) myMock.stub;
@@ -155,6 +157,35 @@ Assert.areEqual(new Account(Name='Test'), result);
 
 Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Returns.cls)
 
+You can also configure it to return the same object multipe times
+
+```java
+// Arrange
+myMethodSpy.returns(new Account(Name='Test'), 3);
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  Object result = myTypeStub.myMethod();
+  // Assert
+  Assert.areEqual(new Account(Name='Test'), result);
+}
+```
+
+##### Global returns once
+
+Configure it to return a specific value once, whatever the parameter received
+The stub will return the configured value once
+
+```java
+// Arrange
+myMethodSpy.returnsOnce(new Account(Name='Test'));
+// Act
+Object result = myTypeStub.myMethod();
+// Assert
+Assert.areEqual(new Account(Name='Test'), result);
+```
+
+Have a look at the [ReturnsOnce recipe](force-app/recipes/classes/mocking/ReturnsOnce.cls)
+
 ##### Global throws
 
 Configure it to throw a specific exception, whatever the parameter received
@@ -176,10 +207,53 @@ try {
 
 Have a look at the [Throws recipe](force-app/recipes/classes/mocking/Throws.cls)
 
+You can also configure it to throw the same exception multipe times
+
+```java
+// Arrange
+myMethodSpy.throwsException(new MyException(), 3);
+for(Integer i = 0 ; i < 3 ; ++i) {
+  try {
+      // Act
+      Object result = myTypeStub.myMethod();
+
+      // Assert
+      Assert.fail('Expected exception was not thrown');
+  } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, MyException.class);
+  }
+}
+```
+
+##### Global throws once
+
+Configure it to throw a specific exception once, whatever the parameter received
+The stub will throw the configured exception once
+
+```java
+// Arrange
+myMethodSpy.throwsExceptionOnce(new MyException());
+try {
+    // Act
+    Object result = myTypeStub.myMethod();
+
+    // Assert
+    Assert.fail('Expected exception was not thrown');
+} catch (Exception ex) {
+    Assert.isInstanceOfType(ex, MyException.class);
+}
+```
+
+Have a look at the [ThrowsOnce recipe](force-app/recipes/classes/mocking/ThrowsOnce.cls)
+
 ##### Parameterized configuration
 
 Configure it to return a specific value, when call with specific parameters
+Configure it to return a specific value once, when call with specific parameters
+Configure it to return a specific value times N, when call with specific parameters
 Configure it to throw a specific value, when call with specific parameters
+Configure it to throw a specific value once, when call with specific parameters
+Configure it to throw a specific value times N, when call with specific parameters
 
 ```java
 // Arrange
@@ -189,8 +263,35 @@ myMethodSpy
 
 // Arrange
 myMethodSpy
+    .whenCalledWith(Argument.any(), 10)
+    .thenReturnOnce(new Account(Name='Test Once'));
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), 10)
+    .thenReturn(new Account(Name='Test Times'), 3);
+
+// Arrange
+myMethodSpy
     .whenCalledWith(Argument.any(), -1)
     .thenThrow(new MyException);
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenThrowOnce(new MyOtherException());
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenThrow(new MyException(), 3);
+
+
+// Act
+Object result = myTypeStub.myMethod('nothing', 10);
+
+// Assert
+Assert.areEqual(new Account(Name='Test Once'), result);
 
 // Act
 Object result = myTypeStub.myMethod('nothing', 10);
@@ -198,14 +299,44 @@ Object result = myTypeStub.myMethod('nothing', 10);
 // Assert
 Assert.areEqual(new Account(Name='Test'), result);
 
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  Object result = myTypeStub.myMethod('nothing', 10);
+
+  // Assert
+  Assert.areEqual(new Account(Name='Test Times'), result);
+}
+
 // Act
 try {
-    Object result = myTypeStub.myMethod('value', -1);
+    myTypeStub.myMethod('value', -1);
+
+    // Assert
+    Assert.fail('Expected exception was not thrown');
+} catch (Exception ex) {
+    Assert.isInstanceOfType(ex, MyOtherException.class);
+}
+
+// Act
+try {
+    myTypeStub.myMethod('value', -1);
 
     // Assert
     Assert.fail('Expected exception was not thrown');
 } catch (Exception ex) {
     Assert.isInstanceOfType(ex, MyException.class);
+}
+
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  try {
+      myTypeStub.myMethod('value', -1);
+
+      // Assert
+      Assert.fail('Expected exception was not thrown');
+  } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, MyException.class);
+  }
 }
 ```
 
@@ -218,9 +349,10 @@ Have a look at the [mocking recipes](force-app/recipes/classes/mocking/) to have
 The order of the spy configuration drive how it will behave.
 
 1. If no configuration at all, then return null (default behavior).
-1. Then, it checks the `whenCalledWith` configurations.
-1. Then, it checks the global `returns` configurations.
-1. Then, it checks the global `throwsException` configurations.
+1. Then, it checks the "matching" `whenCalledWith` `once` and `times` configurations and apply them in setup order.
+1. Then, it checks the "global once" and "global times" (`returnsOnce` or `throwsExceptionOnce` or `returns(object, integer)` or `throws(exception, integer)`) configuration and apply them in setup order.
+1. Then, it checks the "matching" `whenCalledWith` configurations and apply them in setup order.
+1. Then, it checks the "global" (`returns` or `throwsException`) configurations and apply them in setup order.
 
 If there is a configuration and it does not match then it throws a `ConfigurationException`.
 The error message will contains the arguments and the configuration.
@@ -352,10 +484,20 @@ public class MyMatchable implements Argument.Matchable {
 
     return matches;
   }
+
+  public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof MyMatchable)) {
+        return false;
+      }
+      MyMatchable other = (MyMatchable) obj;
+      return <this fields custom comparison with other instance>;
+    }
 }
 
 List<Argument.Matchable> args = Argument.of(new MyMatchable(), ...otherArguments);
 ```
+
+Implements the `public Boolean equals(Object obj)` method on your custom matchable so we can compare list of arguments
 
 Have a look at the [overview recipes](force-app/recipes/classes/ApexMockeryOverview.cls) to have a deeper overview of what you can do with the library
 
@@ -369,8 +511,10 @@ It contains one classe for each use cases the library covers
 
 - [No Configuration](force-app/recipes/classes/mocking/NoConfiguration.cls): spy not configured
 - [Returns](force-app/recipes/classes/mocking/Returns.cls): spy configured to return
+- [Returns](force-app/recipes/classes/mocking/ReturnsOnce.cls): spy configured to return once
 - [ReturnsThenThrows](force-app/recipes/classes/mocking/ReturnsThenThrows.cls): spy configured to throw
 - [Throws](force-app/recipes/classes/mocking/Throws.cls): spy configured to throw
+- [ThrowsOnce](force-app/recipes/classes/mocking/ThrowsOnce.cls): spy configured to throw once
 - [ThrowsThenReturns](force-app/recipes/classes/mocking/ThrowsThenReturns.cls): spy configured to return
 - [WhenCalledWithCustomMatchable_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithCustomMatchable_ThenReturn.cls): spy configured with custom matcher to return
 - [WhenCalledWithEqualMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithEqualMatching_ThenReturn.cls): spy configured with equals matcher to return
@@ -378,7 +522,9 @@ It contains one classe for each use cases the library covers
 - [WhenCalledWithMatchingThrowsAndReturns](force-app/recipes/classes/mocking/WhenCalledWithMatchingThrowsAndReturns.cls): spy configured with matcher to return and to throw
 - [WhenCalledWithNotMatchingAndReturn](force-app/recipes/classes/mocking/WhenCalledWithNotMatchingAndReturn.cls): spy configured with matcher and global return, called without matching parameters
 - [WhenCalledWithTypeMatching_ThenReturn](force-app/recipes/classes/mocking/WhenCalledWithTypeMatching_ThenReturn.cls): spy configured with type matcher to return
-- [WhenCalledWith_ThenThrow](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrow.cls): spy configured with JSON matcher to throw
+- [WhenCalledWith_ThenReturnOnce](force-app/recipes/classes/mocking/WhenCalledWith_ThenReturnOnce.cls): spy configured with a matcher to return once
+- [WhenCalledWith_ThenThrow](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrow.cls): spy configured with a matcher to throw
+- [WhenCalledWith_ThenThrowOnce](force-app/recipes/classes/mocking/WhenCalledWith_ThenThrowOnce.cls): spy configured with a matcher to throw once
 - [WhenCalledWithoutMatchingConfiguration](force-app/recipes/classes/mocking/WhenCalledWithoutMatchingConfiguration.cls): spy configured and called without matching parameters
 
 #### Asserting

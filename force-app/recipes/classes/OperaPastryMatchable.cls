@@ -10,4 +10,8 @@ public class OperaPastryMatchable implements Argument.Matchable {
     Pastry p = (Pastry) callArgument;
     return p.name == 'Opera';
   }
+
+  public Boolean equals(Object obj) {
+    return obj != null && obj instanceof OperaPastryMatchable;
+  }
 }

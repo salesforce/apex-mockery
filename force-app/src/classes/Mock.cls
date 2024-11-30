@@ -22,23 +22,25 @@ global class Mock implements System.StubProvider {
     List<Object> listOfArgs
   ) {
     Object result;
-    if (this.spies.containsKey(stubbedMethodName)) {
-      MethodSpy spy = this.getSpy(stubbedMethodName);
-      result = spy.call(listOfArgs);
+    final String key = this.getSpyKey(stubbedMethodName);
+    if (this.spies.containsKey(key)) {
+      MethodSpy spy = this.getSpy(key);
+      result = spy.call(listOfParamTypes, listOfParamNames, listOfArgs);
     }
 
     return result;
   }
 
   global MethodSpy spyOn(final String methodName) {
-    if (!this.spies.containsKey(methodName)) {
-      this.spies.put(methodName, new MethodSpy(methodName));
+    final String key = this.getSpyKey(methodName);
+    if (!this.spies.containsKey(key)) {
+      this.spies.put(key, new MethodSpy(methodName));
     }
-    return this.getSpy(methodName);
+    return this.getSpy(key);
   }
 
   global MethodSpy getSpy(final String methodName) {
-    return this.spies.get(methodName);
+    return this.spies.get(this.getSpyKey(methodName));
   }
 
   global static Mock forType(final Type aType) {
@@ -51,6 +53,10 @@ global class Mock implements System.StubProvider {
 
   global interface StubBuilder {
     Object build(final Type aType, System.StubProvider stubProvider);
+  }
+
+  private String getSpyKey(final String methodName) {
+    return methodName.toLowerCase();
   }
 
   private class DefaultStubBuilder implements StubBuilder {

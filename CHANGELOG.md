@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.0](https://github.com/salesforce/apex-mockery/compare/v2.1.0...v2.2.0) (2024-11-29)
+
+
+### Features
+
+* add "global" and "matching" `once` API ([#69](https://github.com/salesforce/apex-mockery/issues/69)) ([f5bb8d9](https://github.com/salesforce/apex-mockery/commit/f5bb8d936932d11ef7bd425a591737ca4a194717))
+* add "global" and "matching" `times` API ([#72](https://github.com/salesforce/apex-mockery/issues/72)) ([6e13d6a](https://github.com/salesforce/apex-mockery/commit/6e13d6a6281ef17ce224f65f1fe58427cdc2791b))
+* add names and types of method parameters in error output ([#62](https://github.com/salesforce/apex-mockery/issues/62)) ([4c6cc01](https://github.com/salesforce/apex-mockery/commit/4c6cc012b1a90c8b756f08d148a454a25642c84e))
+
+
+### Bug Fixes
+
+* case insensitive matching for mock ([#75](https://github.com/salesforce/apex-mockery/issues/75)) ([37f958e](https://github.com/salesforce/apex-mockery/commit/37f958e3872227b1099bf284a717fb322a839eda))
+* issue when punctual matchers are consumed ([#77](https://github.com/salesforce/apex-mockery/issues/77)) ([a07d6a1](https://github.com/salesforce/apex-mockery/commit/a07d6a11cfe2448df6783fee36748f33c358605a))
+* spy calls with newer SObjects (and misc. updates) ([#63](https://github.com/salesforce/apex-mockery/issues/63)) ([d914655](https://github.com/salesforce/apex-mockery/commit/d91465551026e4034fa7c75fc2ec243c4c595dd1))
+
 ## [2.1.0](https://github.com/salesforce/apex-mockery/compare/v2.0.0...v2.1.0) (2023-05-12)
 
 

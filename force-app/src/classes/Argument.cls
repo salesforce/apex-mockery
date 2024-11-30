@@ -117,6 +117,10 @@ global class Argument {
     public override String toString() {
       return 'any';
     }
+
+    public Boolean equals(Object obj) {
+      return obj != null && obj instanceof AnyMatchable;
+    }
   }
 
   private class EqualsMatchable implements Argument.Matchable {
@@ -143,23 +147,37 @@ global class Argument {
     public override String toString() {
       return String.valueOf(this.callArgumentToMatch);
     }
+
+    public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof EqualsMatchable)) {
+        return false;
+      }
+      EqualsMatchable other = (EqualsMatchable) obj;
+      return this.matches(other.callArgumentToMatch);
+    }
   }
 
   private class JSONMatchable implements Argument.Matchable {
-    private Object callArgumentToMatch;
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
-      this.callArgumentToMatch = callArgumentToMatch;
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
-    public Boolean matches(final Object callArgument) {
-      return this.jsonValue.equals(JSON.serialize(callArgument));
+    public boolean matches(final Object callArgument) {
+      return String.valueOf(this.jsonValue).equals(String.valueOf(JSON.serialize(callArgument)));
     }
 
-    public override String toString() {
-      return 'json(' + this.callArgumentToMatch + ')';
+    override public String toString() {
+      return 'json(' + this.jsonValue + ')';
+    }
+
+    public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof JSONMatchable)) {
+        return false;
+      }
+      JSONMatchable other = (JSONMatchable) obj;
+      return this.jsonValue.equals(other.jsonValue);
     }
   }
 
@@ -179,8 +197,7 @@ global class Argument {
     }
 
     public boolean matches(final Object callArgument) {
-      String typeName = this.getType(callArgument);
-      // Using a case-insensitive comparison since Apex types are case-insensitive
+      String typeName = Argument.getTypeName(callArgument);
       if (this.typeNameToMatch == typeName) {
         return true;
       }
@@ -193,19 +210,50 @@ global class Argument {
       return false;
     }
 
-    private String getType(final Object callArgument) {
-      try {
-        // Cast as Date to determine if Object is a valid Date.
-        Date typeCheck = (Date) callArgument; // NOPMD
-        return 'Date';
-      } catch (System.TypeException te) {
-        // If not a Date, extract Type output from exception message.
-        return te.getMessage().substringBetween('Invalid conversion from runtime type ', ' to Date');
-      }
-    }
-
-    public override String toString() {
+    override public String toString() {
       return this.typeNameToMatch + '.Type';
     }
+
+    public Boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof TypeMatchable)) {
+        return false;
+      }
+      TypeMatchable other = (TypeMatchable) obj;
+      return this.typeNameToMatch == other.typeNameToMatch;
+    }
+  }
+
+  private static String getTypeName(final Object callArgument) {
+    String result = 'Date';
+    try {
+      Date typeCheck = (Date) callArgument;
+    } catch (System.TypeException te) {
+      String message = te.getMessage().substringAfter('Invalid conversion from runtime type ');
+      result = message.substringBefore(' to Date');
+    }
+    return result;
+  }
+
+  public static Type getType(final Object callArgument) {
+    final String typeName = getTypeName(callArgument);
+    return Type.forName(typeName);
+  }
+
+  global static Boolean areListsEqual(final List<Argument.Matchable> list1, final List<Argument.Matchable> list2) {
+    if (list1 == null || list2 == null) {
+      return list1 == list2;
+    }
+
+    final Integer size = list1.size();
+    if (size != list2.size()) {
+      return false;
+    }
+
+    for (Integer i = 0; i < size; ++i) {
+      if (list1[i] != list2[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }

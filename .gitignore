@@ -27,6 +27,7 @@ yarn-error.log*
 
 # Dependency directories
 node_modules/
+.wireit/
 
 # Eslint cache
 .eslintcache
