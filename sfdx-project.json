@@ -21,6 +21,7 @@
     }
   ],
   "name": "apex-mockery",
+  "namespace": "mockery",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "56.0",
   "packageAliases": {
