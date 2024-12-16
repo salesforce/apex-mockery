@@ -27,6 +27,8 @@ We want its usage to be simple, its maintainability to be easy and to provide th
       - [Global returns once](#global-returns-once)
       - [Global throws](#global-throws)
       - [Global throws once](#global-throws-once)
+      - [Global mock implementation](#global-mock-implementation)
+      - [Global mock implementation once](#global-mock-implementation-once)
       - [Parameterized configuration](#parameterized-configuration)
       - [Configuration order matters !](#configuration-order-matters-)
   - [Assert on a spy](#assert-on-a-spy)
@@ -246,6 +248,65 @@ try {
 
 Have a look at the [ThrowsOnce recipe](force-app/recipes/classes/mocking/ThrowsOnce.cls)
 
+##### Global mock implementation
+
+Configure it to behave specifically, using the parameters or not
+The stub will always execute the configured behavior
+
+```java
+class MockImpl implements MethodSpy.ConfiguredBehavior {
+  public Object apply(final List<Object> params) {
+    // Do something with params
+    return 'something';
+  }
+}
+
+// Arrange
+myMethodSpy.mockImplementation(new MockImpl());
+// Act
+Object result = myTypeStub.myMethod();
+// Assert
+Assert.areEqual('something', result);
+```
+
+Have a look at the [Returns recipe](force-app/recipes/classes/mocking/MockImplementation.cls)
+
+You can also configure it to execute the configured behavior multipe times
+
+```java
+// Arrange
+myMethodSpy.mockImplementation(Mocnew MockImpl()kImpl, 3);
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  Object result = myTypeStub.myMethod();
+  // Assert
+  Assert.areEqual('something', result);
+}
+```
+
+##### Global mock implementation once
+
+Configure it to behave specifically once, using the parameters or not
+The stub will execute the configured behavior once
+
+```java
+class MockImpl implements MethodSpy.ConfiguredBehavior {
+  public Object apply(final List<Object> params) {
+    // Do something with params
+    return 'something';
+  }
+}
+
+// Arrange
+myMethodSpy.mockImplementation(new MockImpl());
+// Act
+Object result = myTypeStub.myMethod();
+// Assert
+Assert.areEqual('something', result);
+```
+
+Have a look at the [ReturnsOnce recipe](force-app/recipes/classes/mocking/MockImplementationOnce.cls)
+
 ##### Parameterized configuration
 
 Configure it to return a specific value, when call with specific parameters
@@ -254,6 +315,9 @@ Configure it to return a specific value times N, when call with specific paramet
 Configure it to throw a specific value, when call with specific parameters
 Configure it to throw a specific value once, when call with specific parameters
 Configure it to throw a specific value times N, when call with specific parameters
+Configure it to with a specific implementation, when call with specific parameters
+Configure it to with a specific implementation once, when call with specific parameters
+Configure it to with a specific implementation times N, when call with specific parameters
 
 ```java
 // Arrange
@@ -285,6 +349,21 @@ myMethodSpy
 myMethodSpy
     .whenCalledWith(Argument.any(), -1)
     .thenThrow(new MyException(), 3);
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenMockImplementation(new MockImpl());
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenMockImplementationOnce(new MockImpl());
+
+// Arrange
+myMethodSpy
+    .whenCalledWith(Argument.any(), -1)
+    .thenMockImplementation(new MockImpl(), 3);
 
 
 // Act
@@ -337,6 +416,26 @@ for(Integer i = 0 ; i < 3 ; ++i) {
   } catch (Exception ex) {
       Assert.isInstanceOfType(ex, MyException.class);
   }
+}
+
+// Act
+Object result = myTypeStub.myMethod('nothing', 10);
+
+// Assert
+Assert.areEqual('Custom Behavior', result);
+
+// Act
+Object result = myTypeStub.myMethod('nothing', 10);
+
+// Assert
+Assert.areEqual('Custom Behavior', result);
+
+for(Integer i = 0 ; i < 3 ; ++i) {
+  // Act
+  Object result = myTypeStub.myMethod('nothing', 10);
+
+  // Assert
+  Assert.areEqual('Custom Behavior', result);
 }
 ```
 
