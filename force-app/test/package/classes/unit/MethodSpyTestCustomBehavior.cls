@@ -7,7 +7,7 @@
 
 @IsTest
 private class MethodSpyTestCustomBehavior {
-  private class ReturnParam implements MethodSpy.ConfiguredBehavior {
+  class ReturnParam implements MethodSpy.ConfiguredBehavior {
     public Object apply(final List<Object> params) {
       return params;
     }
@@ -18,12 +18,14 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.mockImplementation(new ReturnParam());
+    final String valueParameter = 'str';
 
     // Act
-    final Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    final List<Object> result = (List<Object>) sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ valueParameter });
 
     // Assert
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    Assert.areEqual(new List<Object>{ valueParameter }, result);
+    Assert.isTrue(valueParameter === result[0]);
   }
 
   @isTest
@@ -31,12 +33,14 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('str').thenMockImplementation(new ReturnParam());
+    final String valueParameter = 'str';
 
     // Act
-    final Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    final List<Object> result = (List<Object>) sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ valueParameter });
 
     // Assert
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    Assert.areEqual(new List<Object>{ valueParameter }, result);
+    Assert.isTrue(valueParameter === result[0]);
   }
 
   @isTest
@@ -44,13 +48,15 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.mockImplementationOnce(new ReturnParam());
+    final String valueParameter = 'str';
 
-    // Act & Assert
-    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    // Act
+    final List<Object> result = (List<Object>) sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ valueParameter });
+    Assert.areEqual(new List<Object>{ valueParameter }, result);
+    Assert.isTrue(valueParameter === result[0]);
 
-    result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.isNull(result);
+    final Object secondResult = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Assert.isNull(secondResult);
   }
 
   @isTest
@@ -58,13 +64,15 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('str').thenMockImplementationOnce(new ReturnParam());
+    final String valueParameter = 'str';
 
-    // Act & Assert
-    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    // Act
+    final List<Object> result = (List<Object>) sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ valueParameter });
+    Assert.areEqual(new List<Object>{ valueParameter }, result);
+    Assert.isTrue(valueParameter === result[0]);
 
-    result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.isNull(result);
+    final Object secondResult = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Assert.isNull(secondResult);
   }
 
   @isTest
@@ -72,16 +80,18 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.mockImplementation(new ReturnParam(), 2);
+    final String valueParameter = 'str';
 
-    // Act & Assert
-    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    // Act
+    final List<Object> result = (List<Object>) sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ valueParameter });
+    Assert.areEqual(new List<Object>{ valueParameter }, result);
+    Assert.isTrue(valueParameter === result[0]);
 
-    result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    Object secondResult = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Assert.areEqual(new List<Object>{ valueParameter }, secondResult);
 
-    result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.isNull(result);
+    secondResult = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Assert.isNull(secondResult);
   }
 
   @isTest
@@ -89,15 +99,45 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     sut.whenCalledWith('str').thenMockImplementation(new ReturnParam(), 2);
+    final String valueParameter = 'str';
 
-    // Act & Assert
-    Object result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    // Act
+    final List<Object> result = (List<Object>) sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ valueParameter });
+    Assert.areEqual(new List<Object>{ valueParameter }, result);
+    Assert.isTrue(valueParameter === result[0]);
 
-    result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.areEqual(new List<Object>{ 'str' }, result);
+    Object secondResult = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
 
-    result = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
-    Assert.isNull(result);
+    secondResult = sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ 'str' });
+    Assert.isNull(secondResult);
+  }
+
+  @isTest
+  static void givenSpyConfiguredWithMutatingBehavior_whenCalledWithObjectAndUpdateAttribute_thenObjectAttributeIsMutated() {
+    // Arrange
+    MethodSpy sut = new MethodSpy('methodName');
+    final Person aPerson = new Person('Name');
+    sut.mockImplementation(new MutateParam());
+
+    // Act
+    sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ aPerson });
+
+    // Assert
+    Assert.areEqual('Mutated Name', aPerson.name);
+  }
+
+  class MutateParam implements MethodSpy.ConfiguredBehavior {
+    public Object apply(final List<Object> params) {
+      final Person aPerson = (Person) params[0];
+      aPerson.name = 'Mutated ' + aPerson.name;
+      return null;
+    }
+  }
+
+  class Person {
+    public String name { get; set; }
+    public Person(final String name) {
+      this.name = name;
+    }
   }
 }
