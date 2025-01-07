@@ -16,6 +16,7 @@ We want its usage to be simple, its maintainability to be easy and to provide th
   - [Why you should use the library](#why-you-should-use-the-library)
 - [Installation](#installation)
   - [Namespaced Org /!\\](#namespaced-org-)
+    - [`global` classes and methods](#global-classes-and-methods)
 - [Usage](#usage)
   - [Mock](#mock)
     - [How to stub namespaced type?](#how-to-stub-namespaced-type)
@@ -87,6 +88,18 @@ In this case you have those choices:
 - Create your own unlocked/2GP package with your namespace containing the sources
 
 It's [not recommended](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_dependency_overview.htm#:~:text=Can%20a%20managed%202GP%20package%20depend%20on%20an,on%20a%20managed%201GP%20or%20managed%202GP%20package.) for a 2GP package to depends on an unlocked package, namespaced or not (ISV scenario).
+
+#### `global` classes and methods
+
+The library includes an unlocked package with a namespace, and the classes and methods use the `global` modifier.  
+This [design](https://github.com/salesforce/apex-mockery/wiki/Unlocked-Package-namespace-strategy) enables you to access them outside the namespace, whether in other namespaces or unmanaged code.
+
+If you want to include the library in your own managed package and use Apex Mockery for your tests, convert these global classes and methods to public.  
+This approach ensures that your package does not expose Apex Mockery when customers install it.
+
+> [!TIP]  
+> We recommend ISVs use Apex Mockery as ["unpackaged metadata"](https://developer.salesforce.com/docs/atlas.en-us.pkg2_dev.meta/pkg2_dev/sfdx_dev_dev2gp_unpackaged_md.htm#:~:text=Specify%20Unpackaged%20Metadata%20for%20Package%20Version%20Creation%20Tests).  
+> This approach ensures that the library is not included in the package distribution.
 
 ## Usage
 
