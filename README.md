@@ -474,7 +474,7 @@ Argument.ofType(CustomType.class);
 Use the `Argument.Matchable` interface and then use it with `Argument` APIs
 
 ```java
-@isTest
+@IsTest
 public class MyMatchable implements Argument.Matchable {
   public Boolean matches(Object callArgument) {
     boolean matches = false;

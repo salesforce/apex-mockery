@@ -6,7 +6,7 @@
  */
 @IsTest
 private class FunctionalTest {
-  @isTest
+  @IsTest
   static void whenCreatingNewCompany_itShouldInsertAccount() {
     // Arrange
     Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
@@ -20,7 +20,7 @@ private class FunctionalTest {
     Expect.that(insertSObjectSpy).hasBeenCalledWith(Argument.of(new Account(NumberOfEmployees = 10)));
   }
 
-  @isTest
+  @IsTest
   static void whenCreatingNewCompanyWithOpportunity_itShouldInsertAccountAndOpportunity() {
     // Arrange
     Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
@@ -42,7 +42,7 @@ private class FunctionalTest {
     Expect.that(insertSObjectSpy).hasBeenCalledTimes(2);
   }
 
-  @isTest
+  @IsTest
   static void whenCreatingNewCompanyWith1BEmployees_itThrows() {
     // Arrange
     Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);
@@ -62,7 +62,7 @@ private class FunctionalTest {
     }
   }
 
-  @isTest
+  @IsTest
   static void whenCreatingNewCompaniesWithAllOrNoneFalseAndPartialSuccess_itReturnsSaveResult() {
     // Arrange
     Mock dmlDelegateMock = Mock.forType(DMLDelegate.class);

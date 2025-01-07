@@ -564,7 +564,7 @@ private class MethodSpyTest {
     Assert.areEqual(expected, actual, 'Not serializable custom apex identical list should match');
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyReturnsOnce_whenCalledOnce_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -579,7 +579,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyThrowsOnce_whenCalledOnce_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -598,7 +598,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchReturnsOnce_whenCalledOnce_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -613,7 +613,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchThrowsOnce_whenCalledOnce_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -632,7 +632,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenConfiguredSpy_whenCalled_respectTheOrderOfMatching() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -732,7 +732,7 @@ private class MethodSpyTest {
     }
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyReturnsNTimes_whenCalledN1Times_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -749,7 +749,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyThrowsNTimes_whenCalledN1Times_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -770,7 +770,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchReturnsNTimes_whenCalledN1Times_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -787,7 +787,7 @@ private class MethodSpyTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchThrowsNTimes_whenCalledN1Times_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
