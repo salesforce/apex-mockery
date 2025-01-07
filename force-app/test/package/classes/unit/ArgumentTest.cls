@@ -8,7 +8,7 @@ public class ArgumentTest {
     // Act & Assert
     Assert.isTrue(sut.matches(null));
     Assert.isTrue(sut.matches(Date.today()));
-    Assert.isTrue(sut.matches(DateTime.now()));
+    Assert.isTrue(sut.matches(Datetime.now()));
     Assert.isTrue(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isTrue(sut.matches(Blob.valueOf('test')));
     Assert.isTrue(sut.matches(false));
@@ -34,7 +34,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -59,7 +59,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -85,7 +85,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -112,7 +112,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -138,7 +138,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -162,7 +162,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -187,7 +187,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -212,7 +212,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -237,7 +237,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -261,7 +261,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -285,7 +285,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -309,7 +309,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -334,7 +334,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
