@@ -5,9 +5,9 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @isTest
-private class MockImplementationOnce {
-  class MockImpl implements MethodSpy.ConfiguredBehavior {
-    public Object apply(final List<Object> params) {
+private class BehaveOnce {
+  class MockImpl implements MethodSpy.SpyBehavior {
+    public Object execute(final List<Object> params) {
       return Date.today().addDays(10);
     }
   }
@@ -18,7 +18,7 @@ private class MockImplementationOnce {
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.mockImplementationOnce(new MockImpl());
+    planDeliverySpy.behavesOnce(new MockImpl());
 
     // Act
     OrderConfirmation order = myBakery.order(new Pastry('Opera'));

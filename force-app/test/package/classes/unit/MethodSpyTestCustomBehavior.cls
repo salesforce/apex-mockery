@@ -7,8 +7,8 @@
 
 @IsTest
 private class MethodSpyTestCustomBehavior {
-  class ReturnParam implements MethodSpy.ConfiguredBehavior {
-    public Object apply(final List<Object> params) {
+  class ReturnParam implements MethodSpy.SpyBehavior {
+    public Object execute(final List<Object> params) {
       return params;
     }
   }
@@ -17,7 +17,7 @@ private class MethodSpyTestCustomBehavior {
   static void givenSpyConfiguredWithBehavior_whenCalled_thenExecuteTheBehavior() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.mockImplementation(new ReturnParam());
+    sut.behaves(new ReturnParam());
     final String valueParameter = 'str';
 
     // Act
@@ -32,7 +32,7 @@ private class MethodSpyTestCustomBehavior {
   static void givenSpyConfiguredWithMatcherWithBehavior_whenCalledWithMatching_thenExecuteTheBehavior() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('str').thenMockImplementation(new ReturnParam());
+    sut.whenCalledWith('str').thenBehave(new ReturnParam());
     final String valueParameter = 'str';
 
     // Act
@@ -47,7 +47,7 @@ private class MethodSpyTestCustomBehavior {
   static void givenSpyConfiguredWithBehaviorOnce_whenCalled_thenExecuteTheBehaviorOnce() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.mockImplementationOnce(new ReturnParam());
+    sut.behavesOnce(new ReturnParam());
     final String valueParameter = 'str';
 
     // Act
@@ -63,7 +63,7 @@ private class MethodSpyTestCustomBehavior {
   static void givenSpyConfiguredWithMatcherWithBehaviorOnce_whenCalledWithMatching_thenExecuteTheBehaviorOnce() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('str').thenMockImplementationOnce(new ReturnParam());
+    sut.whenCalledWith('str').thenBehaveOnce(new ReturnParam());
     final String valueParameter = 'str';
 
     // Act
@@ -79,7 +79,7 @@ private class MethodSpyTestCustomBehavior {
   static void givenSpyConfiguredWithBehaviorTimes_whenCalled_thenExecuteTheBehaviorTimes() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.mockImplementation(new ReturnParam(), 2);
+    sut.behaves(new ReturnParam(), 2);
     final String valueParameter = 'str';
 
     // Act
@@ -98,7 +98,7 @@ private class MethodSpyTestCustomBehavior {
   static void givenSpyConfiguredWithMatcherWithBehaviorTimes_whenCalledWithMatching_thenExecuteTheBehaviorTimes() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
-    sut.whenCalledWith('str').thenMockImplementation(new ReturnParam(), 2);
+    sut.whenCalledWith('str').thenBehave(new ReturnParam(), 2);
     final String valueParameter = 'str';
 
     // Act
@@ -117,7 +117,7 @@ private class MethodSpyTestCustomBehavior {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
     final Person aPerson = new Person('Name');
-    sut.mockImplementation(new MutateParam());
+    sut.behaves(new MutateParam());
 
     // Act
     sut.call(new List<Type>{ String.class }, new List<String>{ 'param' }, new List<Object>{ aPerson });
@@ -126,8 +126,8 @@ private class MethodSpyTestCustomBehavior {
     Assert.areEqual('Mutated Name', aPerson.name);
   }
 
-  class MutateParam implements MethodSpy.ConfiguredBehavior {
-    public Object apply(final List<Object> params) {
+  class MutateParam implements MethodSpy.SpyBehavior {
+    public Object execute(final List<Object> params) {
       final Person aPerson = (Person) params[0];
       aPerson.name = 'Mutated ' + aPerson.name;
       return null;

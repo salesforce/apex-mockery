@@ -5,9 +5,9 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 @isTest
-private class MockImplementation {
-  class MockImpl implements MethodSpy.ConfiguredBehavior {
-    public Object apply(final List<Object> params) {
+private class WhenCalledWith_ThenBehave {
+  class MockImpl implements MethodSpy.SpyBehavior {
+    public Object execute(final List<Object> params) {
       return Date.today().addDays(10);
     }
   }
@@ -18,16 +18,16 @@ private class MockImplementation {
     Mock deliveryServiceMock = Mock.forType(DeliveryService.class);
     MethodSpy planDeliverySpy = deliveryServiceMock.spyOn('planDelivery');
     Bakery myBakery = new Bakery((DeliveryService) deliveryServiceMock.stub);
-    planDeliverySpy.mockImplementation(new MockImpl());
+    planDeliverySpy.whenCalledWith(new Pastry('Croissant')).thenBehave(new MockImpl());
 
     // Act
-    OrderConfirmation order = myBakery.order(new Pastry('Opera'));
+    OrderConfirmation order = myBakery.order(new Pastry('Croissant'));
 
     // Assert
     Assert.areEqual(Date.today().addDays(10), order.deliveryDate);
 
     // Act
-    order = myBakery.order(new Pastry('Opera'));
+    order = myBakery.order(new Pastry('Croissant'));
 
     // Assert
     Assert.areEqual(Date.today().addDays(10), order.deliveryDate);

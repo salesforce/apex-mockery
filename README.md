@@ -254,28 +254,28 @@ Configure it to behave specifically, using the parameters or not
 The stub will always execute the configured behavior
 
 ```java
-class MockImpl implements MethodSpy.ConfiguredBehavior {
-  public Object apply(final List<Object> params) {
+class MockImpl implements MethodSpy.SpyBehavior {
+  public Object execute(final List<Object> params) {
     // Do something with params
     return 'something';
   }
 }
 
 // Arrange
-myMethodSpy.mockImplementation(new MockImpl());
+myMethodSpy.behaves(new MockImpl());
 // Act
 Object result = myTypeStub.myMethod();
 // Assert
 Assert.areEqual('something', result);
 ```
 
-Have a look at the [Returns recipe](force-app/recipes/classes/mocking/MockImplementation.cls)
+Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Behave.cls)
 
 You can also configure it to execute the configured behavior multipe times
 
 ```java
 // Arrange
-myMethodSpy.mockImplementation(Mocnew MockImpl()kImpl, 3);
+myMethodSpy.behaves(Mocnew MockImpl()kImpl, 3);
 for(Integer i = 0 ; i < 3 ; ++i) {
   // Act
   Object result = myTypeStub.myMethod();
@@ -290,22 +290,22 @@ Configure it to behave specifically once, using the parameters or not
 The stub will execute the configured behavior once
 
 ```java
-class MockImpl implements MethodSpy.ConfiguredBehavior {
-  public Object apply(final List<Object> params) {
+class MockImpl implements MethodSpy.SpyBehavior {
+  public Object execute(final List<Object> params) {
     // Do something with params
     return 'something';
   }
 }
 
 // Arrange
-myMethodSpy.mockImplementation(new MockImpl());
+myMethodSpy.behaves(new MockImpl());
 // Act
 Object result = myTypeStub.myMethod();
 // Assert
 Assert.areEqual('something', result);
 ```
 
-Have a look at the [ReturnsOnce recipe](force-app/recipes/classes/mocking/MockImplementationOnce.cls)
+Have a look at the [ReturnsOnce recipe](force-app/recipes/classes/mocking/BehaveOnce.cls)
 
 ##### Parameterized configuration
 
@@ -353,17 +353,17 @@ myMethodSpy
 // Arrange
 myMethodSpy
     .whenCalledWith(Argument.any(), -1)
-    .thenMockImplementation(new MockImpl());
+    .thenBehave(new MockImpl());
 
 // Arrange
 myMethodSpy
     .whenCalledWith(Argument.any(), -1)
-    .thenMockImplementationOnce(new MockImpl());
+    .thenBehaveOnce(new MockImpl());
 
 // Arrange
 myMethodSpy
     .whenCalledWith(Argument.any(), -1)
-    .thenMockImplementation(new MockImpl(), 3);
+    .thenBehave(new MockImpl(), 3);
 
 
 // Act
