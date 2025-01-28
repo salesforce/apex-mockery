@@ -375,8 +375,6 @@ global class MethodSpy {
     public ConfiguredValueBehavior(final Object value) {
       this.value = value;
     }
-    private ConfiguredValueBehavior() {
-    }
 
     public Object execute(final List<Object> params) {
       return this.value;
@@ -400,8 +398,6 @@ global class MethodSpy {
     public final Exception error;
     public ConfiguredExceptionBehavior(final Exception error) {
       this.error = error;
-    }
-    private ConfiguredExceptionBehavior() {
     }
 
     public Object execute(final List<Object> params) {
