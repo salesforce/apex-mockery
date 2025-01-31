@@ -13,7 +13,7 @@ private class MethodSpyTestCustomBehavior {
     }
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithBehavior_whenCalled_thenExecuteTheBehavior() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -28,7 +28,7 @@ private class MethodSpyTestCustomBehavior {
     Assert.isTrue(valueParameter === result[0]);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithMatcherWithBehavior_whenCalledWithMatching_thenExecuteTheBehavior() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -43,7 +43,7 @@ private class MethodSpyTestCustomBehavior {
     Assert.isTrue(valueParameter === result[0]);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithBehaviorOnce_whenCalled_thenExecuteTheBehaviorOnce() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -59,7 +59,7 @@ private class MethodSpyTestCustomBehavior {
     Assert.isNull(secondResult);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithMatcherWithBehaviorOnce_whenCalledWithMatching_thenExecuteTheBehaviorOnce() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -75,7 +75,7 @@ private class MethodSpyTestCustomBehavior {
     Assert.isNull(secondResult);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithBehaviorTimes_whenCalled_thenExecuteTheBehaviorTimes() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -94,7 +94,7 @@ private class MethodSpyTestCustomBehavior {
     Assert.isNull(secondResult);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithMatcherWithBehaviorTimes_whenCalledWithMatching_thenExecuteTheBehaviorTimes() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -112,7 +112,7 @@ private class MethodSpyTestCustomBehavior {
     Assert.isNull(secondResult);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredWithMutatingBehavior_whenCalledWithObjectAndUpdateAttribute_thenObjectAttributeIsMutated() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
