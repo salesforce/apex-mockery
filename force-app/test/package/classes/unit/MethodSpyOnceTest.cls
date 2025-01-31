@@ -7,7 +7,7 @@
 
 @IsTest
 private class MethodSpyOnceTest {
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyReturnsOnce_whenCalledOnce_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -22,7 +22,7 @@ private class MethodSpyOnceTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyThrowsOnce_whenCalledOnce_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -41,7 +41,7 @@ private class MethodSpyOnceTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchReturnsOnce_whenCalledOnce_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -56,7 +56,7 @@ private class MethodSpyOnceTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchThrowsOnce_whenCalledOnce_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');

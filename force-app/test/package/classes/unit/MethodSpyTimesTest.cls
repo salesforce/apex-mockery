@@ -7,7 +7,7 @@
 
 @IsTest
 private class MethodSpyTimesTest {
-  @isTest
+  @IsTest
   static void givenConfiguredSpy_whenCalled_respectTheOrderOfMatching() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -107,7 +107,7 @@ private class MethodSpyTimesTest {
     }
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyReturnsNTimes_whenCalledN1Times_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -124,7 +124,7 @@ private class MethodSpyTimesTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToGloballyThrowsNTimes_whenCalledN1Times_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -145,7 +145,7 @@ private class MethodSpyTimesTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchReturnsNTimes_whenCalledN1Times_returnsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');
@@ -162,7 +162,7 @@ private class MethodSpyTimesTest {
     Assert.isNull(result);
   }
 
-  @isTest
+  @IsTest
   static void givenSpyConfiguredToMatchThrowsNTimes_whenCalledN1Times_throwsConfiguration() {
     // Arrange
     MethodSpy sut = new MethodSpy('methodName');

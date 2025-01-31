@@ -10,7 +10,7 @@ private class ExpectTest {
   // Test are white box (implementation test instead of behavioural test)
   // We implemented a FakeAsserter class for the occasion
 
-  @isTest
+  @IsTest
   static void givenMethodSpyInstance_thatReturnsMethodSpyAssertInstance() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -22,7 +22,7 @@ private class ExpectTest {
     Assert.isNotNull(result);
   }
 
-  @isTest
+  @IsTest
   static void hasNotBeenCalled_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -37,7 +37,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void hasBeenCalled_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -53,7 +53,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenObject_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -69,7 +69,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called with (Account:{})', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenObjectList_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -85,7 +85,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called with (Account:{}, Opportunity:{})', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenMixList_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -101,7 +101,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called with (Account:{}, test)', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenArgumentsEmpty_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -117,7 +117,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called with ()', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenNoParameter_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -133,7 +133,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called with ()', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void given1Arguments_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -150,7 +150,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given2Arguments_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -167,7 +167,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given3Arguments_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -188,7 +188,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given4Arguments_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -209,7 +209,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given5Arguments_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -230,7 +230,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void givenMatchables_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -247,7 +247,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void givenNullParam_hasBeenCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -263,7 +263,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called with (null)\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenNullParam_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -279,7 +279,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not last called with (null)', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenObject_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -295,7 +295,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not last called with (Account:{})', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenMixList_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -311,7 +311,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not last called with (Account:{}, test)', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenNoParameter_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -327,7 +327,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not last called with ()', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void given1Arguments_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -344,7 +344,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given2Arguments_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -361,7 +361,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given3Arguments_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -382,7 +382,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given4Arguments_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -403,7 +403,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void given5Arguments_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -424,7 +424,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void givenMatchables_hasBeenLastCalledWith_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -441,7 +441,7 @@ private class ExpectTest {
     Assert.isFalse(fakeAsserter.failed);
   }
 
-  @isTest
+  @IsTest
   static void givenNullMatchables_hasBeenLastCalledWithNull_callsAssertEquals() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -457,7 +457,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not last called with (null)\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenCall_hasBeenCalledTimes_returnsCalledTimes() {
     // Arrange
     MethodSpy spy = new MethodSpy('method');
@@ -478,7 +478,7 @@ private class ExpectTest {
     Assert.areEqual('Method method was not called 2 times\nmethod call history:\n\t#1 method(())\n', fakeAsserter.errorMessage);
   }
 
-  @isTest
+  @IsTest
   static void givenExpectedEqualsAssert_MethodSpyAsserter_doNotThrow() {
     // Arrange
     Expect.Asserter sut = new Expect.MethodSpyAsserter();

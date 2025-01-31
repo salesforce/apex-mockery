@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-@isTest
+@IsTest
 global class Mock implements System.StubProvider {
   global Object stub { get; set; }
   private Map<String, MethodSpy> spies = new Map<String, MethodSpy>();

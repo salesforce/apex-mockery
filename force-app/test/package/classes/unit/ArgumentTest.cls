@@ -1,6 +1,6 @@
-@isTest
+@IsTest
 public class ArgumentTest {
-  @isTest
+  @IsTest
   static void givenAnyMatchable_matchesAnyKindOfArgument() {
     // Arrange
     Argument.Matchable sut = Argument.any();
@@ -8,7 +8,7 @@ public class ArgumentTest {
     // Act & Assert
     Assert.isTrue(sut.matches(null));
     Assert.isTrue(sut.matches(Date.today()));
-    Assert.isTrue(sut.matches(DateTime.now()));
+    Assert.isTrue(sut.matches(Datetime.now()));
     Assert.isTrue(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isTrue(sut.matches(Blob.valueOf('test')));
     Assert.isTrue(sut.matches(false));
@@ -24,7 +24,7 @@ public class ArgumentTest {
     Assert.isTrue(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
-  @isTest
+  @IsTest
   static void givenEqualsMatchable_matchesPrimitive() {
     // Arrange
     Argument.Matchable sut = Argument.equals(10);
@@ -34,7 +34,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -49,7 +49,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
-  @isTest
+  @IsTest
   static void givenEqualsMatchable_matchesSObject() {
     // Arrange
     Argument.Matchable sut = Argument.equals(new Account(Name = 'test'));
@@ -59,7 +59,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -74,7 +74,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
-  @isTest
+  @IsTest
   static void givenEqualsMatchable_matchesCustomTypeWithEquals() {
     // Arrange
     Argument.Matchable sut = Argument.equals(new CustomTypeWithEquals('test', 10, new Account(Name = 'test')));
@@ -85,7 +85,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -102,7 +102,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new CustomTypeWithEquals('TEST', 10, new Account(Name = 'TEST'))));
   }
 
-  @isTest
+  @IsTest
   static void givenEqualsMatchable_matchesCollection() {
     // Arrange
     Argument.Matchable sut = Argument.equals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
@@ -112,7 +112,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -128,7 +128,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
-  @isTest
+  @IsTest
   static void givenTypeMatchable_matchesPrimitive() {
     // Arrange
     Argument.Matchable sut = Argument.ofType('Integer');
@@ -138,7 +138,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -152,7 +152,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenTypeMatchable_matchesSObject() {
     // Arrange
     Argument.Matchable sut = Argument.ofType(Account.getSObjectType());
@@ -162,7 +162,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -177,7 +177,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new CustomType('test', 10, new Account(Name = 'test'))));
   }
 
-  @isTest
+  @IsTest
   static void givenTypeMatchable_matchesCustomType() {
     // Arrange
     Argument.Matchable sut = Argument.ofType(CustomType.class);
@@ -187,7 +187,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -202,7 +202,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenTypeMatchable_matchesDeriveType() {
     // Arrange
     Argument.Matchable sut = Argument.ofType(Argument.Matchable.class);
@@ -212,7 +212,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -227,7 +227,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenTypeMatchable_matchesCollection() {
     // Arrange
     Argument.Matchable sut = Argument.ofType('List');
@@ -237,7 +237,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -251,7 +251,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenJSONMatchable_matchesPrimitive() {
     // Arrange
     Argument.Matchable sut = Argument.jsonEquals(10);
@@ -261,7 +261,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -275,7 +275,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenJSONMatchable_matchesSObject() {
     // Arrange
     Argument.Matchable sut = Argument.jsonEquals(new Account(Name = 'test'));
@@ -285,7 +285,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -299,7 +299,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenJSONMatchable_matchesCustomType() {
     // Arrange
     Argument.Matchable sut = Argument.jsonEquals(new CustomType('test', 10, new Account(Name = 'test')));
@@ -309,7 +309,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -324,7 +324,7 @@ public class ArgumentTest {
     Assert.isFalse(sut.matches(new Map<Id, Object>()));
   }
 
-  @isTest
+  @IsTest
   static void givenJSONMatchable_matchesCollection() {
     // Arrange
     Argument.Matchable sut = Argument.jsonEquals(new Map<String, Object>{ 'A' => new Account(), 'B' => 'test' });
@@ -334,7 +334,7 @@ public class ArgumentTest {
 
     Assert.isFalse(sut.matches(null));
     Assert.isFalse(sut.matches(Date.today()));
-    Assert.isFalse(sut.matches(DateTime.now()));
+    Assert.isFalse(sut.matches(Datetime.now()));
     Assert.isFalse(sut.matches(Time.newInstance(12, 12, 12, 12)));
     Assert.isFalse(sut.matches(Blob.valueOf('test')));
     Assert.isFalse(sut.matches(false));
@@ -393,7 +393,7 @@ public class ArgumentTest {
     }
   }
 
-  @isTest
+  @IsTest
   static void givenNull_whenOfIsCalled_doesNotmatche() {
     // Arrange
     List<Argument.Matchable> sut = null;
@@ -405,7 +405,7 @@ public class ArgumentTest {
     Assert.isFalse(result);
   }
 
-  @isTest
+  @IsTest
   static void givenNothing_whenNullIsCalled_doesNotmatche() {
     // Arrange
     List<Argument.Matchable> sut = Argument.empty();
@@ -417,7 +417,7 @@ public class ArgumentTest {
     Assert.isFalse(result);
   }
 
-  @isTest
+  @IsTest
   static void givenNull_whenNullIsCalled_matches() {
     // Arrange
     List<Argument.Matchable> sut = null;
@@ -429,7 +429,7 @@ public class ArgumentTest {
     Assert.isTrue(result);
   }
 
-  @isTest
+  @IsTest
   static void givenNothing_whenOfIsCalled_matchesEmptyList() {
     // Arrange
     List<Argument.Matchable> sut = Argument.empty();
@@ -441,7 +441,7 @@ public class ArgumentTest {
     Assert.isTrue(result);
   }
 
-  @isTest
+  @IsTest
   static void given1Object_whenOfIsCalled_matchesTheElement() {
     // Arrange
     List<Argument.Matchable> sut = Argument.of('test');
@@ -453,7 +453,7 @@ public class ArgumentTest {
     Assert.isTrue(result);
   }
 
-  @isTest
+  @IsTest
   static void given2Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
     List<Argument.Matchable> sut = Argument.of('test', 10);
@@ -467,7 +467,7 @@ public class ArgumentTest {
     Assert.isFalse(negative);
   }
 
-  @isTest
+  @IsTest
   static void given3Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
     List<Argument.Matchable> sut = Argument.of('test', 10, new Account());
@@ -481,7 +481,7 @@ public class ArgumentTest {
     Assert.isFalse(negative);
   }
 
-  @isTest
+  @IsTest
   static void given4Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
     List<Argument.Matchable> sut = Argument.of('test', 10, new Account(), new List<Date>());
@@ -495,7 +495,7 @@ public class ArgumentTest {
     Assert.isFalse(negative);
   }
 
-  @isTest
+  @IsTest
   static void given5Objects_whenOfIsCalled_matchesElementsInOrder() {
     // Arrange
     List<Argument.Matchable> sut = Argument.of('test', 10, new Account(), new List<Date>(), new Map<Id, Set<String>>());
@@ -509,7 +509,7 @@ public class ArgumentTest {
     Assert.isFalse(negative);
   }
 
-  @isTest
+  @IsTest
   static void givenListOf10MixType_whenOfListIsCalledWithList_matchesElementsInOrder() {
     // Arrange
     List<Argument.Matchable> sut = Argument.ofList(
@@ -550,7 +550,7 @@ public class ArgumentTest {
     Assert.isFalse(negative);
   }
 
-  @isTest
+  @IsTest
   static void whenOfListIsCalledWithNull_matchesEmptyList() {
     // Act
     List<Argument.Matchable> sut = Argument.ofList(null);
@@ -681,7 +681,7 @@ public class ArgumentTest {
     Assert.isTrue(result);
   }
 
-  @isTest
+  @IsTest
   static void ArgumentAnyMatchable_equals_spec() {
     // Act && Assert
     Assert.isTrue(Argument.any() == Argument.any());
@@ -691,7 +691,7 @@ public class ArgumentTest {
     Assert.isFalse(Argument.any() == Argument.ofType(Account.getSObjectType()));
   }
 
-  @isTest
+  @IsTest
   static void ArgumentEqualsMatchable_equals_spec() {
     // Act && Assert
     Assert.isTrue(Argument.equals(new Account()) == Argument.equals(new Account()));
@@ -703,7 +703,7 @@ public class ArgumentTest {
     Assert.isFalse(Argument.equals(new Account()) == Argument.ofType(Account.getSObjectType()));
   }
 
-  @isTest
+  @IsTest
   static void ArgumentJSONMatchable_equals_spec() {
     // Act && Assert
     Assert.isTrue(Argument.jsonEquals(new Account()) == Argument.jsonEquals(new Account()));
@@ -715,7 +715,7 @@ public class ArgumentTest {
     Assert.isFalse(Argument.jsonEquals(new Account()) == Argument.ofType(Account.getSObjectType()));
   }
 
-  @isTest
+  @IsTest
   static void ArgumentTypeMatchable_equals_spec() {
     // Act && Assert
     Assert.isTrue(Argument.ofType(Account.getSObjectType()) == Argument.ofType(Account.getSObjectType()));
