@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/salesforce/apex-mockery/compare/v2.2.0...v2.3.0) (2025-01-31)
+
+
+### Features
+
+* implement custom implementation behavior configuration ([#84](https://github.com/salesforce/apex-mockery/issues/84)) ([d8a4d53](https://github.com/salesforce/apex-mockery/commit/d8a4d531740f3a9ce22bd55d333cd6bb1e6555d3))
+
+
+### Bug Fixes
+
+* case for IsTest and Datetime ([#86](https://github.com/salesforce/apex-mockery/issues/86)) ([92817cc](https://github.com/salesforce/apex-mockery/commit/92817cc972c805a4fb810544b71093bcc2e3bac9))
+
 ## [2.2.0](https://github.com/salesforce/apex-mockery/compare/v2.1.0...v2.2.0) (2024-11-29)
 
 
