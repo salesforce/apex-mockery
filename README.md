@@ -269,13 +269,13 @@ Object result = myTypeStub.myMethod();
 Assert.areEqual('something', result);
 ```
 
-Have a look at the [Returns recipe](force-app/recipes/classes/mocking/Behave.cls)
+Have a look at the [Behave recipe](force-app/recipes/classes/mocking/Behave.cls)
 
 You can also configure it to execute the configured behavior multipe times
 
 ```java
 // Arrange
-myMethodSpy.behaves(Mocnew MockImpl()kImpl, 3);
+myMethodSpy.behaves(new MockImpl(), 3);
 for(Integer i = 0 ; i < 3 ; ++i) {
   // Act
   Object result = myTypeStub.myMethod();
@@ -298,14 +298,14 @@ class MockImpl implements MethodSpy.SpyBehavior {
 }
 
 // Arrange
-myMethodSpy.behaves(new MockImpl());
+myMethodSpy.behavesOnce(new MockImpl());
 // Act
 Object result = myTypeStub.myMethod();
 // Assert
 Assert.areEqual('something', result);
 ```
 
-Have a look at the [ReturnsOnce recipe](force-app/recipes/classes/mocking/BehaveOnce.cls)
+Have a look at the [BehaveOnce recipe](force-app/recipes/classes/mocking/BehaveOnce.cls)
 
 ##### Parameterized configuration
 
