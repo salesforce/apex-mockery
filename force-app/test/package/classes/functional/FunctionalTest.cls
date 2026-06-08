@@ -58,6 +58,7 @@ private class FunctionalTest {
       // Assert
       Assert.fail('it shoud not reach this line');
     } catch (DmlException dex) {
+      Expect.that(insertSObjectSpy).hasBeenCalled();
       Expect.that(insertSObjectSpy).hasBeenCalledWith(Argument.of(new Account(NumberOfEmployees = 1000000000)));
     }
   }

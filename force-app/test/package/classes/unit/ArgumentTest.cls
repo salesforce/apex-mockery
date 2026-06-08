@@ -601,6 +601,14 @@ public class ArgumentTest {
   }
 
   @IsTest
+  static void givenNullArgument_getType_returnsNull() {
+    // Act
+    Type result = Argument.getType(null);
+    // Assert
+    Assert.isNull(result, 'getType(null) should return null');
+  }
+
+  @IsTest
   static void areListsEqual_whenCalledWithNull_returnsTrue() {
     // Arrange
     final List<Argument.Matchable> list1 = null;
@@ -659,7 +667,7 @@ public class ArgumentTest {
   }
 
   @IsTest
-  static void areListsEqual_whenCalledWithSameList_returnsFalse() {
+  static void areListsEqual_whenCalledWithEquivalentList_returnsTrue() {
     // Arrange
     final List<Argument.Matchable> list1 = new List<Argument.Matchable>{
       Argument.any(),

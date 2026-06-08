@@ -132,7 +132,16 @@ private class MockTest {
       // Assert
       Assert.fail('Expected exception was not thrown');
     } catch (Exception ex) {
+      Assert.isInstanceOfType(ex, NullPointerException.class, 'Expected NullPointerException');
       Assert.areNotEqual(null, ex);
     }
+  }
+
+  @IsTest
+  static void givenMock_whenAccessingStub_stubIsNotNull() {
+    // Arrange & Act
+    Mock sut = Mock.forType(DummyInterface.class);
+    // Assert
+    Assert.isNotNull(sut.stub, 'stub should be set after construction');
   }
 }

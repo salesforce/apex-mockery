@@ -30,6 +30,10 @@ global class Expect {
      * @param param1 args that should match one call parameters
      * @see          Arguments
      */
+    // SYNC POINT: The 1-5 argument overloads below are duplicated in:
+    //   - Argument.of()               (Argument.cls)
+    //   - MethodSpy.whenCalledWith()  (MethodSpy.cls)
+    // If you add a 6th overload here, add it in the other two locations too.
     void hasBeenCalledWith();
     void hasBeenCalledWith(final Object param1);
     void hasBeenCalledWith(final Object param1, final Object param2);
@@ -107,13 +111,8 @@ global class Expect {
     private MethodSpy spy;
     private Asserter asserter;
 
-    private DefaultMethodSpyExpectable(MethodSpy spy) {
+    private DefaultMethodSpyExpectable(final MethodSpy spy, final Asserter asserter) {
       this.spy = spy;
-      this.asserter = METHOD_SPY_ASSERTER;
-    }
-
-    private DefaultMethodSpyExpectable(MethodSpy spy, Asserter asserter) {
-      this(spy);
       this.asserter = asserter;
     }
 
@@ -129,6 +128,10 @@ global class Expect {
       this.asserter.isTrue(this.spy.callLog.size() == count, buildErrorMessage(this.spy, ErrorMessageType.NOT_CALLED_TIMES, count));
     }
 
+    // SYNC POINT: The 1-5 argument overloads below are duplicated in:
+    //   - Argument.of()               (Argument.cls)
+    //   - MethodSpy.whenCalledWith()  (MethodSpy.cls)
+    // If you add a 6th overload here, add it in the other two locations too.
     public void hasBeenCalledWith() {
       this.hasBeenCalledWithArguments(Argument.empty());
     }
@@ -204,13 +207,13 @@ global class Expect {
   }
 
   private class ErrorMessageRow {
-    protected String message;
-    protected Boolean tabbed;
+    private final String message;
+    private final Boolean tabbed;
 
-    ErrorMessageRow(String message) {
+    ErrorMessageRow(final String message) {
       this(message, false);
     }
-    ErrorMessageRow(String message, Boolean tabbed) {
+    ErrorMessageRow(final String message, final Boolean tabbed) {
       this.message = message;
       this.tabbed = tabbed;
     }

@@ -21,9 +21,6 @@ global class Argument {
     Boolean matches(Object callArgument);
   }
 
-  global class ConfigurationException extends Exception {
-  }
-
   private Argument() {
   }
 
@@ -50,6 +47,10 @@ global class Argument {
     return new List<Argument.Matchable>();
   }
 
+  // SYNC POINT: The 1-5 argument overloads below are duplicated in:
+  //   - MethodSpy.whenCalledWith()  (MethodSpy.cls)
+  //   - Expect.hasBeenCalledWith()  (Expect.cls)
+  // If you add a 6th overload here, add it in the other two locations too.
   global static List<Argument.Matchable> of(final Object arg) {
     return Argument.ofList(new List<Object>{ arg });
   }
@@ -161,10 +162,12 @@ global class Argument {
     private String jsonValue;
 
     public JSONMatchable(final Object callArgumentToMatch) {
+      // Serialized once at configuration time — the expected value never changes.
       this.jsonValue = JSON.serialize(callArgumentToMatch);
     }
 
-    public boolean matches(final Object callArgument) {
+    public Boolean matches(final Object callArgument) {
+      // The call argument must be serialized fresh each time — it varies per invocation.
       return String.valueOf(this.jsonValue).equals(String.valueOf(JSON.serialize(callArgument)));
     }
 
@@ -196,8 +199,11 @@ global class Argument {
       this.typeNameToMatch = callArgumentToMatch.getName();
     }
 
-    public boolean matches(final Object callArgument) {
+    public Boolean matches(final Object callArgument) {
       String typeName = Argument.getTypeName(callArgument);
+      if (typeName == null) {
+        return false;
+      }
       if (this.typeNameToMatch == typeName) {
         return true;
       }
@@ -224,6 +230,16 @@ global class Argument {
   }
 
   private static String getTypeName(final Object callArgument) {
+    if (callArgument == null) {
+      return null;
+    }
+    // Apex does not expose Object.getClass() or any reflection API to get
+    // the runtime type of an arbitrary Object. The only available technique
+    // is to attempt a cast to a known type and parse the resulting
+    // TypeException message, which Salesforce embeds the actual type name in:
+    //   "Invalid conversion from runtime type <ActualType> to Date"
+    // This relies on an undocumented message format. If Salesforce changes it,
+    // this method will silently return 'Date' for all non-Date, non-null types.
     String result = 'Date';
     try {
       Date typeCheck = (Date) callArgument;
@@ -236,6 +252,9 @@ global class Argument {
 
   public static Type getType(final Object callArgument) {
     final String typeName = getTypeName(callArgument);
+    if (typeName == null) {
+      return null;
+    }
     return Type.forName(typeName);
   }
 
