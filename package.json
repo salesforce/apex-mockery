@@ -19,7 +19,10 @@
     "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
     "prepush": "npm run lint && npm run build && npm run test",
-    "test": "wireit"
+    "test": "wireit",
+    "prepare:isv": "node scripts/convert-globals-to-public.js --write",
+    "prepare:isv:dry-run": "node scripts/convert-globals-to-public.js",
+    "test:scripts": "node scripts/convert-globals-to-public.test.js"
   },
   "wireit": {
     "build": {

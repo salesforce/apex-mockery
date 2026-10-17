@@ -16,6 +16,7 @@ We want its usage to be simple, its maintainability to be easy and to provide th
   - [Why you should use the library](#why-you-should-use-the-library)
 - [Installation](#installation)
   - [Namespaced Org /!\\](#namespaced-org-)
+  - [Embedding in a managed package (ISV)](#embedding-in-a-managed-package-isv)
 - [Usage](#usage)
   - [Mock](#mock)
     - [How to stub namespaced type?](#how-to-stub-namespaced-type)
@@ -89,6 +90,26 @@ In this case you have those choices:
 - Create your own unlocked/2GP package with your namespace containing the sources
 
 It's [not recommended](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp_dependency_overview.htm#:~:text=Can%20a%20managed%202GP%20package%20depend%20on%20an,on%20a%20managed%201GP%20or%20managed%202GP%20package.) for a 2GP package to depends on an unlocked package, namespaced or not (ISV scenario).
+
+### Embedding in a managed package (ISV)
+
+The unlocked package we ship has **no namespace**. Access modifiers stay `global` so the same sources remain Stub API–compatible when tested inside a namespaced scratch org.
+
+ISVs who **copy** `force-app/src/classes` into a managed package usually want `public` instead of `global`, so apex-mockery does not become part of the managed package API surface (and so classes remain deletable later). See [#80](https://github.com/salesforce/apex-mockery/issues/80).
+
+Preferred approach for packaging tests: treat apex-mockery as [unpackaged metadata](https://developer.salesforce.com/docs/atlas.en-us.pkg2_dev.meta/pkg2_dev/sfdx_dev_dev2gp_unpackaged_md.htm) so it is not distributed with your package.
+
+If you still embed the sources, convert modifiers locally (does not change this repository):
+
+```bash
+# preview
+npm run prepare:isv:dry-run
+# or: node scripts/convert-globals-to-public.js path/to/copied/classes
+
+# rewrite in place
+npm run prepare:isv
+# or: node scripts/convert-globals-to-public.js path/to/copied/classes --write
+```
 
 ## Usage
 
